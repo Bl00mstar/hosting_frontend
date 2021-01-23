@@ -1,5 +1,3 @@
-import React from 'react';
+import DesktopMenu from './Menu';
 
-export default function index() {
-  return <div>wut</div>;
-}
+export default DesktopMenu;

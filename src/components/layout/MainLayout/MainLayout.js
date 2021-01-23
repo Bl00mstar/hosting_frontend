@@ -1,13 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import media from '@media/mediaResolution';
 import Menu from '@views/Menu';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+// import media from '@media/mediaResolution';
 
 const MainLayout = ({ children }) => (
   <MainContaier>
     <Menu />
-    <StyledMain>{children}</StyledMain>
+    <div>{children}</div>
   </MainContaier>
 );
 
@@ -15,21 +16,30 @@ MainLayout.propTypes = {
   children: PropTypes.node,
 };
 
+const mapStateToProps = () => ({});
+
+export default connect(mapStateToProps)(MainLayout);
+
 const MainContaier = styled.div`
-  display: flex;
-  ${media.small`
-  flex-direction: column;
-`}
+  display: block;
+  flex-flow: column nowrap;
 `;
 
-const StyledMain = styled.main`
-  width: 100%;
-  height: 100%;
-  background-color: ${({ theme }) => theme.colors.ground};
-  color: ${({ theme }) => theme.colors.light};
-  ${media.medium`
-    margin-top: 64px;
-`}
-`;
-
-export default MainLayout;
+// const StyledMain = styled.main`
+//   ${media.xmedium`
+//     width: 100%;
+//    height:95%;
+// `}
+//   ${media.medium`
+//     width: 100%;
+//    height:100%;
+// `}
+// ${media.tablet`
+//     width: 100%;
+//    height:100%;
+// `}
+// ${media.small`
+// width: 100%;
+//    height:100%;
+// `}
+// `;
