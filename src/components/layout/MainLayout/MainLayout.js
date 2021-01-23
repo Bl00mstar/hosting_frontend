@@ -21,25 +21,7 @@ const mapStateToProps = () => ({});
 export default connect(mapStateToProps)(MainLayout);
 
 const MainContaier = styled.div`
-  display: block;
+  align-items: center;
+  display: flex;
   flex-flow: column nowrap;
 `;
-
-// const StyledMain = styled.main`
-//   ${media.xmedium`
-//     width: 100%;
-//    height:95%;
-// `}
-//   ${media.medium`
-//     width: 100%;
-//    height:100%;
-// `}
-// ${media.tablet`
-//     width: 100%;
-//    height:100%;
-// `}
-// ${media.small`
-// width: 100%;
-//    height:100%;
-// `}
-// `;
