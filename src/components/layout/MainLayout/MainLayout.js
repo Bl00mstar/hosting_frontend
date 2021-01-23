@@ -3,7 +3,6 @@ import Menu from '@views/Menu';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-// import media from '@media/mediaResolution';
 
 const MainLayout = ({ children }) => (
   <MainContaier>

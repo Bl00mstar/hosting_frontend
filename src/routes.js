@@ -1,7 +1,7 @@
 import React from 'react';
 
-// import Home from '@views/Home';
-// import About from '@views/About';
+import Login from '@views/Login';
+import Signup from '@views/Signup';
 
 export const routes = [
   {
@@ -12,11 +12,11 @@ export const routes = [
   {
     description: 'Login',
     path: '/account/login',
-    element: <div>login</div>,
+    element: <Login />,
   },
   {
     description: 'Sign Up',
     path: '/account/signup',
-    element: <div>signup</div>,
+    element: <Signup />,
   },
 ];
