@@ -11,6 +11,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "framer-motion": "^3.2.2-rc.1",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-app-rewire-alias": "^0.2.0",

@@ -1,32 +1,78 @@
 import React from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 export default function Signup() {
   return (
-    <div>
-      <div>Sign up</div>
+    <StyledRow>
+      <PageTitle>Register</PageTitle>
+      <PageDescription>
+        Enter your details to register an account.
+      </PageDescription>
       <form>
         <StyledInput>
-          <Input type="text" placeholder="First Name"></Input>
-          <Input type="text" placeholder="Last Name"></Input>
+          <HalfInput type="text" placeholder="First Name"></HalfInput>
+          <HalfInput type="text" placeholder="Last Name"></HalfInput>
           <Input type="text" placeholder="E-mail"></Input>
           <Input type="text" placeholder="Username"></Input>
           <Input type="text" placeholder="Password"></Input>
           <Input type="text" placeholder="Confirm password"></Input>
         </StyledInput>
+        <StyledDiv>
+          <StyledButton>Sign up</StyledButton>
+        </StyledDiv>
       </form>
-    </div>
+    </StyledRow>
   );
 }
 
+export const PageTitle = styled.div`
+  font-size: 2.5rem;
+  margin-top: 4rem;
+`;
+export const PageDescription = styled.div`
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+`;
+
+export const StyledDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const StyledRow = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+`;
+
+export const HalfInput = styled.input`
+  height: 40px;
+  width: 50%;
+  border: 2px solid #aaa;
+  border-radius: 20px;
+  padding-left: 20px;
+  margin: 8px 0;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+  :hover {
+    border-color: #993399;
+    box-shadow: 0 0 8px 0 #990099;
+  }
+  :focus {
+    border-color: #993399;
+    box-shadow: 0 0 8px 0 #990099;
+  }
+`;
+
 const Input = styled.input`
   height: 40px;
-  font-size: 18px;
   width: 100%;
   border: 2px solid #aaa;
   border-radius: 20px;
-  padding-left: 40px;
-  padding-right: 100px;
+  padding-left: 20px;
   margin: 8px 0;
   outline: none;
   box-sizing: border-box;
@@ -44,7 +90,7 @@ const Input = styled.input`
 const StyledInput = styled.div`
   margin-left: auto;
   margin-right: auto;
-  max-width: 450px;
+  max-width: 350px;
   select {
     top: 8px;
     font-size: 18px;
@@ -67,5 +113,33 @@ const StyledInput = styled.div`
   }
   &.inputWithIcon {
     position: relative;
+  }
+`;
+
+export const StyledButton = styled(motion.button)`
+  position: relative;
+  font-size: 1rem;
+  letter-spacing: 4px;
+  line-height: 2.5rem;
+  display: block;
+  text-align: center;
+  border: 1px solid #6a5acd;
+  color: #6a5acd;
+  background-color: transparent;
+  border-radius: 0.2rem;
+  width: 10rem;
+  height: 2.5rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: all 1s;
+  background-size: 200%;
+  background-position: 100% 0;
+  background-image: linear-gradient(45deg, #6a5acd 50%, transparent 50%);
+  :focus {
+    outline: none;
+  }
+  :hover {
+    background-position: 0 100%;
+    color: ${({ theme }) => theme.colors.ground};
   }
 `;
