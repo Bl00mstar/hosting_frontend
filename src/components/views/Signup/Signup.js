@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import {
   userSignup,
   handleClearError,
@@ -12,11 +13,12 @@ import {
 import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
 import SuccessAlert from '@containers/LoginAlerts/SuccessAlert';
 
-const Signup = ({ signup, clearError, signupClear }) => {
+const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
   const { register, handleSubmit, errors, watch } = useForm({
     criteriaMode: 'all',
     mode: 'onChange',
   });
+  let navigate = useNavigate();
   const password = useRef({});
   password.current = watch('password', '');
 
@@ -29,7 +31,9 @@ const Signup = ({ signup, clearError, signupClear }) => {
     signup(data);
     e.target.reset();
   };
-
+  if (isAuthenticated) {
+    navigate('/');
+  }
   return (
     <StyledRow>
       <ErrorAlert />
@@ -117,9 +121,12 @@ Signup.propTypes = {
   signup: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired,
   signupClear: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.details.isAuthenticated,
+});
 
 const mapDispatchToProps = (dispatch) => {
   return {

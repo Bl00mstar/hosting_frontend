@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { userLogin, handleClearError } from '@store/user/user.actions';
 import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
 import Ellipsis from '@containers/LoginAlerts/EllipsisPreloader';
 
-const Login = ({ login, clearError, userLoading }) => {
+const Login = ({ login, clearError, userLoading, isAuthenticated }) => {
   const { register, handleSubmit, errors } = useForm({
     criteriaMode: 'all',
     mode: 'onChange',
   });
+  let navigate = useNavigate();
 
   useEffect(() => {
     clearError();
@@ -23,6 +25,10 @@ const Login = ({ login, clearError, userLoading }) => {
     login(data);
     e.target.reset();
   };
+
+  if (isAuthenticated) {
+    navigate('/user/dashboard');
+  }
 
   return (
     <StyledRow>
@@ -80,10 +86,12 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired,
   userLoading: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   userLoading: state.user.details.isLoading,
+  isAuthenticated: state.user.details.isAuthenticated,
 });
 
 const mapDispatchToProps = (dispatch) => {
