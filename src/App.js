@@ -1,15 +1,22 @@
 import React from 'react';
-import { useRoutes } from 'react-router-dom';
-import { routes } from './routes';
-import MainLayout from '@layout/MainLayout';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import MainLayout from '@layout/MainLayout/MainLayout';
 
 const App = () => {
-  const element = useRoutes(routes);
   return (
     <div className="App">
-      <MainLayout>{element}</MainLayout>
+      <MainLayout />
     </div>
   );
 };
 
-export default App;
+App.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.details.isAuthenticated,
+});
+
+export default connect(mapStateToProps)(App);

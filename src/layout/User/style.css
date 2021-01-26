@@ -1,0 +1,92 @@
+.App {
+  font-family: 'Poiret One';
+  margin: 0px;
+  padding: 0px;
+}
+
+.sidebar {
+  background: linear-gradient(#282b2f, #0b2651);
+}
+
+.left {
+  text-align: left;
+}
+
+.band {
+  background: linear-gradient(#b8babd, #ffffff);
+}
+
+.icon {
+  position: relative;
+  display: block;
+  padding: 1px 5px 1px 5px;
+  background-size: contain;
+  text-decoration: none;
+}
+
+.icon:hover {
+  stroke: #aeb1b6;
+}
+
+.guage {
+  padding: 10px;
+  height: 175px;
+}
+
+.stat {
+  display: inline-block;
+  margin: 8px;
+}
+
+.arrow {
+  display: inline;
+  height: 17px;
+  margin: 0px 5px 0px 5px;
+}
+
+.green {
+  font-size: 18px;
+  color: green;
+}
+
+.red {
+  font-size: 18px;
+  color: red;
+}
+
+.value {
+  font-size: 28px;
+}
+
+.expenses-container {
+  width: 100%;
+  height: 20%;
+}
+
+#incoming {
+  color: green;
+}
+
+#income {
+  color: green;
+}
+
+#outgoing {
+  color: red;
+}
+
+#expenses {
+  color: red;
+}
+
+.audit {
+  border: solid;
+  height: 250px;
+}
+.border {
+  border: solid;
+}
+
+.test-row {
+  height: 30px;
+}
