@@ -36,3 +36,7 @@ export const handleSignupSuccess = (data) => {
 export const handleSignupClear = () => {
   return { type: userTypes.SIGNUP_CLEAR };
 };
+
+export const userLogout = () => {
+  return { type: userTypes.USER_LOGOUT };
+};

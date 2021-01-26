@@ -9,6 +9,17 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case userTypes.USER_LOGOUT:
+      localStorage.removeItem('authorization');
+      return {
+        ...state,
+        details: {
+          token: '',
+          email: '',
+          isLoading: false,
+          isAuthenticated: false,
+        },
+      };
     case userTypes.USER_DATA:
       localStorage.setItem('authorization', action.payload.token);
       return {

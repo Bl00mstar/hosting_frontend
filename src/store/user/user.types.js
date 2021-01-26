@@ -9,6 +9,7 @@ const userTypes = {
   USER_CLEAR: 'USER_CLEAR',
   CHECK_USER_AUTHENTICATED: 'CHECK_USER_AUTHENTICATED',
   USER_LOADED: 'USER_LOADED',
+  USER_LOGOUT: 'USER_LOGOUT',
 };
 
 export default userTypes;
