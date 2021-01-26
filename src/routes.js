@@ -4,6 +4,12 @@ import Login from '@views/Login';
 import Signup from '@views/Signup';
 import Home from '@views/Home';
 
+import Create from '@containers/Create';
+import Dashboard from '@containers/Dashboard';
+import Settings from '@containers/Settings';
+import Trash from '@containers/Trash';
+import Upload from '@containers/Upload';
+
 export const routes = [
   {
     description: 'Home',
@@ -26,33 +32,31 @@ export const routes = [
   {
     description: 'Dashboard',
     path: '/user/dashboard',
-    element: <div>dashboard</div>,
-    // icon:
+    element: <Dashboard />,
     type: ['user'],
   },
   {
     description: 'Settings',
     path: '/user/settings',
-    element: <div>settings</div>,
-    // icon:
+    element: <Settings />,
     type: ['user'],
   },
   {
     description: 'Upload file',
     path: '/user/upload',
-    element: <div>upload</div>,
+    element: <Upload />,
     type: ['files'],
   },
   {
     description: 'New folder',
     path: '/user/create',
-    element: <div>new folder</div>,
+    element: <Create />,
     type: ['files'],
   },
   {
     description: 'Trash folder',
     path: '/user/trash',
-    element: <div>trash foldeer</div>,
+    element: <Trash />,
     type: ['files'],
   },
 ];

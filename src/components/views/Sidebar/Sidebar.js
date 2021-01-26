@@ -11,16 +11,17 @@ const Sidebar = () => {
         <nav className="col-md-2 d-sm-none d-xs-none d-md-block bg-light sidebar">
           <div className="sidebar-sticky">
             <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link active" href="#">
-                  Dashboard <span className="sr-only">(current)</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-light" href="#">
-                  Settings
-                </a>
-              </li>
+              {routes.map(({ description, path, type }) => {
+                if (type.includes('user')) {
+                  return (
+                    <li className="nav-item">
+                      <NavLink to={`/${path}`} className="nav-link text-light">
+                        {description}
+                      </NavLink>
+                    </li>
+                  );
+                }
+              })}
 
               <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Manage files</span>
