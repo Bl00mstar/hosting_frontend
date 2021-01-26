@@ -1,22 +1,109 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import {
+  userSignup,
+  handleClearError,
+  handleSignupClear,
+} from '@store/user/user.actions';
+import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
+import SuccessAlert from '@containers/LoginAlerts/SuccessAlert';
 
-export default function Signup() {
+const Signup = ({ signup, clearError, signupClear }) => {
+  const { register, handleSubmit, errors, watch } = useForm({
+    criteriaMode: 'all',
+    mode: 'onChange',
+  });
+  const password = useRef({});
+  password.current = watch('password', '');
+
+  useEffect(() => {
+    clearError();
+    signupClear();
+  }, [clearError, signupClear]);
+
+  const onSubmit = (data, e) => {
+    signup(data);
+    e.target.reset();
+  };
+
   return (
     <StyledRow>
+      <ErrorAlert />
+      <SuccessAlert />
       <PageTitle>Register</PageTitle>
       <PageDescription>
         Enter your details to register an account.
       </PageDescription>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <StyledInput>
-          <HalfInput type="text" placeholder="First Name"></HalfInput>
-          <HalfInput type="text" placeholder="Last Name"></HalfInput>
-          <Input type="text" placeholder="E-mail"></Input>
-          <Input type="text" placeholder="Username"></Input>
-          <Input type="text" placeholder="Password"></Input>
-          <Input type="text" placeholder="Confirm password"></Input>
+          <HalfInput
+            type="text"
+            placeholder="First Name"
+            name="firstName"
+            ref={register({
+              required: true,
+            })}
+          />
+          <HalfInput
+            type="text"
+            placeholder="Last Name"
+            name="lastName"
+            ref={register({
+              required: true,
+            })}
+          />
+          {errors?.firstName?.types?.required && (
+            <StyledError>First name required.</StyledError>
+          )}
+          {errors?.lastName?.types?.required && (
+            <StyledError>Last name required.</StyledError>
+          )}
+          <Input
+            type="email"
+            placeholder="E-mail"
+            name="email"
+            ref={register({
+              required: true,
+              pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            })}
+          />
+          {errors?.email?.types?.required && (
+            <StyledError>Email required.</StyledError>
+          )}
+          {errors?.email?.types?.pattern && (
+            <StyledError>Wrong email address.</StyledError>
+          )}
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            ref={register({
+              required: true,
+              minLength: 6,
+            })}
+          />
+          {errors?.password?.types?.required && (
+            <StyledError>Password required.</StyledError>
+          )}
+          {errors?.password?.types?.minLength && (
+            <StyledError>Password must have at least 6 characters.</StyledError>
+          )}
+          <Input
+            type="password"
+            placeholder="Confirm password"
+            name="passwordConfirm"
+            ref={register({
+              validate: (value) =>
+                value === password.current || 'The passwords do not match',
+            })}
+          />
+          {errors.passwordConfirm && (
+            <StyledError>{errors.passwordConfirm.message}</StyledError>
+          )}
         </StyledInput>
         <StyledDiv>
           <StyledButton>Sign up</StyledButton>
@@ -24,7 +111,29 @@ export default function Signup() {
       </form>
     </StyledRow>
   );
-}
+};
+
+Signup.propTypes = {
+  signup: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
+  signupClear: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signup: (x) => dispatch(userSignup(x)),
+    clearError: () => dispatch(handleClearError()),
+    signupClear: () => dispatch(handleSignupClear()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+
+export const StyledError = styled.p`
+  color: red;
+`;
 
 export const PageTitle = styled.div`
   font-size: 2.5rem;
@@ -123,8 +232,8 @@ export const StyledButton = styled(motion.button)`
   line-height: 2.5rem;
   display: block;
   text-align: center;
-  border: 1px solid #6a5acd;
-  color: #6a5acd;
+  border: 1px solid #ba55d3;
+  color: #ba55d3;
   background-color: transparent;
   border-radius: 0.2rem;
   width: 10rem;
@@ -134,7 +243,7 @@ export const StyledButton = styled(motion.button)`
   transition: all 1s;
   background-size: 200%;
   background-position: 100% 0;
-  background-image: linear-gradient(45deg, #6a5acd 50%, transparent 50%);
+  background-image: linear-gradient(45deg, #ba55d3 50%, transparent 50%);
   :focus {
     outline: none;
   }

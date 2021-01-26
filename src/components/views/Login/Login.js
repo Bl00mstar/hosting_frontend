@@ -1,18 +1,72 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { userLogin, handleClearError } from '@store/user/user.actions';
+import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
+import Ellipsis from '@containers/LoginAlerts/EllipsisPreloader';
 
-export default function Login() {
+const Login = ({ login, clearError, userLoading }) => {
+  const { register, handleSubmit, errors } = useForm({
+    criteriaMode: 'all',
+    mode: 'onChange',
+  });
+
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
+
+  const onSubmit = (data, e) => {
+    clearError();
+    login(data);
+    e.target.reset();
+  };
+
   return (
     <StyledRow>
+      {userLoading && <Ellipsis />}
+      <ErrorAlert />
       <PageTitle>Login</PageTitle>
       <PageDescription>
         To log in, enter your email and password.
       </PageDescription>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <StyledInput>
-          <Input type="text" placeholder="E-mail"></Input>
-          <Input type="password" placeholder="Password"></Input>
+          <Input
+            type="text"
+            placeholder="E-mail"
+            name="email"
+            ref={register({
+              required: true,
+              pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            })}
+          />
+          {errors?.email?.types?.required && (
+            <StyledError>Email required.</StyledError>
+          )}
+          {errors?.email?.types?.pattern && (
+            <StyledError>Wrong email address.</StyledError>
+          )}
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            ref={register({
+              required: true,
+              minLength: 6,
+            })}
+          ></Input>
+          {errors?.password?.types?.required && (
+            <StyledError>Password required.</StyledError>
+          )}
+          {errors?.password?.types?.minLength && (
+            <StyledError>Password must have at least 6 characters.</StyledError>
+          )}
+          {errors?.password?.types?.pattern && (
+            <StyledError>Wrong password pattern.</StyledError>
+          )}
         </StyledInput>
         <StyledDiv>
           <StyledButton>Login</StyledButton>
@@ -20,7 +74,30 @@ export default function Login() {
       </form>
     </StyledRow>
   );
-}
+};
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
+  userLoading: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  userLoading: state.user.details.isLoading,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (x) => dispatch(userLogin(x)),
+    clearError: () => dispatch(handleClearError()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export const StyledError = styled.p`
+  color: red;
+`;
 
 export const StyledDiv = styled.div`
   display: flex;
@@ -50,8 +127,8 @@ export const StyledButton = styled(motion.button)`
   line-height: 2.5rem;
   display: block;
   text-align: center;
-  border: 1px solid #6a5acd;
-  color: #6a5acd;
+  border: 1px solid #ba55d3;
+  color: #ba55d3;
   background-color: transparent;
   border-radius: 0.2rem;
   width: 10rem;
@@ -61,7 +138,7 @@ export const StyledButton = styled(motion.button)`
   transition: all 1s;
   background-size: 200%;
   background-position: 100% 0;
-  background-image: linear-gradient(45deg, #6a5acd 50%, transparent 50%);
+  background-image: linear-gradient(45deg, #ba55d3 50%, transparent 50%);
   :focus {
     outline: none;
   }
@@ -73,7 +150,7 @@ export const StyledButton = styled(motion.button)`
 
 const Input = styled.input`
   height: 40px;
-  width: 100%;
+  width: 350px;
   border: 2px solid #aaa;
   border-radius: 20px;
   padding-left: 20px;

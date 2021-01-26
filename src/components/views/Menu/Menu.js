@@ -57,6 +57,8 @@ const NavLinksWrapper = styled.ul``;
 
 const StyledLi = styled.li`
   display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
   a {
     display: block;
     padding: 6px 22px;
@@ -68,7 +70,8 @@ const NavLink = styled(Link)`
   position: relative;
   color: white;
   color: var(--text);
-  transition: all 450ms linear;
+  right: 0;
+  transition: all 1s ease;
   border-bottom: 1px solid transparent;
   &.active {
     border-bottom: 1px solid #ba55d3;

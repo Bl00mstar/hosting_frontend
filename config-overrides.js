@@ -10,5 +10,7 @@ module.exports = override(
     ['@layout']: path.resolve(__dirname, './src/components/layout/MainLayout'),
     ['@store']: path.resolve(__dirname, './src/store'),
     ['@assets']: path.resolve(__dirname, './src/components/assets'),
+    ['@utils']: path.resolve(__dirname, './src/utils'),
+    ['@containers']: path.resolve(__dirname, './src/components/containers'),
   })
 );
