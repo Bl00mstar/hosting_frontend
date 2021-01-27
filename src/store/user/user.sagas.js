@@ -45,6 +45,8 @@ function* userSignup(signupData) {
     );
     yield put(handleSignupSuccess(data));
   } catch (error) {
+    console.loag('asd');
+    console.log(error);
     yield put(handleUserError(error));
   }
 }
