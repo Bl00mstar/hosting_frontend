@@ -5,10 +5,11 @@ import {
   watchIsUserLoaded,
 } from './user/user.sagas';
 
-import { watchlistUserFolder } from './files/file.sagas';
+import { watchlistUserFolder, watchlistUserTrash } from './files/file.sagas';
 
 export default function* rootSaga() {
   yield all([
+    watchlistUserTrash(),
     watchUserLogin(),
     watchUserSignup(),
     watchIsUserLoaded(),

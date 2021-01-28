@@ -1,17 +1,37 @@
-import { fileRequest } from './file.helpers';
+import { fileRequest, postPathGetFiles } from './file.helpers';
 import fileTypes from './file.types';
-import { takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 import { apiLink } from '@utils/api';
+import {
+  loadUserFiles,
+  putFileData,
+  loadUserTrash,
+  putTrashData,
+} from './file.actions';
 
 export function* watchlistUserFolder() {
-  yield takeEvery(fileTypes.FILE_LIST, listFolder);
+  yield takeEvery(fileTypes.GET_FILE_LIST, listFolder);
 }
 
-function* listFolder(name) {
+function* listFolder(path) {
+  yield put(loadUserFiles());
   try {
-    yield console.log(name);
-    const data = yield fileRequest(apiLink + '/file');
-    console.log(data);
+    const data = yield postPathGetFiles(apiLink + '/file', path);
+    yield put(putFileData(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* watchlistUserTrash() {
+  yield takeEvery(fileTypes.GET_TRASH_LIST, listTrash);
+}
+
+function* listTrash() {
+  yield put(loadUserTrash());
+  try {
+    const data = yield fileRequest(apiLink + '/file/trash');
+    yield put(putTrashData(data));
   } catch (error) {
     console.log(error);
   }
