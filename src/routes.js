@@ -9,6 +9,7 @@ import Dashboard from '@containers/Dashboard';
 import Settings from '@containers/Settings';
 import Trash from '@containers/Trash';
 import Upload from '@containers/Upload';
+import Files from '@containers/Files';
 
 export const routes = [
   {
@@ -30,6 +31,12 @@ export const routes = [
     type: ['public'],
   },
   {
+    description: 'Your account',
+    path: '/user/dashboard',
+    element: <Dashboard />,
+    type: ['private'],
+  },
+  {
     description: 'Dashboard',
     path: '/user/dashboard',
     element: <Dashboard />,
@@ -40,6 +47,12 @@ export const routes = [
     path: '/user/settings',
     element: <Settings />,
     type: ['user'],
+  },
+  {
+    description: 'Files tree',
+    path: '/user/files',
+    element: <Files />,
+    type: ['files'],
   },
   {
     description: 'Upload file',

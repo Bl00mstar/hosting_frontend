@@ -33,5 +33,6 @@ const StyledBoxError = styled.div`
 `;
 
 const StyledSuccess = styled.p`
+  margin-top: 1rem;
   color: red;
 `;

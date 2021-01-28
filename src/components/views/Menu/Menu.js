@@ -130,7 +130,7 @@ const NavImage = styled.div`
 `;
 const StyledLi = styled.li`
   display: inline-block;
-  padding: 10px 22px;
+  padding: 10px 10px;
   a {
     display: block;
     padding: 6px 22px;

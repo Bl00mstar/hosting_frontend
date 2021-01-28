@@ -9,7 +9,7 @@ const SuccessAlert = ({ isSignupSuccess, signupSuccessMessage }) => {
   return (
     isSignupSuccess && (
       <StyledBox>
-        <StyledSuccess>{signupSuccessMessage}</StyledSuccess>
+        <StyledSuccess>{signupSuccessMessage.msg}</StyledSuccess>
         <StyledSuccessHref onClick={() => navigate('/account/login')}>
           Go to login
         </StyledSuccessHref>
@@ -20,7 +20,7 @@ const SuccessAlert = ({ isSignupSuccess, signupSuccessMessage }) => {
 
 SuccessAlert.propTypes = {
   isSignupSuccess: PropTypes.bool.isRequired,
-  signupSuccessMessage: PropTypes.string.isRequired,
+  signupSuccessMessage: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -43,5 +43,6 @@ const StyledBox = styled.div`
 `;
 
 const StyledSuccess = styled.p`
+  margin-top: 1rem;
   color: green;
 `;

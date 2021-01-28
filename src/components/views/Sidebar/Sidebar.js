@@ -11,10 +11,10 @@ const Sidebar = () => {
         <nav className="col-md-2 d-sm-none d-xs-none d-md-block bg-light sidebar">
           <div className="sidebar-sticky">
             <ul className="nav flex-column">
-              {routes.map(({ description, path, type }) => {
+              {routes.map(({ description, path, type }, key) => {
                 if (type.includes('user')) {
                   return (
-                    <li className="nav-item">
+                    <li className="nav-item" key={key}>
                       <NavLink to={`/${path}`} className="nav-link text-light">
                         {description}
                       </NavLink>
@@ -27,10 +27,10 @@ const Sidebar = () => {
                 <span>Manage files</span>
                 <a className="d-flex align-items-center text-muted" href="#" />
               </h6>
-              {routes.map(({ description, path, type }) => {
+              {routes.map(({ description, path, type }, key) => {
                 if (type.includes('files')) {
                   return (
-                    <li className="nav-item">
+                    <li className="nav-item" key={key}>
                       <NavLink
                         to={`/${path}`}
                         className="nav-link text-left text-light"
