@@ -3,12 +3,12 @@ import fileTypes from './file.types';
 const initialState = {
   tree: { isLoading: false, folders: [], files: [], path: '/' },
   trash: { isLoading: false, files: [] },
+  alert: { folder: { isMsg: false, msg: '' } },
 };
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
     case fileTypes.SET_DIRECTORY_PATH:
-      console.log(action.payload);
       return {
         ...state,
         tree: { ...state.tree, path: action.payload },
@@ -21,7 +21,6 @@ const fileReducer = (state = initialState, action) => {
           isLoading: false,
           folders: [],
           files: [],
-          path: '/',
         },
       };
     case fileTypes.LOAD_TRASH_LIST:
@@ -41,16 +40,16 @@ const fileReducer = (state = initialState, action) => {
     case fileTypes.LOAD_FILE_LIST:
       return {
         ...state,
-        tree: { isLoading: true, folders: [], files: [], path: '/' },
+        tree: { ...state.tree, isLoading: true, folders: [], files: [] },
       };
     case fileTypes.SET_FILE_LIST:
       return {
         ...state,
         tree: {
+          ...state.tree,
           isLoading: false,
           folders: action.payload.directories,
           files: action.payload.files,
-          path: '/',
         },
       };
     default:

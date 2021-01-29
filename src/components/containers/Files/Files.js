@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getUserFiles, setDirectoryPath } from '@store/files/file.actions';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { List, ListItem } from '@material-ui/core';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +14,7 @@ import Delete from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,10 +27,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
+  const [selectPath, setSelectPath] = useState([]);
   const classes = useStyles();
   useEffect(() => {
-    getFiles('/');
-  }, [getFiles]);
+    getFiles(path);
+    let pathArray = path.replace(/\//g, '/ ').split(' ');
+    pathArray.pop();
+    setSelectPath(pathArray);
+  }, [getFiles, path]);
 
   const generate = (values, type) => {
     if (values) {
@@ -42,14 +46,18 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
               {type === 'folder' ? <FolderIcon /> : <InsertDriveFileIcon />}
             </ListItemIcon>
 
-            <ListItemText
-              style={{ cursor: 'pointer' }}
-              primary={value}
-              onClick={() => {
-                setPath('/' + value);
-                getFiles('/' + value);
-              }}
-            />
+            {type === 'folder' ? (
+              <ListItemText
+                style={{ cursor: 'pointer' }}
+                primary={value}
+                onClick={() => {
+                  setPath(path + value);
+                }}
+              />
+            ) : (
+              <ListItemText style={{ cursor: 'pointer' }} primary={value} />
+            )}
+
             {type === 'file' ? (
               <ListItemIcon
                 style={{ cursor: 'pointer' }}
@@ -89,15 +97,32 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
     }
   };
 
+  const selectDirectory = (e, el) => {
+    e.preventDefault();
+    setPath(path.split(el)[0] + el);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={10}>
           <Typography variant="h6" className={classes.title}>
-            Path: {path}
+            Path:{' '}
+            {selectPath.map((el, key) => (
+              <Button
+                variant="outlined"
+                onClick={(e) => selectDirectory(e, el)}
+                key={key}
+              >
+                {el}
+              </Button>
+            ))}
           </Typography>
           <div className={classes.demo}>
-            Create folder | Move folder
+            <Button variant="outlined">Create folder</Button>
+            <Button variant="outlined">Upload file</Button>
+            <Button variant="outlined">Delete</Button>
+            <Button variant="outlined">Rename</Button>
             <List dense={true}>
               {foldersList ? (
                 generate(foldersList, 'folder')
