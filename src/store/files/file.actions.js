@@ -1,18 +1,22 @@
 import fileTypes from './file.types';
 
 //
+// FILE MANAGEMENT
+//
+export const downloadFile = (data) => {
+  return { type: fileTypes.DOWNLOAD_FILE, payload: data };
+};
+export const uploadFile = (data) => {
+  return { type: fileTypes.UPLOAD_FILE, payload: data };
+};
+
+//
 // FOLDERS MANAGEMENT
 //
 
 export const createNewFolder = (data) => {
   return { type: fileTypes.CREATE_NEW_FOLDER, payload: data };
 };
-// export const createPatternFolder = (data) => {
-//   return { type: fileTypes.CREATE_PATTERN_FOLDER, payload: data };
-// };
-// export const createRandomFolder = (data) => {
-//   return { type: fileTypes.CREATE_RANDOM_FOLDER, payload: data };
-// };
 export const deleteFolder = (data) => {
   return { type: fileTypes.DELETE_FOLDER, payload: data };
 };

@@ -13,17 +13,28 @@ export function* watchCreateFolder() {
   yield takeEvery(fileTypes.CREATE_NEW_FOLDER, createFolder);
 }
 
-function* createFolder() {
-  //folder type
-  //path
-  let type = 'asd';
+function* createFolder({ payload }) {
+  console.log(payload);
+  const { file_type } = payload;
   try {
-    if (type === 'pattern') {
-      yield console.log('pattern');
-    } else if (type === 'random') {
-      yield console.log('random');
+    if (file_type === 'pattern') {
+      const data = yield postPathGetFiles(
+        apiLink + '/file/folder/createPattern',
+        payload
+      );
+      console.log(data);
+    } else if (file_type === 'random') {
+      const data = yield postPathGetFiles(
+        apiLink + '/file/folder/createRandom',
+        payload
+      );
+      console.log(data);
     } else {
-      yield console.log('new folder');
+      const data = yield postPathGetFiles(
+        apiLink + '/file/folder/createNew',
+        payload
+      );
+      console.log(data);
     }
   } catch (error) {
     console.log(error);
@@ -34,10 +45,10 @@ export function* watchlistUserFolder() {
   yield takeEvery(fileTypes.GET_FILE_LIST, listFolder);
 }
 
-function* listFolder(path) {
+function* listFolder({ payload }) {
   yield put(loadUserFiles());
   try {
-    const data = yield postPathGetFiles(apiLink + '/file', path);
+    const data = yield postPathGetFiles(apiLink + '/file', payload);
     yield put(putFileData(data));
   } catch (error) {
     console.log(error);

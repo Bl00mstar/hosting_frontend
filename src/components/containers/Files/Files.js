@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { tokenConfig } from '@store/user/user.helpers';
+import axios from 'axios';
+import download from 'downloadjs';
+import { useStyles } from '@styles/DashboardStyle';
 import { getUserFiles, setDirectoryPath } from '@store/files/file.actions';
-import { makeStyles } from '@material-ui/core/styles';
-import { List, ListItem } from '@material-ui/core';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import Delete from '@material-ui/icons/Delete';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import Button from '@material-ui/core/Button';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: 752,
-  },
-  title: {
-    margin: theme.spacing(4, 0, 2),
-  },
-}));
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Grid,
+  Typography,
+  Checkbox,
+  Button,
+} from '@material-ui/core';
+import {
+  Folder,
+  InsertDriveFile,
+  Delete,
+  GetApp,
+  FormatColorText,
+} from '@material-ui/icons';
 
 const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
   const [selectPath, setSelectPath] = useState([]);
@@ -36,6 +34,21 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
     setSelectPath(pathArray);
   }, [getFiles, path]);
 
+  const downloadFiles = async (data) => {
+    console.log(path + data);
+    let token = await tokenConfig();
+    axios.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${token.headers['x-auth-token']}`;
+    axios
+      .post('http://localhost:9000/media/file', { file: data, path: path })
+      .then((data) => {
+        console.log(data);
+        download(data.data, 'asd.mp3');
+      })
+      .catch((err) => console.log(err));
+  };
+
   const generate = (values, type) => {
     if (values) {
       return values.map((value) =>
@@ -43,7 +56,7 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
           <ListItem>
             <Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} />
             <ListItemIcon>
-              {type === 'folder' ? <FolderIcon /> : <InsertDriveFileIcon />}
+              {type === 'folder' ? <Folder /> : <InsertDriveFile />}
             </ListItemIcon>
 
             {type === 'folder' ? (
@@ -62,10 +75,10 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
               <ListItemIcon
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  console.log('download');
+                  downloadFiles(value);
                 }}
               >
-                <GetAppIcon />
+                <GetApp />
               </ListItemIcon>
             ) : (
               <></>
@@ -76,7 +89,7 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
                 console.log('rename');
               }}
             >
-              <FormatColorTextIcon />
+              <FormatColorText />
             </ListItemIcon>
             <ListItemIcon
               style={{ cursor: 'pointer' }}
@@ -120,7 +133,21 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
           </Typography>
           <div className={classes.demo}>
             <Button variant="outlined">Create folder</Button>
-            <Button variant="outlined">Upload file</Button>
+            <input
+              className={classes.input}
+              style={{ display: 'none' }}
+              id="raised-button-file"
+              type="file"
+            />
+            <label htmlFor="raised-button-file">
+              <Button
+                variant="outlined"
+                component="span"
+                className={classes.button}
+              >
+                Upload File
+              </Button>
+            </label>
             <Button variant="outlined">Delete</Button>
             <Button variant="outlined">Rename</Button>
             <List dense={true}>
