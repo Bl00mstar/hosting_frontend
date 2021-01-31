@@ -64,10 +64,4 @@ const mapStateToProps = (state) => ({
   path: state.file.tree.path,
 });
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     createFolder: (x) => dispatch(createNewFolder(x)),
-//   };
-// };
-
 export default connect(mapStateToProps)(Upload);

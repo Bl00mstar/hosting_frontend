@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { tokenConfig } from '@store/user/user.helpers';
 import axios from 'axios';
-import download from 'downloadjs';
+import { saveAs } from 'file-saver';
 import { useStyles } from '@styles/DashboardStyle';
 import { getUserFiles, setDirectoryPath } from '@store/files/file.actions';
 import {
@@ -16,15 +16,13 @@ import {
   Checkbox,
   Button,
 } from '@material-ui/core';
-import {
-  Folder,
-  InsertDriveFile,
-  Delete,
-  GetApp,
-  FormatColorText,
-} from '@material-ui/icons';
+import { Folder, InsertDriveFile, Delete, GetApp } from '@material-ui/icons';
+import CreateFolder from './CreateFolder';
+import UploadFile from './UploadFile';
 
 const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
+  const [showCreateField, setShowCreateField] = useState(false);
+  const [showUploadField, setShowUploadField] = useState(false);
   const [selectPath, setSelectPath] = useState([]);
   const classes = useStyles();
   useEffect(() => {
@@ -34,79 +32,98 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
     setSelectPath(pathArray);
   }, [getFiles, path]);
 
-  const downloadFiles = async (data) => {
-    console.log(path + data);
+  const deleteFile = async (data) => {
+    const { id } = data;
     let token = await tokenConfig();
+    let link = `http://localhost:9000/media/delete/${id}`;
     axios.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${token.headers['x-auth-token']}`;
-    axios
-      .post('http://localhost:9000/media/file', { file: data, path: path })
-      .then((data) => {
-        console.log(data);
-        download(data.data, 'asd.mp3');
-      })
-      .catch((err) => console.log(err));
+    axios({
+      url: link,
+      method: 'GET',
+    }).then((data) => {
+      console.log(data);
+    });
   };
 
-  const generate = (values, type) => {
+  const downloadFiles = async (data) => {
+    const { id, name } = data;
+    let token = await tokenConfig();
+    let link = `http://localhost:9000/media/file/${id}`;
+    axios.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${token.headers['x-auth-token']}`;
+    axios({
+      url: link,
+      method: 'GET',
+      responseType: 'blob',
+    }).then((response) => {
+      saveAs(response.data, name);
+    });
+  };
+
+  const generateFolders = (values) => {
     if (values) {
       return values.map((value) =>
         React.cloneElement(
           <ListItem>
             <Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} />
             <ListItemIcon>
-              {type === 'folder' ? <Folder /> : <InsertDriveFile />}
+              <Folder />
             </ListItemIcon>
-
-            {type === 'folder' ? (
-              <ListItemText
-                style={{ cursor: 'pointer' }}
-                primary={value}
-                onClick={() => {
-                  setPath(path + value);
-                }}
-              />
-            ) : (
-              <ListItemText style={{ cursor: 'pointer' }} primary={value} />
-            )}
-
-            {type === 'file' ? (
-              <ListItemIcon
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  downloadFiles(value);
-                }}
-              >
-                <GetApp />
-              </ListItemIcon>
-            ) : (
-              <></>
-            )}
+            <ListItemText
+              style={{ cursor: 'pointer' }}
+              primary={value}
+              onClick={() => {
+                setPath(path + value);
+              }}
+            />
+          </ListItem>,
+          { key: value }
+        )
+      );
+    }
+  };
+  const generateFiles = (values) => {
+    if (values) {
+      return values.map((value) =>
+        React.cloneElement(
+          <ListItem>
+            <Checkbox
+              value={value.fileId}
+              inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            />
+            <ListItemIcon>
+              <InsertDriveFile />
+            </ListItemIcon>
+            <ListItemText
+              style={{ cursor: 'pointer' }}
+              primary={value.fileName}
+            />
             <ListItemIcon
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                console.log('rename');
+                downloadFiles({ id: value.fileId, name: value.fileName });
               }}
             >
-              <FormatColorText />
+              <GetApp />
             </ListItemIcon>
             <ListItemIcon
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                console.log('delete');
+                deleteFile({ id: value.fileId });
               }}
             >
               <Delete />
             </ListItemIcon>
           </ListItem>,
-          {
-            key: value,
-          }
+          { key: value.fileId }
         )
       );
-    } else {
-      <div>No files</div>;
     }
   };
 
@@ -132,31 +149,29 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
             ))}
           </Typography>
           <div className={classes.demo}>
-            <Button variant="outlined">Create folder</Button>
-            <input
-              className={classes.input}
-              style={{ display: 'none' }}
-              id="raised-button-file"
-              type="file"
-            />
-            <label htmlFor="raised-button-file">
-              <Button
-                variant="outlined"
-                component="span"
-                className={classes.button}
-              >
-                Upload File
-              </Button>
-            </label>
-            <Button variant="outlined">Delete</Button>
-            <Button variant="outlined">Rename</Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setShowCreateField(!showCreateField);
+              }}
+            >
+              Create folder
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setShowUploadField(!showUploadField);
+              }}
+            >
+              Upload File
+            </Button>
+            {/* <Button variant="outlined">Delete</Button>
+            <Button variant="outlined">Rename</Button> */}
+            {showCreateField && <CreateFolder />}
+            {showUploadField && <UploadFile />}
             <List dense={true}>
-              {foldersList ? (
-                generate(foldersList, 'folder')
-              ) : (
-                <div>nie ma</div>
-              )}
-              {filesList ? generate(filesList, 'file') : <div>nie ma</div>}
+              {foldersList ? generateFolders(foldersList) : <></>}
+              {filesList ? generateFiles(filesList) : <></>}
             </List>
           </div>
         </Grid>
