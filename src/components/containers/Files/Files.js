@@ -5,7 +5,12 @@ import { tokenConfig } from '@store/user/user.helpers';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import { useStyles } from '@styles/DashboardStyle';
-import { getUserFiles, setDirectoryPath } from '@store/files/file.actions';
+import {
+  getUserFiles,
+  setDirectoryPath,
+  folderChecked,
+  filesChecked,
+} from '@store/files/file.actions';
 import {
   List,
   ListItem,
@@ -16,15 +21,29 @@ import {
   Checkbox,
   Button,
 } from '@material-ui/core';
-import { Folder, InsertDriveFile, Delete, GetApp } from '@material-ui/icons';
+import { Folder, InsertDriveFile, GetApp } from '@material-ui/icons';
 import CreateFolder from './CreateFolder';
 import UploadFile from './UploadFile';
+import Rename from './Rename';
+import RenameView from './RenameView';
+import DeleteItem from './DeleteItem';
 
-const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
+const Files = ({
+  filesList,
+  getFiles,
+  foldersList,
+  path,
+  setPath,
+  folderCheck,
+  checkedFiles,
+  filesChecked,
+}) => {
   const [showCreateField, setShowCreateField] = useState(false);
   const [showUploadField, setShowUploadField] = useState(false);
+  const [renameInput, setRenameInput] = useState(false);
   const [selectPath, setSelectPath] = useState([]);
   const classes = useStyles();
+
   useEffect(() => {
     getFiles(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
@@ -32,25 +51,10 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
     setSelectPath(pathArray);
   }, [getFiles, path]);
 
-  const deleteFile = async (data) => {
-    const { id } = data;
-    let token = await tokenConfig();
-    let link = `http://localhost:9000/media/delete/${id}`;
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `Bearer ${token.headers['x-auth-token']}`;
-    axios({
-      url: link,
-      method: 'GET',
-    }).then((data) => {
-      console.log(data);
-    });
-  };
-
   const downloadFiles = async (data) => {
     const { id, name } = data;
     let token = await tokenConfig();
-    let link = `http://localhost:9000/media/file/${id}`;
+    let link = `http://192.168.55.100:9000/media/file/${id}`;
     axios.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${token.headers['x-auth-token']}`;
@@ -68,7 +72,12 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
       return values.map((value) =>
         React.cloneElement(
           <ListItem>
-            <Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} />
+            <Checkbox
+              inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+              onChange={() => {
+                folderCheck(value);
+              }}
+            />
             <ListItemIcon>
               <Folder />
             </ListItemIcon>
@@ -91,10 +100,21 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
         React.cloneElement(
           <ListItem>
             <Checkbox
-              value={value.fileId}
+              value={value.fileName}
               inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
               onChange={(e) => {
-                console.log(e.target.value);
+                let filtered = checkedFiles.filter(
+                  (el) => el.name === e.target.value
+                );
+                let checkedFile = { id: value.fileId, name: e.target.value };
+                if (typeof filtered !== 'undefined' && filtered.length > 0) {
+                  let newFilesArray = checkedFiles.filter(
+                    (el) => el.name !== e.target.value
+                  );
+                  filesChecked(newFilesArray);
+                } else {
+                  filesChecked([...checkedFiles, checkedFile]);
+                }
               }}
             />
             <ListItemIcon>
@@ -112,14 +132,6 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
             >
               <GetApp />
             </ListItemIcon>
-            <ListItemIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                deleteFile({ id: value.fileId });
-              }}
-            >
-              <Delete />
-            </ListItemIcon>
           </ListItem>,
           { key: value.fileId }
         )
@@ -130,6 +142,10 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
   const selectDirectory = (e, el) => {
     e.preventDefault();
     setPath(path.split(el)[0] + el);
+  };
+
+  const showRenameField = () => {
+    setRenameInput(!renameInput);
   };
 
   return (
@@ -165,10 +181,12 @@ const Files = ({ filesList, getFiles, foldersList, path, setPath }) => {
             >
               Upload File
             </Button>
-            {/* <Button variant="outlined">Delete</Button>
-            <Button variant="outlined">Rename</Button> */}
+            <Rename isClicked={showRenameField} checkedValue={setRenameInput} />
+            <DeleteItem />
+            <br />
             {showCreateField && <CreateFolder />}
             {showUploadField && <UploadFile />}
+            {renameInput && <RenameView />}
             <List dense={true}>
               {foldersList ? generateFolders(foldersList) : <></>}
               {filesList ? generateFiles(filesList) : <></>}
@@ -186,18 +204,24 @@ Files.propTypes = {
   filesList: PropTypes.array.isRequired,
   foldersList: PropTypes.array,
   path: PropTypes.string,
+  folderCheck: PropTypes.func.isRequired,
+  filesChecked: PropTypes.func.isRequired,
+  checkedFiles: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   filesList: state.file.tree.files,
   foldersList: state.file.tree.folders,
   path: state.file.tree.path,
+  checkedFiles: state.file.items.checked.files,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFiles: (x) => dispatch(getUserFiles(x)),
     setPath: (x) => dispatch(setDirectoryPath(x)),
+    folderCheck: (x) => dispatch(folderChecked(x)),
+    filesChecked: (x) => dispatch(filesChecked(x)),
   };
 };
 

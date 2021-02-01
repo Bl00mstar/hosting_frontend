@@ -7,6 +7,8 @@ import {
   putFileData,
   loadUserTrash,
   putTrashData,
+  alertFolderError,
+  alertFolderSuccess,
 } from './file.actions';
 
 export function* watchCreateFolder() {
@@ -14,7 +16,6 @@ export function* watchCreateFolder() {
 }
 
 function* createFolder({ payload }) {
-  console.log(payload);
   const { file_type } = payload;
   try {
     if (file_type === 'pattern') {
@@ -23,21 +24,24 @@ function* createFolder({ payload }) {
         payload
       );
       console.log(data);
+      yield put(alertFolderSuccess(data.msg));
     } else if (file_type === 'random') {
       const data = yield postPathGetFiles(
         apiLink + '/file/folder/createRandom',
         payload
       );
       console.log(data);
+      yield put(alertFolderSuccess(data.msg));
     } else {
       const data = yield postPathGetFiles(
         apiLink + '/file/folder/createNew',
         payload
       );
-      console.log(data);
+      yield put(alertFolderSuccess(data.msg));
     }
   } catch (error) {
     console.log(error);
+    yield put(alertFolderError(error));
   }
 }
 

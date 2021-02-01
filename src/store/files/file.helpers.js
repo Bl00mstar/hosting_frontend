@@ -44,8 +44,12 @@ export const postPathGetFiles = async (url, values) => {
       })
       .catch((error) => {
         if (error.response) {
+          // Validation Error
+          console.log(error.response.data.msg);
           reject(error.response.data.message);
         } else if (error.request) {
+          //Cannot connect to server
+          //error.request
           reject('Cannot connect to server.');
         } else {
           reject(error);

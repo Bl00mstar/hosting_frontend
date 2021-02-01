@@ -1,5 +1,16 @@
 import fileTypes from './file.types';
-
+//
+// ACTION MANAGEMENT
+//
+export const folderChecked = (data) => {
+  return { type: fileTypes.FOLDERS_CHECKED, payload: data };
+};
+export const filesChecked = (data) => {
+  return { type: fileTypes.FILES_CHECKED, payload: data };
+};
+export const itemSelected = (data) => {
+  return { type: fileTypes.ITEM_SELECTED, payload: data };
+};
 //
 // FILE MANAGEMENT
 //
@@ -14,6 +25,15 @@ export const uploadFile = (data) => {
 // FOLDERS MANAGEMENT
 //
 
+export const clearFolderAlerts = () => {
+  return { type: fileTypes.CLEAR_FOLDER_ALERTS };
+};
+export const alertFolderError = (data) => {
+  return { type: fileTypes.FOLDER_ALERT_ERROR, payload: data };
+};
+export const alertFolderSuccess = (data) => {
+  return { type: fileTypes.FOLDER_ALERT_SUCCESS, payload: data };
+};
 export const createNewFolder = (data) => {
   return { type: fileTypes.CREATE_NEW_FOLDER, payload: data };
 };
