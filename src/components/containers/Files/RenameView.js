@@ -2,105 +2,72 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { Input, Button } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
+import { renameItem, getUserFiles } from '@store/files/file.actions';
 
-const RenameView = ({ item }) => {
-  const { register, handleSubmit } = useForm({
+const RenameView = ({ item, rename, path, getFiles }) => {
+  const [name, setName] = useState('');
+  const { handleSubmit } = useForm({
     criteriaMode: 'all',
     mode: 'onChange',
   });
-  const [name, setName] = useState('');
+
+  const [selectedItem, setSelectedItem] = useState({});
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
+
   useEffect(() => {
     if (item.type === 'file') {
-      setName(item.item.name);
+      let itemName = item.name.split('.');
+      itemName.pop();
+      setName(itemName);
+      setSelectedItem(item);
     } else if (item.type === 'folder') {
-      setName(item.item.split('/')[0]);
+      setName(item.name);
+      setSelectedItem(item);
     }
   }, [item]);
 
-  const onSubmit = (data, e) => {
-    e.preventDefault();
-    console.log(data);
+  const onSubmit = () => {
+    rename({ newName: name, item: selectedItem, path: path });
+    getFiles(path);
   };
 
   return (
-    <>
+    <section>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          type="text"
+        <TextField
+          id="standard-name"
+          label="Name"
           value={name}
-          name="changeText"
-          onChange={(e) => setName(e.target.value)}
-          ref={register({
-            required: true,
-          })}
+          onChange={handleChange}
         />
-        <Button variant="outlined">Change</Button>
+        <Button type="submit" name="asd" variant="outlined">
+          Change
+        </Button>
       </form>
-      {/* <Input value={name} onChange={(e) => setName(e.target.value)}></Input> */}
-    </>
+    </section>
   );
 };
 
 RenameView.propTypes = {
   item: PropTypes.object.isRequired,
+  rename: PropTypes.func.isRequired,
+  getFiles: PropTypes.func.isRequired,
+  path: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
-  item: state.file.items.selected,
+  item: state.file.action.selected,
+  path: state.file.tree.path,
 });
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    rename: (x) => dispatch(renameItem(x)),
+    getFiles: (x) => dispatch(getUserFiles(x)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenameView);
-
-// import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-
-// import {
-//   createNewFolder,
-//   getUserFiles,
-//   clearFolderAlerts,
-// } from '@store/files/file.actions';
-// import { useStyles } from '@styles/DashboardStyle';
-
-// const CreateFolder = ({
-//   path,
-//   createFolder,
-//   getFiles,
-//   clearAlerts,
-//   success,
-//   error,
-// }) => {
-//   const classes = useStyles();
-//   const [showAlerts, setShowAlerts] = useState(false);
-
-//   useEffect(() => {
-//     if (error || success) {
-//       console.log(error);
-//       setShowAlerts(true);
-//       setTimeout(() => {
-//         clearAlerts();
-//         setShowAlerts(false);
-//       }, 3000);
-//     }
-//   }, [error, clearAlerts, success]);
-
-//   return (
-//     <div className={classes.demo}>
-
-//       <div>
-//         <br />
-//       </div>
-//       {showAlerts ? (
-//         <div>
-//           {error && <div>{error}</div>}
-//           {success && <div>{success}</div>}
-//         </div>
-//       ) : (
-//         <></>
-//       )}
-//     </div>

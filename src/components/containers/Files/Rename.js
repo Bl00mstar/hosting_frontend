@@ -2,29 +2,26 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { itemSelected } from '@store/files/file.actions';
+import { handleSelected } from '@store/files/file.actions';
 
-const Rename = ({ files, folders, isClicked, checkedValue, selected }) => {
+const Rename = ({ item, renameIsClicked, checkedValue, selected }) => {
   const [renameButton, setRenameButton] = useState(false);
   useEffect(() => {
     checkedValue(false);
-    selected({ type: '', item: '' });
-    if (files.length + folders.length === 1) {
+    selected({ type: '', name: '', id: '' });
+    if (item.length === 1) {
+      console.log(item);
       setRenameButton(true);
-      if (files[0]) {
-        selected({ type: 'file', item: files[0] });
-      } else if (folders[0]) {
-        selected({ type: 'folder', item: folders[0] });
-      }
+      selected({ type: item[0].type, name: item[0].name, id: item[0].id });
     } else {
       setRenameButton(false);
     }
-  }, [files, folders, checkedValue, selected]);
+  }, [item, selected, checkedValue]);
 
   return (
     <>
       {renameButton ? (
-        <Button variant="outlined" onClick={isClicked}>
+        <Button variant="outlined" onClick={renameIsClicked}>
           Rename
         </Button>
       ) : (
@@ -35,21 +32,19 @@ const Rename = ({ files, folders, isClicked, checkedValue, selected }) => {
 };
 
 Rename.propTypes = {
-  files: PropTypes.array.isRequired,
-  folders: PropTypes.array.isRequired,
-  isClicked: PropTypes.func.isRequired,
+  item: PropTypes.func.isRequired,
+  renameIsClicked: PropTypes.func.isRequired,
   checkedValue: PropTypes.func.isRequired,
   selected: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  files: state.file.items.checked.files,
-  folders: state.file.items.checked.folders,
+  item: state.file.action.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selected: (x) => dispatch(itemSelected(x)),
+    selected: (x) => dispatch(handleSelected(x)),
   };
 };
 

@@ -9,10 +9,14 @@ import {
   watchlistUserFolder,
   watchlistUserTrash,
   watchCreateFolder,
+  watchRenameItem,
+  watchDeleteItem,
 } from './files/file.sagas';
 
 export default function* rootSaga() {
   yield all([
+    watchDeleteItem(),
+    watchRenameItem(),
     watchCreateFolder(),
     watchlistUserTrash(),
     watchUserLogin(),

@@ -1,139 +1,112 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { tokenConfig } from '@store/user/user.helpers';
-import axios from 'axios';
-import { saveAs } from 'file-saver';
 import { useStyles } from '@styles/DashboardStyle';
 import {
   getUserFiles,
   setDirectoryPath,
-  folderChecked,
-  filesChecked,
+  downloadItem,
+  handleCheck,
 } from '@store/files/file.actions';
 import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Grid,
   Typography,
+  List,
+  ListItem,
   Checkbox,
+  ListItemIcon,
+  ListItemText,
   Button,
 } from '@material-ui/core';
-import { Folder, InsertDriveFile, GetApp } from '@material-ui/icons';
+import { InsertDriveFile, GetApp, Folder } from '@material-ui/icons';
 import CreateFolder from './CreateFolder';
 import UploadFile from './UploadFile';
 import Rename from './Rename';
-import RenameView from './RenameView';
+import MoveItem from './MoveItem';
 import DeleteItem from './DeleteItem';
+import RenameView from './RenameView';
 
 const Files = ({
-  filesList,
-  getFiles,
-  foldersList,
+  itemsList,
   path,
+  getFiles,
+  downloadFile,
+  checkedItems,
+  handleCheck,
   setPath,
-  folderCheck,
-  checkedFiles,
-  filesChecked,
 }) => {
+  const classes = useStyles();
   const [showCreateField, setShowCreateField] = useState(false);
   const [showUploadField, setShowUploadField] = useState(false);
   const [renameInput, setRenameInput] = useState(false);
   const [selectPath, setSelectPath] = useState([]);
-  const classes = useStyles();
 
   useEffect(() => {
     getFiles(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
+    console.log('path', pathArray);
     pathArray.pop();
     setSelectPath(pathArray);
   }, [getFiles, path]);
 
-  const downloadFiles = async (data) => {
-    const { id, name } = data;
-    let token = await tokenConfig();
-    let link = `http://192.168.55.100:9000/media/file/${id}`;
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `Bearer ${token.headers['x-auth-token']}`;
-    axios({
-      url: link,
-      method: 'GET',
-      responseType: 'blob',
-    }).then((response) => {
-      saveAs(response.data, name);
-    });
-  };
+  useEffect(() => {
+    getFiles(path);
+  }, [getFiles, path]);
 
-  const generateFolders = (values) => {
-    if (values) {
-      return values.map((value) =>
-        React.cloneElement(
-          <ListItem>
-            <Checkbox
-              inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
-              onChange={() => {
-                folderCheck(value);
-              }}
-            />
-            <ListItemIcon>
-              <Folder />
-            </ListItemIcon>
-            <ListItemText
-              style={{ cursor: 'pointer' }}
-              primary={value}
-              onClick={() => {
-                setPath(path + value);
-              }}
-            />
-          </ListItem>,
-          { key: value }
-        )
+  const handleCheckbox = (e, data) => {
+    let filtered = checkedItems.filter((el) => el.name === e.target.value);
+    let newChecked = { id: data.id, name: data.name, type: data.type };
+    if (typeof filtered !== 'undefined' && filtered.length > 0) {
+      let newFilesArray = checkedItems.filter(
+        (el) => el.name !== e.target.value
       );
+      handleCheck(newFilesArray);
+    } else {
+      handleCheck([...checkedItems, newChecked]);
     }
   };
-  const generateFiles = (values) => {
+
+  const generate = (values) => {
     if (values) {
       return values.map((value) =>
         React.cloneElement(
           <ListItem>
             <Checkbox
-              value={value.fileName}
+              value={value.name}
               inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
               onChange={(e) => {
-                let filtered = checkedFiles.filter(
-                  (el) => el.name === e.target.value
-                );
-                let checkedFile = { id: value.fileId, name: e.target.value };
-                if (typeof filtered !== 'undefined' && filtered.length > 0) {
-                  let newFilesArray = checkedFiles.filter(
-                    (el) => el.name !== e.target.value
-                  );
-                  filesChecked(newFilesArray);
-                } else {
-                  filesChecked([...checkedFiles, checkedFile]);
-                }
+                handleCheckbox(e, value);
               }}
             />
             <ListItemIcon>
-              <InsertDriveFile />
+              {value.type === 'folder' ? <Folder /> : <InsertDriveFile />}
             </ListItemIcon>
-            <ListItemText
-              style={{ cursor: 'pointer' }}
-              primary={value.fileName}
-            />
-            <ListItemIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                downloadFiles({ id: value.fileId, name: value.fileName });
-              }}
-            >
-              <GetApp />
-            </ListItemIcon>
+            {value.type === 'folder' ? (
+              <ListItemText
+                style={{ cursor: 'pointer' }}
+                primary={value.name}
+                onClick={() => {
+                  setPath(path + value.name + '/');
+                }}
+              />
+            ) : (
+              <ListItemText
+                style={{ cursor: 'pointer' }}
+                primary={value.name}
+              />
+            )}
+            {value.type === 'file' && (
+              <ListItemIcon
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  downloadFile({ id: value.fileId, name: value.fileName });
+                }}
+              >
+                <GetApp />
+              </ListItemIcon>
+            )}
           </ListItem>,
-          { key: value.fileId }
+          { key: value.id }
         )
       );
     }
@@ -153,7 +126,7 @@ const Files = ({
       <Grid container spacing={2}>
         <Grid item xs={12} md={10}>
           <Typography variant="h6" className={classes.title}>
-            Path:{' '}
+            Path:
             {selectPath.map((el, key) => (
               <Button
                 variant="outlined"
@@ -181,16 +154,17 @@ const Files = ({
             >
               Upload File
             </Button>
-            <Rename isClicked={showRenameField} checkedValue={setRenameInput} />
+            <Rename
+              renameIsClicked={showRenameField}
+              checkedValue={setRenameInput}
+            />
+            <MoveItem />
             <DeleteItem />
             <br />
             {showCreateField && <CreateFolder />}
             {showUploadField && <UploadFile />}
             {renameInput && <RenameView />}
-            <List dense={true}>
-              {foldersList ? generateFolders(foldersList) : <></>}
-              {filesList ? generateFiles(filesList) : <></>}
-            </List>
+            <List dense={true}>{itemsList ? generate(itemsList) : <></>}</List>
           </div>
         </Grid>
       </Grid>
@@ -199,29 +173,27 @@ const Files = ({
 };
 
 Files.propTypes = {
-  getFiles: PropTypes.func,
-  setPath: PropTypes.func,
-  filesList: PropTypes.array.isRequired,
-  foldersList: PropTypes.array,
-  path: PropTypes.string,
-  folderCheck: PropTypes.func.isRequired,
-  filesChecked: PropTypes.func.isRequired,
-  checkedFiles: PropTypes.array.isRequired,
+  itemsList: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
+  getFiles: PropTypes.func.isRequired,
+  setPath: PropTypes.func.isRequired,
+  downloadFile: PropTypes.func.isRequired,
+  checkedItems: PropTypes.array.isRequired,
+  handleCheck: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  filesList: state.file.tree.files,
-  foldersList: state.file.tree.folders,
+  itemsList: state.file.tree.items,
   path: state.file.tree.path,
-  checkedFiles: state.file.items.checked.files,
+  checkedItems: state.file.action.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFiles: (x) => dispatch(getUserFiles(x)),
     setPath: (x) => dispatch(setDirectoryPath(x)),
-    folderCheck: (x) => dispatch(folderChecked(x)),
-    filesChecked: (x) => dispatch(filesChecked(x)),
+    downloadItem: (x) => dispatch(downloadItem(x)),
+    handleCheck: (x) => dispatch(handleCheck(x)),
   };
 };
 

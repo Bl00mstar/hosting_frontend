@@ -11,6 +11,7 @@ export const fileRequest = async (url) => {
     axios
       .get(url)
       .then((res) => {
+        console.log(res);
         resolve(res.data);
       })
       .catch((error) => {
@@ -40,6 +41,7 @@ export const postPathGetFiles = async (url, values) => {
     axios
       .post(url, { values })
       .then((res) => {
+        console.log(res);
         resolve(res.data);
       })
       .catch((error) => {

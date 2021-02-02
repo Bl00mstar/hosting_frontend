@@ -2,20 +2,20 @@ import fileTypes from './file.types';
 //
 // ACTION MANAGEMENT
 //
-export const folderChecked = (data) => {
-  return { type: fileTypes.FOLDERS_CHECKED, payload: data };
-};
-export const filesChecked = (data) => {
-  return { type: fileTypes.FILES_CHECKED, payload: data };
-};
-export const itemSelected = (data) => {
+
+export const handleSelected = (data) => {
   return { type: fileTypes.ITEM_SELECTED, payload: data };
 };
+
+export const handleCheck = (data) => {
+  return { type: fileTypes.ITEM_CHECKED, payload: data };
+};
+
 //
 // FILE MANAGEMENT
 //
-export const downloadFile = (data) => {
-  return { type: fileTypes.DOWNLOAD_FILE, payload: data };
+export const downloadItem = (data) => {
+  return { type: fileTypes.DOWNLOAD_ITEM, payload: data };
 };
 export const uploadFile = (data) => {
   return { type: fileTypes.UPLOAD_FILE, payload: data };
@@ -37,11 +37,17 @@ export const alertFolderSuccess = (data) => {
 export const createNewFolder = (data) => {
   return { type: fileTypes.CREATE_NEW_FOLDER, payload: data };
 };
-export const deleteFolder = (data) => {
-  return { type: fileTypes.DELETE_FOLDER, payload: data };
+//
+// Item management
+//
+export const itemSelected = (data) => {
+  return { type: fileTypes.ITEM_SELECTED, payload: data };
 };
-export const renameFolder = (data) => {
-  return { type: fileTypes.RENAME_FOLDER, payload: data };
+export const deleteItem = (data) => {
+  return { type: fileTypes.DELETE_ITEM, payload: data };
+};
+export const renameItem = (data) => {
+  return { type: fileTypes.RENAME_ITEM, payload: data };
 };
 
 //
