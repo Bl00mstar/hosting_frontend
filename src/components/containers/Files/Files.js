@@ -30,7 +30,7 @@ const Files = ({
   itemsList,
   path,
   getFiles,
-  downloadFile,
+  downloadItem,
   checkedItems,
   handleCheck,
   setPath,
@@ -44,14 +44,14 @@ const Files = ({
   useEffect(() => {
     getFiles(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
-    console.log('path', pathArray);
     pathArray.pop();
     setSelectPath(pathArray);
   }, [getFiles, path]);
 
   useEffect(() => {
+    handleCheck([]);
     getFiles(path);
-  }, [getFiles, path]);
+  }, [getFiles, path, handleCheck]);
 
   const handleCheckbox = (e, data) => {
     let filtered = checkedItems.filter((el) => el.name === e.target.value);
@@ -99,7 +99,7 @@ const Files = ({
               <ListItemIcon
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  downloadFile({ id: value.fileId, name: value.fileName });
+                  downloadItem({ id: value.id, name: value.name });
                 }}
               >
                 <GetApp />
@@ -177,7 +177,7 @@ Files.propTypes = {
   path: PropTypes.string.isRequired,
   getFiles: PropTypes.func.isRequired,
   setPath: PropTypes.func.isRequired,
-  downloadFile: PropTypes.func.isRequired,
+  downloadItem: PropTypes.func.isRequired,
   checkedItems: PropTypes.array.isRequired,
   handleCheck: PropTypes.func.isRequired,
 };

@@ -3,29 +3,44 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userLogout } from '@store/user/user.actions';
+import MenuIcon from '@material-ui/icons/Menu';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+} from '@material-ui/core/';
+import { useStyles } from '@styles/DashboardStyle';
 
-const Navbar = ({ logout }) => {
+const Navbar = ({ handleDrawerToggle, logout }) => {
+  const classes = useStyles();
   let navigate = useNavigate();
   return (
-    <div className="container-fluid">
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-          img
-        </a>
-
-        <ul className="navbar-nav px-4">
-          <li className="nav-item text-nowrap">
-            <a className="nav-link" onClick={() => logout() && navigate('/')}>
-              Sign out
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <AppBar position="fixed" className={classes.appBar + ' bg-dark'}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          className={classes.menuButton}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          Hosting
+        </Typography>
+        <Button color="inherit" onClick={() => logout() && navigate('/')}>
+          Sign out
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
 Navbar.propTypes = {
+  handleDrawerToggle: PropTypes.func,
   logout: PropTypes.func.isRequired,
 };
 

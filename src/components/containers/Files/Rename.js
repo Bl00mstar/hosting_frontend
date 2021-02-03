@@ -32,7 +32,7 @@ const Rename = ({ item, renameIsClicked, checkedValue, selected }) => {
 };
 
 Rename.propTypes = {
-  item: PropTypes.func.isRequired,
+  item: PropTypes.array.isRequired,
   renameIsClicked: PropTypes.func.isRequired,
   checkedValue: PropTypes.func.isRequired,
   selected: PropTypes.func.isRequired,

@@ -1,56 +1,73 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUserTrash } from '@store/files/file.actions';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import Checkbox from '@material-ui/core/Checkbox';
+import { getUserTrash, handleCheck } from '@store/files/file.actions';
+import { useStyles } from '@styles/DashboardStyle';
+import {
+  Typography,
+  Grid,
+  List,
+  ListItem,
+  Checkbox,
+  ListItemIcon,
+  ListItemText,
+} from '@material-ui/core/';
+import { InsertDriveFile } from '@material-ui/icons';
+import Delete from './Delete';
+import Restore from './Restore';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: 752,
-  },
-  title: {
-    margin: theme.spacing(4, 0, 2),
-  },
-}));
-
-function generate(values) {
-  return values.map((value) =>
-    React.cloneElement(
-      <ListItem>
-        <Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} />
-        <ListItemIcon>
-          <InsertDriveFileIcon />
-        </ListItemIcon>
-        <ListItemText primary={value} />
-      </ListItem>,
-      {
-        key: value,
-      }
-    )
-  );
-}
-
-const Trash = ({ getTrash, trashList }) => {
+const Trash = ({ getTrash, trashList, handleCheck, checkedItems }) => {
   const classes = useStyles();
+
   useEffect(() => {
+    handleCheck([]);
     getTrash();
-  }, [getTrash]);
+  }, [getTrash, handleCheck]);
+
+  const handleCheckbox = (e, data) => {
+    let filtered = checkedItems.filter((el) => el.id === e.target.value);
+    let newChecked = { id: data.id, name: data.name, type: data.type };
+    if (typeof filtered !== 'undefined' && filtered.length > 0) {
+      let newFilesArray = checkedItems.filter((el) => el.id !== e.target.value);
+      handleCheck(newFilesArray);
+    } else {
+      handleCheck([...checkedItems, newChecked]);
+    }
+  };
+
+  const generate = (values) => {
+    return values.map((value) =>
+      React.cloneElement(
+        <ListItem>
+          <Checkbox
+            value={value.id}
+            inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+            onChange={(e) => {
+              handleCheckbox(e, value);
+            }}
+          />
+          <ListItemIcon>
+            <InsertDriveFile />
+          </ListItemIcon>
+          <ListItemText primary={value.name} />
+          <ListItemText primary={value.date} />
+        </ListItem>,
+        {
+          key: value.id,
+        }
+      )
+    );
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Typography variant="h6" className={classes.title}>
-            Path: /? usuń/przywróc
+            Trash folder:
           </Typography>
+          <Delete />
+          <Restore />
           <div className={classes.demo}>
             <List dense={true}>{generate(trashList)}</List>
           </div>
@@ -63,15 +80,19 @@ const Trash = ({ getTrash, trashList }) => {
 Trash.propTypes = {
   getTrash: PropTypes.func,
   trashList: PropTypes.array.isRequired,
+  handleCheck: PropTypes.func.isRequired,
+  checkedItems: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  trashList: state.file.trash.files,
+  trashList: state.file.trash.items,
+  checkedItems: state.file.action.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getTrash: () => dispatch(getUserTrash()),
+    handleCheck: (x) => dispatch(handleCheck(x)),
   };
 };
 

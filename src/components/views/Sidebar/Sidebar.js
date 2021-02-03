@@ -1,54 +1,100 @@
 import React from 'react';
-import '../../../layout/User/style.css';
+import PropTypes from 'prop-types';
 import { routes } from '../../../routes';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Drawer,
+  Hidden,
+} from '@material-ui/core/';
+import { useTheme } from '@material-ui/core/styles';
+import { useStyles } from '@styles/DashboardStyle';
 
-const Sidebar = () => {
-  return (
-    <div className="container-fluid">
-      <div className="col-md-2 d-sm-none d-xs-none d-md-block bg-light sidebar">
-        <nav className="col-md-2 d-sm-none d-xs-none d-md-block bg-light sidebar">
-          <div className="sidebar-sticky">
-            <ul className="nav flex-column">
-              {routes.map(({ description, path, type }, key) => {
-                if (type.includes('user')) {
-                  return (
-                    <li className="nav-item" key={key}>
-                      <NavLink to={`/${path}`} className="nav-link text-light">
-                        {description}
-                      </NavLink>
-                    </li>
-                  );
-                }
-              })}
+const Sidebar = (props) => {
+  const { window, mobileOpen, handleDrawerToggle } = props;
+  const theme = useTheme();
+  const classes = useStyles();
 
-              <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>Manage files</span>
-                <a className="d-flex align-items-center text-muted" href="#" />
-              </h6>
-              {routes.map(({ description, path, type }, key) => {
-                if (type.includes('files')) {
-                  return (
-                    <li className="nav-item" key={key}>
-                      <NavLink
-                        to={`/${path}`}
-                        className="nav-link text-left text-light"
-                      >
-                        {description}
-                      </NavLink>
-                    </li>
-                  );
-                }
-              })}
-            </ul>
-          </div>
-        </nav>
-      </div>
+  const drawer = (
+    <div>
+      <div className={classes.toolbar} />
+      <Divider />
+      <List>
+        {routes.map(({ description, path, type, icon }, key) => {
+          if (type.includes('user')) {
+            return (
+              <Link key={key} to={`/${path}`}>
+                <ListItem button key={key}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText primary={description} />
+                </ListItem>
+              </Link>
+            );
+          }
+        })}
+      </List>
+      <Divider />
+      <List>
+        {routes.map(({ description, path, type, icon }, key) => {
+          if (type.includes('files')) {
+            return (
+              <Link key={key} to={`/${path}`}>
+                <ListItem button key={key}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText primary={description} />
+                </ListItem>
+              </Link>
+            );
+          }
+        })}
+      </List>
     </div>
   );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
+  return (
+    <nav className={classes.drawer} aria-label="mailbox folders">
+      <Hidden smUp implementation="css">
+        <Drawer
+          container={container}
+          variant="temporary"
+          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true,
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+      <Hidden xsDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="permanent"
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+    </nav>
+  );
+};
+Sidebar.propTypes = {
+  window: PropTypes.func,
+  mobileOpen: PropTypes.bool,
+  handleDrawerToggle: PropTypes.func,
 };
 
 export default Sidebar;
-
-const NavLink = styled(Link)``;

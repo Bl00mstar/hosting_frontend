@@ -1,4 +1,4 @@
-import { fileRequest, postPathGetFiles } from './file.helpers';
+import { fileRequest, postPathGetFiles, download } from './file.helpers';
 import fileTypes from './file.types';
 import { put, takeEvery } from 'redux-saga/effects';
 import { apiLink } from '@utils/api';
@@ -10,14 +10,48 @@ import {
   alertFolderError,
   alertFolderSuccess,
 } from './file.actions';
+import { saveAs } from 'file-saver';
+
+export function* watchPermDelete() {
+  yield takeEvery(fileTypes.PERM_DELETE, permDelete);
+}
+function* permDelete({ payload }) {
+  try {
+    const data = yield postPathGetFiles(
+      apiLink + '/file/trash/delete',
+      payload
+    );
+    console.log(data);
+  } catch (error) {
+    yield console.log(error);
+  }
+}
+
+export function* watchRestoreItem() {
+  yield takeEvery(fileTypes.RESTORE_ITEM, restoreItem);
+}
+function* restoreItem({ payload }) {
+  try {
+    const data = yield postPathGetFiles(
+      apiLink + '/file/trash/restore',
+      payload
+    );
+    console.log(data);
+  } catch (error) {
+    yield console.log(error);
+  }
+}
 
 export function* watchDownloadItem() {
   yield takeEvery(fileTypes.DOWNLOAD_ITEM, downloadItem);
 }
 function* downloadItem({ payload }) {
-  console.log(payload);
   try {
-    console.log('asd');
+    console.log(payload);
+    const { id, name } = payload;
+    console.log(id);
+    const data = yield download(apiLink + `/media/${id}`);
+    saveAs(data, name);
   } catch (error) {
     console.log(error);
     yield console.log('asd');
@@ -30,7 +64,7 @@ export function* watchDeleteItem() {
 function* deleteItem({ payload }) {
   console.log(payload);
   try {
-    const data = yield postPathGetFiles(apiLink + '/media/delete', payload);
+    const data = yield postPathGetFiles(apiLink + '/file/delete', payload);
     console.log(data);
     yield console.log('asd');
   } catch (error) {
@@ -44,7 +78,7 @@ export function* watchRenameItem() {
 }
 function* renameItem({ payload }) {
   try {
-    const data = yield postPathGetFiles(apiLink + '/media/rename', payload);
+    const data = yield postPathGetFiles(apiLink + '/file/rename', payload);
     console.log(data);
     yield console.log('asd');
   } catch (error) {

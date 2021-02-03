@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Navbar from '@views/Navbar';
-import Sidebar from '@views/Sidebar';
-import Source from '@views/Source';
-import styled from 'styled-components';
+import { CssBaseline } from '@material-ui/core';
+import { useStyles } from '@styles/DashboardStyle';
+import Sidebar from '../../components/views/Sidebar';
+import Navbar from '../../components/views/Navbar';
 import { routes } from '../../routes';
 import { useRoutes, useNavigate } from 'react-router-dom';
-import './style.css';
 
 const User = ({ isAuthenticated }) => {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const classes = useStyles();
   const element = useRoutes(routes);
   let navigate = useNavigate();
 
@@ -17,12 +18,23 @@ const User = ({ isAuthenticated }) => {
     navigate('account/login');
   }
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
-    <DashboardStyled>
-      <Navbar />
-      <Sidebar />
-      <Source>{element}</Source>
-    </DashboardStyled>
+    <div className={classes.root}>
+      <CssBaseline />
+      <Navbar handleDrawerToggle={handleDrawerToggle} />
+      <Sidebar
+        handleDrawerToggle={handleDrawerToggle}
+        mobileOpen={mobileOpen}
+      />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {element}
+      </main>
+    </div>
   );
 };
 
@@ -36,10 +48,12 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps)(User);
 
-const DashboardStyled = styled.div`
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-`;
+{
+  /* <div className={classes.toolbar} />
+<Typography paragraph>
+  Lorem ipsum dolor sit amet, consectetur adipiscing{' '}
+</Typography>
+<Typography paragraph>
+  Consequat mauris nunc congue nisi vitae suscipit.{' '}
+</Typography> */
+}

@@ -10,7 +10,12 @@ export const handleSelected = (data) => {
 export const handleCheck = (data) => {
   return { type: fileTypes.ITEM_CHECKED, payload: data };
 };
-
+export const restoreItem = (data) => {
+  return { type: fileTypes.RESTORE_ITEM, payload: data };
+};
+export const permDelete = (data) => {
+  return { type: fileTypes.PERM_DELETE, payload: data };
+};
 //
 // FILE MANAGEMENT
 //

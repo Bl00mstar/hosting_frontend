@@ -5,6 +5,7 @@ export const fileRequest = async (url) => {
   let token = await tokenConfig();
 
   return new Promise((resolve, reject) => {
+    console.log(url);
     axios.defaults.headers.common[
       'Authorization'
     ] = `Bearer ${token.headers['x-auth-token']}`;
@@ -25,6 +26,28 @@ export const fileRequest = async (url) => {
         } else {
           reject(error);
         }
+      });
+  });
+};
+
+export const download = async (url) => {
+  console.log(url);
+  let token = await tokenConfig();
+  return new Promise((resolve, reject) => {
+    axios.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${token.headers['x-auth-token']}`;
+    axios({
+      url: url,
+      method: 'GET',
+      responseType: 'blob',
+    })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
       });
   });
 };
