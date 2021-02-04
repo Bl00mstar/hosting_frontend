@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { Box, Typography, LinearProgress } from '@material-ui/core';
+import {
+  Grid,
+  TextField,
+  Button,
+  Box,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
 import { useStyles } from '@styles/DashboardStyle';
 import { tokenConfig } from '@store/user/user.helpers';
 
@@ -45,27 +52,40 @@ const UploadFile = ({ path }) => {
 
   return (
     <div className={classes.demo}>
-      <input
-        type="file"
-        onChange={(e) => {
-          setUploadedImage(e.target.files[0]);
-        }}
-      ></input>
-      <button className="btn-small blue" onClick={handleClick}>
-        Upload image
-      </button>
-      {uploadPercentage !== 0 && (
-        <Box display="flex" alignItems="center">
-          <Box width="100%" mr={1}>
-            <LinearProgress variant="determinate" value={uploadPercentage} />
+      <Grid
+        component="form"
+        container
+        required
+        justify="center"
+        style={{ width: '90%', maxWidth: '500px', margin: '0 auto' }}
+      >
+        <TextField
+          id="file"
+          type="file"
+          margin="normal"
+          fullWidth
+          name="selectedFile"
+          variant="outlined"
+          onChange={(e) => {
+            setUploadedImage(e.target.files[0]);
+          }}
+        />
+        <Button variant="outlined" onClick={handleClick} type="submit">
+          Upload
+        </Button>
+        {uploadPercentage !== 0 && (
+          <Box display="flex" alignItems="center">
+            <Box width="100%" mr={1}>
+              <LinearProgress variant="determinate" value={uploadPercentage} />
+            </Box>
+            <Box minWidth={35}>
+              <Typography variant="body2" color="textSecondary">
+                {uploadPercentage}
+              </Typography>
+            </Box>
           </Box>
-          <Box minWidth={35}>
-            <Typography variant="body2" color="textSecondary">
-              {uploadPercentage}
-            </Typography>
-          </Box>
-        </Box>
-      )}
+        )}
+      </Grid>
     </div>
   );
 };

@@ -1,79 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useForm } from 'react-hook-form';
+import { TextField, Button, Grid } from '@material-ui/core';
 import {
   createNewFolder,
   getUserFiles,
-  clearFolderAlerts,
+  alertFiles,
 } from '@store/files/file.actions';
-import { useStyles } from '@styles/DashboardStyle';
 
-const CreateFolder = ({
-  path,
-  createFolder,
-  getFiles,
-  clearAlerts,
-  success,
-  error,
-}) => {
-  const classes = useStyles();
-  const [showAlerts, setShowAlerts] = useState(false);
-  const { register, handleSubmit } = useForm({
-    criteriaMode: 'all',
-    mode: 'onChange',
-  });
-
-  useEffect(() => {
-    if (error || success) {
-      console.log(error);
-      setShowAlerts(true);
-      setTimeout(() => {
-        clearAlerts();
-        setShowAlerts(false);
-      }, 3000);
-    }
-  }, [error, clearAlerts, success]);
-
-  const onSubmit = (data, e) => {
+const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
+  const formEl = React.useRef(null);
+  const submitForm = (e) => {
     e.preventDefault();
-    e.target.reset();
-    data.file_path = path;
-    data.file_type = 'new';
-    createFolder(data);
-    getFiles(path);
+    const formData = new FormData(formEl.current);
+    const name = formData.get('name');
+    console.log(name);
+    if (!name) {
+      alertFiles({ message: 'Folder name cannot be empty.', type: 'info' });
+    } else {
+      createFolder({ file_type: 'new', file_text: name, file_path: path });
+      setTimeout(() => {
+        getFiles(path);
+      }, 500);
+    }
   };
 
   return (
-    <div className={classes.demo}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="text"
-          placeholder="Folder name"
-          name="file_text"
-          ref={register({
-            required: true,
-          })}
-          style={{
-            marginTop: '8px',
-            padding: '10px 26px 1px 12px',
-            marginRight: '8px',
-          }}
-        />
-        <button>Create</button>
-      </form>
-      <div>
-        <br />
-      </div>
-      {showAlerts ? (
-        <div>
-          {error && <div>{error}</div>}
-          {success && <div>{success}</div>}
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
+    <Grid
+      component="form"
+      ref={formEl}
+      onSubmit={submitForm}
+      container
+      required
+      justify="center"
+      style={{ width: '90%', maxWidth: '500px', margin: '0 auto' }}
+    >
+      <TextField
+        id="outlined-email-input"
+        label="Folder name"
+        type="text"
+        name="name"
+        autoComplete="name"
+        margin="normal"
+        variant="outlined"
+        fullWidth
+        color="primary"
+      />
+      <br />
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={submitForm}
+        type="submit"
+      >
+        Create
+      </Button>
+    </Grid>
   );
 };
 
@@ -81,22 +63,18 @@ CreateFolder.propTypes = {
   createFolder: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   getFiles: PropTypes.func.isRequired,
-  success: PropTypes.string,
-  error: PropTypes.string,
-  clearAlerts: PropTypes.func.isRequired,
+  alertFiles: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   path: state.file.tree.path,
-  success: state.file.alert.folder.successMsg,
-  error: state.file.alert.folder.errorMsg,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFiles: (x) => dispatch(getUserFiles(x)),
     createFolder: (x) => dispatch(createNewFolder(x)),
-    clearAlerts: () => dispatch(clearFolderAlerts()),
+    alertFiles: (x) => dispatch(alertFiles(x)),
   };
 };
 

@@ -27,7 +27,11 @@ const Sidebar = (props) => {
         {routes.map(({ description, path, type, icon }, key) => {
           if (type.includes('user')) {
             return (
-              <Link key={key} to={`/${path}`}>
+              <Link
+                key={key}
+                to={`/${path}`}
+                style={{ textDecoration: 'none', color: '#606060' }}
+              >
                 <ListItem button key={key}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText primary={description} />
@@ -42,7 +46,11 @@ const Sidebar = (props) => {
         {routes.map(({ description, path, type, icon }, key) => {
           if (type.includes('files')) {
             return (
-              <Link key={key} to={`/${path}`}>
+              <Link
+                key={key}
+                to={`/${path}`}
+                style={{ textDecoration: 'none', color: '#606060' }}
+              >
                 <ListItem button key={key}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText primary={description} />

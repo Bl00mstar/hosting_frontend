@@ -17,7 +17,11 @@ const Navbar = ({ handleDrawerToggle, logout }) => {
   const classes = useStyles();
   let navigate = useNavigate();
   return (
-    <AppBar position="fixed" className={classes.appBar + ' bg-dark'}>
+    <AppBar
+      position="fixed"
+      className={classes.appBar}
+      style={{ background: '#606060' }}
+    >
       <Toolbar>
         <IconButton
           color="inherit"
@@ -29,7 +33,7 @@ const Navbar = ({ handleDrawerToggle, logout }) => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          Hosting
+          .
         </Typography>
         <Button color="inherit" onClick={() => logout() && navigate('/')}>
           Sign out

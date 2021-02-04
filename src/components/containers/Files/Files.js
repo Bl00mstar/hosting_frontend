@@ -7,6 +7,7 @@ import {
   setDirectoryPath,
   downloadItem,
   handleCheck,
+  getFolders,
 } from '@store/files/file.actions';
 import {
   Grid,
@@ -25,6 +26,7 @@ import Rename from './Rename';
 import MoveItem from './MoveItem';
 import DeleteItem from './DeleteItem';
 import RenameView from './RenameView';
+import FileAlerts from './FileAlerts';
 
 const Files = ({
   itemsList,
@@ -34,6 +36,7 @@ const Files = ({
   checkedItems,
   handleCheck,
   setPath,
+  getFolders,
 }) => {
   const classes = useStyles();
   const [showCreateField, setShowCreateField] = useState(false);
@@ -42,11 +45,12 @@ const Files = ({
   const [selectPath, setSelectPath] = useState([]);
 
   useEffect(() => {
+    getFolders();
     getFiles(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
     pathArray.pop();
     setSelectPath(pathArray);
-  }, [getFiles, path]);
+  }, [getFiles, path, getFolders]);
 
   useEffect(() => {
     handleCheck([]);
@@ -126,7 +130,7 @@ const Files = ({
       <Grid container spacing={2}>
         <Grid item xs={12} md={10}>
           <Typography variant="h6" className={classes.title}>
-            Path:
+            <FileAlerts />
             {selectPath.map((el, key) => (
               <Button
                 variant="outlined"
@@ -136,36 +140,43 @@ const Files = ({
                 {el}
               </Button>
             ))}
+
+            <div className={classes.demo}>
+              <Button
+                variant="outlined"
+                style={{ marginRight: '5px', marginTop: '5px' }}
+                onClick={() => {
+                  setShowCreateField(!showCreateField);
+                }}
+              >
+                Create folder
+              </Button>
+              <Button
+                variant="outlined"
+                style={{ marginRight: '5px', marginTop: '5px' }}
+                margin="normal"
+                onClick={() => {
+                  setShowUploadField(!showUploadField);
+                }}
+              >
+                Upload File
+              </Button>
+              <Rename
+                renameIsClicked={showRenameField}
+                checkedValue={setRenameInput}
+              />
+
+              <DeleteItem />
+              <br />
+              {showCreateField && <CreateFolder />}
+              {showUploadField && <UploadFile />}
+              {renameInput && <RenameView />}
+              <MoveItem />
+              <List dense={true}>
+                {itemsList ? generate(itemsList) : <></>}
+              </List>
+            </div>
           </Typography>
-          <div className={classes.demo}>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setShowCreateField(!showCreateField);
-              }}
-            >
-              Create folder
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setShowUploadField(!showUploadField);
-              }}
-            >
-              Upload File
-            </Button>
-            <Rename
-              renameIsClicked={showRenameField}
-              checkedValue={setRenameInput}
-            />
-            <MoveItem />
-            <DeleteItem />
-            <br />
-            {showCreateField && <CreateFolder />}
-            {showUploadField && <UploadFile />}
-            {renameInput && <RenameView />}
-            <List dense={true}>{itemsList ? generate(itemsList) : <></>}</List>
-          </div>
         </Grid>
       </Grid>
     </div>
@@ -180,6 +191,7 @@ Files.propTypes = {
   downloadItem: PropTypes.func.isRequired,
   checkedItems: PropTypes.array.isRequired,
   handleCheck: PropTypes.func.isRequired,
+  getFolders: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -194,6 +206,7 @@ const mapDispatchToProps = (dispatch) => {
     setPath: (x) => dispatch(setDirectoryPath(x)),
     downloadItem: (x) => dispatch(downloadItem(x)),
     handleCheck: (x) => dispatch(handleCheck(x)),
+    getFolders: (x) => dispatch(getFolders(x)),
   };
 };
 

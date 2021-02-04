@@ -3,8 +3,9 @@ import fileTypes from './file.types';
 const initialState = {
   tree: { isLoading: false, items: [], path: '/' },
   trash: { isLoading: false, items: [] },
-  alert: { folder: { successMsg: '', errorMsg: '' } },
+  alert: { folder: { message: '', type: '' } },
   action: {
+    folders: [],
     checked: { items: [] },
     selected: { type: '', id: '', name: '' },
   },
@@ -12,8 +13,39 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.MOVE_FOLDER:
+      return {
+        ...state,
+        action: {
+          ...state.action,
+          folders: action.payload.searchedFolders,
+        },
+      };
+    case fileTypes.ALERT_CLEAR:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          folder: {
+            ...state.alert.folder,
+            message: '',
+            type: '',
+          },
+        },
+      };
+    case fileTypes.ALERT_INFO:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          folder: {
+            ...state.alert.folder,
+            message: action.payload.message,
+            type: action.payload.type,
+          },
+        },
+      };
     case fileTypes.SET_DIRECTORY_PATH:
-      console.log(action.payload);
       return {
         ...state,
         tree: { ...state.tree, path: action.payload },
@@ -75,59 +107,6 @@ const fileReducer = (state = initialState, action) => {
           items: action.payload.searchedItems,
         },
       };
-
-    // case fileTypes.FOLDERS_CHECKED:
-    //   if (state.items.checked.folders.includes(action.payload)) {
-    //     let newFoldersArray = state.items.checked.folders.filter(
-    //       (el) => el !== action.payload
-    //     );
-    //     return {
-    //       ...state,
-    //       items: {
-    //         ...state.items,
-    //         checked: {
-    //           ...state.items.checked,
-    //           folders: newFoldersArray,
-    //         },
-    //       },
-    //     };
-    //   } else {
-    //     return {
-    //       ...state,
-    //       items: {
-    //         ...state.items,
-    //         checked: {
-    //           ...state.items.checked,
-    //           folders: [...state.items.checked.folders, action.payload],
-    //         },
-    //       },
-    //     };
-    //   }
-
-    // case fileTypes.CLEAR_FOLDER_ALERTS:
-    //   return {
-    //     ...state,
-    //     alert: {
-    //       ...state.alert,
-    //       folder: { folder: { successMsg: '', errorMsg: '' } },
-    //     },
-    //   };
-    // case fileTypes.FOLDER_ALERT_ERROR:
-    //   return {
-    //     ...state,
-    //     alert: {
-    //       ...state.alert,
-    //       folder: { ...state.alert.folder, errorMsg: action.payload },
-    //     },
-    //   };
-    // case fileTypes.FOLDER_ALERT_SUCCESS:
-    //   return {
-    //     ...state,
-    //     alert: {
-    //       ...state.alert,
-    //       folder: { ...state.alert.folder, successMsg: action.payload },
-    //     },
-    //   };
 
     default:
       return state;

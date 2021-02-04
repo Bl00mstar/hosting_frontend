@@ -21,7 +21,11 @@ const Rename = ({ item, renameIsClicked, checkedValue, selected }) => {
   return (
     <>
       {renameButton ? (
-        <Button variant="outlined" onClick={renameIsClicked}>
+        <Button
+          variant="outlined"
+          style={{ marginRight: '5px', marginTop: '5px' }}
+          onClick={renameIsClicked}
+        >
           Rename
         </Button>
       ) : (

@@ -1,4 +1,11 @@
 import fileTypes from './file.types';
+// MOVE
+export const getFolders = () => {
+  return { type: fileTypes.SELECT_FOLDER };
+};
+export const setFolders = (data) => {
+  return { type: fileTypes.MOVE_FOLDER, payload: data };
+};
 //
 // ACTION MANAGEMENT
 //
@@ -30,15 +37,13 @@ export const uploadFile = (data) => {
 // FOLDERS MANAGEMENT
 //
 
-export const clearFolderAlerts = () => {
-  return { type: fileTypes.CLEAR_FOLDER_ALERTS };
+export const clearAlertFiles = () => {
+  return { type: fileTypes.ALERT_CLEAR };
 };
-export const alertFolderError = (data) => {
-  return { type: fileTypes.FOLDER_ALERT_ERROR, payload: data };
+export const alertFiles = (data) => {
+  return { type: fileTypes.ALERT_INFO, payload: data };
 };
-export const alertFolderSuccess = (data) => {
-  return { type: fileTypes.FOLDER_ALERT_SUCCESS, payload: data };
-};
+
 export const createNewFolder = (data) => {
   return { type: fileTypes.CREATE_NEW_FOLDER, payload: data };
 };

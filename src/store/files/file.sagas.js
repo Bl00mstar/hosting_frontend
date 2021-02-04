@@ -7,10 +7,22 @@ import {
   putFileData,
   loadUserTrash,
   putTrashData,
-  alertFolderError,
-  alertFolderSuccess,
+  alertFiles,
+  setFolders,
 } from './file.actions';
 import { saveAs } from 'file-saver';
+
+export function* watchGetFolders() {
+  yield takeEvery(fileTypes.SELECT_FOLDER, getFolders);
+}
+function* getFolders() {
+  try {
+    const data = yield fileRequest(apiLink + '/file/folders');
+    yield put(setFolders(data));
+  } catch (error) {
+    yield console.log(error);
+  }
+}
 
 export function* watchPermDelete() {
   yield takeEvery(fileTypes.PERM_DELETE, permDelete);
@@ -99,25 +111,26 @@ function* createFolder({ payload }) {
         apiLink + '/file/folder/createPattern',
         payload
       );
-      console.log(data);
-      yield put(alertFolderSuccess(data.msg));
+
+      yield put(alertFiles(data.msg));
     } else if (file_type === 'random') {
       const data = yield postPathGetFiles(
         apiLink + '/file/folder/createRandom',
         payload
       );
-      console.log(data);
-      yield put(alertFolderSuccess(data.msg));
+
+      yield put(alertFiles(data.msg));
     } else {
       const data = yield postPathGetFiles(
         apiLink + '/file/createNewFolder',
         payload
       );
-      yield put(alertFolderSuccess(data.msg));
+      console.log(data.msg);
+      yield put(alertFiles({ message: data.msg, type: 'success' }));
     }
   } catch (error) {
     console.log(error);
-    yield put(alertFolderError(error));
+    yield put(alertFiles({ message: error, type: 'error' }));
   }
 }
 

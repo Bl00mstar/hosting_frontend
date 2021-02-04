@@ -33,7 +33,11 @@ const DeleteItem = ({ item, deleteItems, path }) => {
   return (
     <>
       {deleteButton ? (
-        <Button variant="outlined" onClick={() => handleDelete()}>
+        <Button
+          variant="outlined"
+          style={{ marginRight: '5px', marginTop: '5px' }}
+          onClick={() => handleDelete()}
+        >
           Delete
         </Button>
       ) : (

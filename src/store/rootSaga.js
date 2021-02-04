@@ -14,10 +14,12 @@ import {
   watchRestoreItem,
   watchPermDelete,
   watchDownloadItem,
+  watchGetFolders,
 } from './files/file.sagas';
 
 export default function* rootSaga() {
   yield all([
+    watchGetFolders(),
     watchDownloadItem(),
     watchRestoreItem(),
     watchPermDelete(),
