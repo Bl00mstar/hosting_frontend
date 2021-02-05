@@ -6,6 +6,7 @@ const initialState = {
   alert: { folder: { message: '', type: '' } },
   action: {
     folders: [],
+    path: '/',
     checked: { items: [] },
     selected: { type: '', id: '', name: '' },
   },
@@ -13,6 +14,15 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.FOLDERS_PATH:
+      console.log(action.payload);
+      return {
+        ...state,
+        action: {
+          ...state.action,
+          path: action.payload,
+        },
+      };
     case fileTypes.MOVE_FOLDER:
       return {
         ...state,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Box } from '@material-ui/core';
 import { renameItem, getUserFiles } from '@store/files/file.actions';
 
 const RenameView = ({ item, rename, path, getFiles }) => {
@@ -35,19 +35,33 @@ const RenameView = ({ item, rename, path, getFiles }) => {
   };
 
   return (
-    <section>
+    <Box
+      m={2}
+      style={{ justify: 'center', maxWidth: '500px', margin: '0 auto' }}
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          id="standard-name"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          id="rename"
           label="Name"
           value={name}
+          size="small"
           onChange={handleChange}
         />
-        <Button type="submit" name="asd" variant="outlined">
-          Change
-        </Button>
+        <Box textAlign="center" m={1}>
+          <Button
+            size="small"
+            variant="outlined"
+            type="submit"
+            style={{ marginBottom: '5px', justify: 'center' }}
+          >
+            Change
+          </Button>
+        </Box>
       </form>
-    </section>
+    </Box>
   );
 };
 

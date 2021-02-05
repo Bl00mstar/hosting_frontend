@@ -1,7 +1,10 @@
 import fileTypes from './file.types';
 // MOVE
-export const getFolders = () => {
-  return { type: fileTypes.SELECT_FOLDER };
+export const foldersPath = (path) => {
+  return { type: fileTypes.FOLDERS_PATH, payload: path };
+};
+export const getFolders = (path) => {
+  return { type: fileTypes.SELECT_FOLDER, payload: path };
 };
 export const setFolders = (data) => {
   return { type: fileTypes.MOVE_FOLDER, payload: data };

@@ -15,9 +15,9 @@ import { saveAs } from 'file-saver';
 export function* watchGetFolders() {
   yield takeEvery(fileTypes.SELECT_FOLDER, getFolders);
 }
-function* getFolders() {
+function* getFolders(payload) {
   try {
-    const data = yield fileRequest(apiLink + '/file/folders');
+    const data = yield postPathGetFiles(apiLink + '/file/folders', payload);
     yield put(setFolders(data));
   } catch (error) {
     yield console.log(error);

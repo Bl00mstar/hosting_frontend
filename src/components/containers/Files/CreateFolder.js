@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { TextField, Button, Grid, Box } from '@material-ui/core';
 import {
   createNewFolder,
   getUserFiles,
@@ -26,36 +26,40 @@ const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
   };
 
   return (
-    <Grid
-      component="form"
-      ref={formEl}
-      onSubmit={submitForm}
-      container
-      required
-      justify="center"
-      style={{ width: '90%', maxWidth: '500px', margin: '0 auto' }}
-    >
-      <TextField
-        id="outlined-email-input"
-        label="Folder name"
-        type="text"
-        name="name"
-        autoComplete="name"
-        margin="normal"
-        variant="outlined"
-        fullWidth
-        color="primary"
-      />
-      <br />
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={submitForm}
-        type="submit"
+    <Box m={2}>
+      <Grid
+        component="form"
+        ref={formEl}
+        onSubmit={submitForm}
+        container
+        required
+        justify="center"
+        style={{ width: '90%', maxWidth: '500px', margin: '0 auto' }}
       >
-        Create
-      </Button>
-    </Grid>
+        <TextField
+          id="outlined-email-input"
+          label="Folder name"
+          type="text"
+          size="small"
+          name="name"
+          autoComplete="name"
+          margin="normal"
+          variant="outlined"
+          fullWidth
+          color="primary"
+        />
+        <br />
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={submitForm}
+          type="submit"
+          style={{ marginBottom: '5px' }}
+        >
+          Create
+        </Button>
+      </Grid>
+    </Box>
   );
 };
 

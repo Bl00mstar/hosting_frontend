@@ -29,9 +29,21 @@ export const useStyles = makeStyles((theme) => ({
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
-
+  bottomPush: {
+    justifyContent: 'center',
+    position: 'fixed',
+    bottom: 0,
+    textAlign: 'center',
+    paddingBottom: 10,
+  },
   drawerPaper: {
     width: drawerWidth,
+  },
+  listSection: {
+    width: '100%',
+    height: 400,
+    maxWidth: 300,
+    backgroundColor: 'inherit',
   },
 
   content: {

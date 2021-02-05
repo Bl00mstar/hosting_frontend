@@ -7,7 +7,6 @@ import {
   setDirectoryPath,
   downloadItem,
   handleCheck,
-  getFolders,
 } from '@store/files/file.actions';
 import {
   Grid,
@@ -18,6 +17,7 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
+  Box,
 } from '@material-ui/core';
 import { InsertDriveFile, GetApp, Folder } from '@material-ui/icons';
 import CreateFolder from './CreateFolder';
@@ -27,6 +27,7 @@ import MoveItem from './MoveItem';
 import DeleteItem from './DeleteItem';
 import RenameView from './RenameView';
 import FileAlerts from './FileAlerts';
+import MoveView from './MoveView';
 
 const Files = ({
   itemsList,
@@ -36,26 +37,24 @@ const Files = ({
   checkedItems,
   handleCheck,
   setPath,
-  getFolders,
 }) => {
   const classes = useStyles();
+  const [showMoveField, setShowMoveField] = useState(false);
   const [showCreateField, setShowCreateField] = useState(false);
   const [showUploadField, setShowUploadField] = useState(false);
   const [renameInput, setRenameInput] = useState(false);
   const [selectPath, setSelectPath] = useState([]);
 
   useEffect(() => {
-    getFolders();
     getFiles(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
     pathArray.pop();
     setSelectPath(pathArray);
-  }, [getFiles, path, getFolders]);
+  }, [getFiles, path]);
 
   useEffect(() => {
     handleCheck([]);
-    getFiles(path);
-  }, [getFiles, path, handleCheck]);
+  }, [handleCheck]);
 
   const handleCheckbox = (e, data) => {
     let filtered = checkedItems.filter((el) => el.name === e.target.value);
@@ -74,7 +73,7 @@ const Files = ({
     if (values) {
       return values.map((value) =>
         React.cloneElement(
-          <ListItem>
+          <ListItem width={'100px'}>
             <Checkbox
               value={value.name}
               inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
@@ -125,6 +124,10 @@ const Files = ({
     setRenameInput(!renameInput);
   };
 
+  const handleMoveField = () => {
+    setShowMoveField(!showMoveField);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -134,6 +137,7 @@ const Files = ({
             {selectPath.map((el, key) => (
               <Button
                 variant="outlined"
+                size="small"
                 onClick={(e) => selectDirectory(e, el)}
                 key={key}
               >
@@ -165,16 +169,28 @@ const Files = ({
                 renameIsClicked={showRenameField}
                 checkedValue={setRenameInput}
               />
-
+              <MoveItem moveIsClicked={handleMoveField} />
               <DeleteItem />
               <br />
               {showCreateField && <CreateFolder />}
               {showUploadField && <UploadFile />}
               {renameInput && <RenameView />}
-              <MoveItem />
-              <List dense={true}>
-                {itemsList ? generate(itemsList) : <></>}
-              </List>
+              {showMoveField && <MoveView />}
+              <Box m={2}>
+                <List
+                  size="small"
+                  style={{
+                    display: 'inline-block',
+                    position: 'fixed',
+                    minWidth: '70%',
+                    maxHeight: '70%',
+                    overflow: 'auto',
+                  }}
+                  dense={true}
+                >
+                  {itemsList ? generate(itemsList) : <></>}
+                </List>
+              </Box>
             </div>
           </Typography>
         </Grid>
@@ -185,13 +201,12 @@ const Files = ({
 
 Files.propTypes = {
   itemsList: PropTypes.array.isRequired,
-  path: PropTypes.string.isRequired,
   getFiles: PropTypes.func.isRequired,
   setPath: PropTypes.func.isRequired,
   downloadItem: PropTypes.func.isRequired,
   checkedItems: PropTypes.array.isRequired,
   handleCheck: PropTypes.func.isRequired,
-  getFolders: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -206,7 +221,6 @@ const mapDispatchToProps = (dispatch) => {
     setPath: (x) => dispatch(setDirectoryPath(x)),
     downloadItem: (x) => dispatch(downloadItem(x)),
     handleCheck: (x) => dispatch(handleCheck(x)),
-    getFolders: (x) => dispatch(getFolders(x)),
   };
 };
 

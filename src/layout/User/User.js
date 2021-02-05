@@ -34,6 +34,9 @@ const User = ({ isAuthenticated }) => {
         <div className={classes.toolbar} />
         {element}
       </main>
+      <footer className={classes.bottomPush}>
+        xdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad
+      </footer>
     </div>
   );
 };
@@ -47,13 +50,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(User);
-
-{
-  /* <div className={classes.toolbar} />
-<Typography paragraph>
-  Lorem ipsum dolor sit amet, consectetur adipiscing{' '}
-</Typography>
-<Typography paragraph>
-  Consequat mauris nunc congue nisi vitae suscipit.{' '}
-</Typography> */
-}
