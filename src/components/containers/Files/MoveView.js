@@ -11,9 +11,12 @@ import {
   Grid,
 } from '@material-ui/core';
 import { getFolders, foldersPath } from '@store/files/file.actions';
+import { useStyles } from '@styles/DashboardStyle';
 
 const MoveView = ({ folders, getFolders, foldersPath, actionPath }) => {
   const [localPath, setLocalPath] = useState([]);
+  const classes = useStyles();
+
   useEffect(() => {
     getFolders(actionPath);
     let localPathArr = actionPath.replace(/\//g, '/ ').split(' ');
@@ -41,25 +44,44 @@ const MoveView = ({ folders, getFolders, foldersPath, actionPath }) => {
   };
 
   return (
-    <Grid component="form" container required style={{ width: '90%' }}>
-      <Box width={1} m={2}>
-        <Typography variant="body2">
-          Selected:
-          {localPath.map((el, key) => (
-            <Button key={key} size="small" variant="text">
-              {el}
+    <div className={classes.root}>
+      <Box
+        width={1}
+        style={{
+          overflow: 'auto',
+          justifyContent: 'center',
+        }}
+      >
+        <Grid
+          container
+          spacing={2}
+          style={{
+            maxHeight: '200px',
+            overflow: 'auto',
+            // textAlign: 'center',
+            justifyContent: 'center',
+            margin: '0 auto',
+          }}
+        >
+          <Grid item xs={10}>
+            Selected path:
+            {localPath.map((el, key) => (
+              <Button key={key} size="small" variant="text">
+                {el}
+              </Button>
+            ))}
+          </Grid>
+          <Grid item xs={2}>
+            <Button size="small" variant="contained">
+              Move
             </Button>
-          ))}
-        </Typography>
-        <MenuList>{folders && generatePath(folders)}</MenuList>
-
-        <Box textAlign="center" m={1}>
-          <Button variant="contained" size="small">
-            Move
-          </Button>
-        </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <MenuList>{folders && generatePath(folders)}</MenuList>
+          </Grid>
+        </Grid>
       </Box>
-    </Grid>
+    </div>
   );
 };
 

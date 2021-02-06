@@ -183,7 +183,7 @@ const Files = ({
                     display: 'inline-block',
                     position: 'fixed',
                     minWidth: '70%',
-                    maxHeight: '70%',
+                    maxHeight: '55%',
                     overflow: 'auto',
                   }}
                   dense={true}
