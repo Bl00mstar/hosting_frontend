@@ -28,12 +28,13 @@ import DeleteItem from './DeleteItem';
 import RenameView from './RenameView';
 import FileAlerts from './FileAlerts';
 import MoveView from './MoveView';
+// import Downloader from '../Downloader';
 
+import useFileDownloader from '../../hooks/useFileDownloader';
 const Files = ({
   itemsList,
   path,
   getFiles,
-  downloadItem,
   checkedItems,
   handleCheck,
   setPath,
@@ -44,6 +45,9 @@ const Files = ({
   const [showUploadField, setShowUploadField] = useState(false);
   const [renameInput, setRenameInput] = useState(false);
   const [selectPath, setSelectPath] = useState([]);
+
+  const [downloadFile, downloaderComponentUI] = useFileDownloader();
+  const download = (file) => downloadFile(file);
 
   useEffect(() => {
     getFiles(path);
@@ -102,7 +106,7 @@ const Files = ({
               <ListItemIcon
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  downloadItem({ id: value.id, name: value.name });
+                  download({ id: value.id, name: value.name });
                 }}
               >
                 <GetApp />
@@ -195,6 +199,7 @@ const Files = ({
           </Typography>
         </Grid>
       </Grid>
+      {downloaderComponentUI}
     </div>
   );
 };
