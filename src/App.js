@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import MainLayout from '@layout/MainLayout/MainLayout';
+import Public from '@layout/Public';
 
 const App = () => {
   return (
     <div className="App">
-      <MainLayout />
+      <Public />
     </div>
   );
 };

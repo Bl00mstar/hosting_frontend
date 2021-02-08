@@ -1,15 +1,13 @@
 import React from 'react';
-
-import Login from '@views/Login';
-import Signup from '@views/Signup';
-import Home from '@views/Home';
-
-import Create from '@containers/Create';
-import Dashboard from '@containers/Dashboard';
-import Settings from '@containers/Settings';
-import Trash from '@containers/Trash';
-import Upload from '@containers/Upload';
-import Files from '@containers/Files';
+import Dashboard from '@pages/Dashboard';
+import Files from '@pages/Files';
+import Home from '@pages/Home';
+import Login from '@pages/Login';
+import NewFolder from '@pages/NewFolder';
+import Register from '@pages/Register';
+import Setting from '@pages/Setting';
+import Trash from '@pages/Trash';
+import Upload from '@pages/Upload';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
@@ -34,7 +32,7 @@ export const routes = [
   {
     description: 'Sign Up',
     path: '/account/signup',
-    element: <Signup />,
+    element: <Register />,
     type: ['public'],
   },
   {
@@ -53,7 +51,7 @@ export const routes = [
   {
     description: 'Settings',
     path: '/user/settings',
-    element: <Settings />,
+    element: <Setting />,
     icon: <SettingsApplicationsIcon />,
     type: ['user'],
   },
@@ -74,7 +72,7 @@ export const routes = [
   {
     description: 'New folder',
     path: '/user/create',
-    element: <Create />,
+    element: <NewFolder />,
     icon: <CreateNewFolderIcon />,
     type: ['files'],
   },
