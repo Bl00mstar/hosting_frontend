@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FilesPath from '@components/FilesPath';
 
-const usePathFiles = () => {
+const useUpdatePath = () => {
   const [path, setPath] = useState(() => []);
 
   const pathFiles = (value) => {
@@ -16,4 +16,4 @@ const usePathFiles = () => {
   ];
 };
 
-export default usePathFiles;
+export default useUpdatePath;

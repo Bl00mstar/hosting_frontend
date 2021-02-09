@@ -1,1 +1,1 @@
-export const apiLink = 'http://localhost:9000';
+export const apiLink = 'http://192.168.55.100:9000';

@@ -1,54 +1,96 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Button } from '@material-ui/core';
 
-const FilesButton = () => {
-  const buttons = [
-    { name: 'Create file', value: 'newfile', type: 'component' },
-    { name: 'Upload file', value: 'upload', type: 'component' },
-    { name: 'Rename', value: 'rename', type: 'component' },
-    { name: 'Move', value: 'move', type: 'component' },
-    { name: 'Delete', value: 'delete', type: 'function' },
-  ];
-
-  const Buttons = buttons.map(({ name, value }, idx) => {
-    return (
-      <button value={value} key={idx}>
-        {name}
-      </button>
-    );
+const FilesButton = ({ buttons = [], checkedItems }) => {
+  const [activeElement, setActiveElement] = useState({
+    active: '',
+    component: '',
   });
 
-  return <div>{Buttons}</div>;
+  const handleActiveElement = (value, element) => {
+    if (activeElement.active === value) {
+      setActiveElement((activeElement) => ({
+        ...activeElement,
+        active: '',
+        component: '',
+      }));
+    } else {
+      setActiveElement((activeElement) => ({
+        ...activeElement,
+        active: value,
+        component: element,
+      }));
+    }
+  };
+
+  const Buttons = buttons.map(({ name, value, type, element }, idx) => {
+    if (checkedItems.length === 0) {
+      if (type.includes('all')) {
+        return (
+          <Button
+            size="small"
+            variant="outlined"
+            value={value}
+            key={idx}
+            onClick={() => handleActiveElement(value, element)}
+            style={{ marginBottom: '5px' }}
+          >
+            {name}
+          </Button>
+        );
+      }
+    } else if (checkedItems.length === 1) {
+      if (type.includes('all') || type.includes('checkOne')) {
+        return (
+          <Button
+            size="small"
+            variant="outlined"
+            value={value}
+            key={idx}
+            onClick={() => handleActiveElement(value, element)}
+            style={{ marginBottom: '5px' }}
+          >
+            {name}
+          </Button>
+        );
+      }
+    } else if (checkedItems.length > 1) {
+      if (type.includes('all') || type.includes('checkMany')) {
+        return (
+          <Button
+            size="small"
+            variant="outlined"
+            value={value}
+            key={idx}
+            onClick={() => handleActiveElement(value, element)}
+            style={{ marginBottom: '5px' }}
+          >
+            {name}
+          </Button>
+        );
+      }
+    }
+  });
+
+  return (
+    <div>
+      {Buttons}
+      <div>element</div>
+      {activeElement.active && activeElement.component}
+    </div>
+  );
 };
 
-// FilesButton.propTypes = {
-//   buttons: PropTypes.array.isRequired,
-// };
+FilesButton.propTypes = {
+  buttons: PropTypes.array.isRequired,
+  checkedItems: PropTypes.array.isRequired,
+};
 
-export default FilesButton;
+const mapStateToProps = (state) => ({
+  files: state.file.tree.items,
+  checkedItems: state.file.action.checked.items,
+});
 
-// import React from 'react';
-// import FilesButton from '@components/FilesButton';
-
-// const useButtonFiles = () => {
-//   const [path, setPath] = useState(() => []);
-
-//   const buttonFiles = (value) => {
-//     let pathArray = value.replace(/\//g, '/ ').split(' ');
-//     pathArray.pop();
-//     setPath(pathArray);
-//   };
-
-//   return [
-//     (e) => buttonFiles(e),
-//     buttonValues.length > 0 ? <FilesButton buttons={buttonValues} /> : null,
-//   ];
-// };
-
-// export default useButtonFiles;
-// // const [buttonFiles, buttonComponentUI] = useButtonFiles();
-// // const updateButton = (values) => buttonFiles(values);
-
-// useEffect(() => {
-//   updateButton(buttonValues);
-// }, []);
+export default connect(mapStateToProps)(FilesButton);
