@@ -5,13 +5,11 @@ import { getUserFiles } from '@store/files/file.actions';
 // import PathNavigate from '@components/FilesPath';
 import FilesList from '@components/FilesList';
 import Filter from '@components/FilesFilter';
-// import Button from '@components/FilesButton';
+import NavigateButton from '@components/FilesPath';
 
-import useUpdatePath from '@hooks/useUpdatePath';
 import useButtonFiles from '@hooks/useButtonFiles';
 
 const Files = ({ path, getFiles, checked }) => {
-  const [navigatePathButton, navigatePathComponent] = useUpdatePath();
   const [filesOptions, filesOptionsComponent] = useButtonFiles();
 
   useEffect(() => {
@@ -20,13 +18,12 @@ const Files = ({ path, getFiles, checked }) => {
 
   useEffect(() => {
     getFiles(path);
-    navigatePathButton(path);
     // eslint-disable-next-line
   }, [path]);
 
   return (
     <>
-      {navigatePathComponent}
+      <NavigateButton />
       {filesOptionsComponent}
       <Filter />
       <FilesList />

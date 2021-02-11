@@ -7,12 +7,19 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { InsertDriveFile, GetApp, Folder } from '@material-ui/icons';
-
+import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const FilesList = ({ files, handleCheck, checkedItems }) => {
+const FilesList = ({
+  path,
+  files,
+  handleCheck,
+  checkedItems,
+  getFiles,
+  setPath,
+}) => {
   useEffect(() => {
     handleCheck([]);
   }, [handleCheck]);
@@ -49,9 +56,10 @@ const FilesList = ({ files, handleCheck, checkedItems }) => {
               <ListItemText
                 style={{ cursor: 'pointer' }}
                 primary={value.name}
-                // onClick={() => {
-                //   setPath(path + value.name + '/');
-                // }}
+                onClick={() => {
+                  setPath(path + value.name + '/');
+                  getFiles(path + value.name + '/');
+                }}
               />
             ) : (
               <ListItemText
@@ -95,12 +103,16 @@ const FilesList = ({ files, handleCheck, checkedItems }) => {
 };
 
 FilesList.propTypes = {
+  getFiles: PropTypes.func.isRequired,
+  setPath: PropTypes.func.isRequired,
   files: PropTypes.array.isRequired,
   checkedItems: PropTypes.array.isRequired,
   handleCheck: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  path: state.file.action.path,
   files: state.file.tree.items,
   checkedItems: state.file.action.checked.items,
 });
@@ -108,6 +120,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     handleCheck: (x) => dispatch(handleCheck(x)),
+    getFiles: (x) => dispatch(setDirectoryPath(x)),
+    setPath: (x) => dispatch(foldersPath(x)),
   };
 };
 
