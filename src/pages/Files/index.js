@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getUserFiles } from '@store/files/file.actions';
-// import PathNavigate from '@components/FilesPath';
+import PathNavigate from '@components/FilesPath';
 import FilesList from '@components/FilesList';
 import Filter from '@components/FilesFilter';
-import NavigateButton from '@components/FilesPath';
+import NavigateButton from '@components/FilesButton';
 
 import useButtonFiles from '@hooks/useButtonFiles';
 
@@ -14,7 +14,7 @@ const Files = ({ path, getFiles, checked }) => {
 
   useEffect(() => {
     filesOptions(checked);
-  }, [checked]);
+  }, [checked, filesOptions]);
 
   useEffect(() => {
     getFiles(path);
@@ -23,6 +23,7 @@ const Files = ({ path, getFiles, checked }) => {
 
   return (
     <>
+      <PathNavigate />
       <NavigateButton />
       {filesOptionsComponent}
       <Filter />

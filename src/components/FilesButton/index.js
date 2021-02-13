@@ -35,7 +35,7 @@ const FilesButton = ({ buttons = [], checkedItems }) => {
             value={value}
             key={idx}
             onClick={() => handleActiveElement(value, element)}
-            style={{ marginBottom: '5px' }}
+            style={{ margin: '1px', minWidth: '8px' }}
           >
             {name}
           </Button>
@@ -50,7 +50,7 @@ const FilesButton = ({ buttons = [], checkedItems }) => {
             value={value}
             key={idx}
             onClick={() => handleActiveElement(value, element)}
-            style={{ marginBottom: '5px' }}
+            style={{ margin: '1px', minWidth: '8px' }}
           >
             {name}
           </Button>
@@ -65,7 +65,7 @@ const FilesButton = ({ buttons = [], checkedItems }) => {
             value={value}
             key={idx}
             onClick={() => handleActiveElement(value, element)}
-            style={{ marginBottom: '5px' }}
+            style={{ margin: '1px', minWidth: '8px' }}
           >
             {name}
           </Button>
@@ -77,14 +77,13 @@ const FilesButton = ({ buttons = [], checkedItems }) => {
   return (
     <div>
       {Buttons}
-      <div>element</div>
       {activeElement.active && activeElement.component}
     </div>
   );
 };
 
 FilesButton.propTypes = {
-  buttons: PropTypes.array.isRequired,
+  buttons: PropTypes.array,
   checkedItems: PropTypes.array.isRequired,
 };
 

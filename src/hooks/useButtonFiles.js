@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import FilesButton from '@components/FilesButton';
+import FilesCreate from '@components/FilesCreate';
+import FilesUploadSingleFile from '@components/FilesUploadSingleFile';
+import FilesRename from '@components/FilesRename';
+import FilesMove from '@components/FilesMove';
+import FilesDeleteToTrash from '@components/FilesDeleteToTrash';
 
 const useButtonFiles = () => {
   const [number, setNumber] = useState(0);
@@ -18,33 +23,33 @@ export default useButtonFiles;
 
 const buttons = [
   {
-    name: 'Create file',
+    name: 'Create',
     value: 'newfile',
     type: ['all'],
-    element: <div>new file</div>,
+    element: <FilesCreate />,
   },
   {
-    name: 'Upload file',
+    name: 'Upload',
     value: 'upload',
     type: ['all'],
-    element: <div>upload</div>,
+    element: <FilesUploadSingleFile />,
   },
   {
     name: 'Rename',
     value: 'rename',
     type: ['checkOne'],
-    element: <div>rename</div>,
+    element: <FilesRename />,
   },
   {
     name: 'Move',
     value: 'move',
     type: ['checkMany', 'checkOne'],
-    element: <div>move</div>,
+    element: <FilesMove />,
   },
   {
     name: 'Delete',
     value: 'delete',
     type: ['checkMany', 'checkOne'],
-    element: <div>delete</div>,
+    element: <FilesDeleteToTrash />,
   },
 ];

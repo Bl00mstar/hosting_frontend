@@ -1,28 +1,56 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Button } from '@material-ui/core';
+import { foldersPath, getUserFiles } from '@store/files/file.actions';
 
-const FilesPath = ({ path }) => {
-  // const [localPath, setLocalPath] = useState([]);
-
+const FilesPath = ({ path, setPath, getFiles }) => {
+  const [selectPath, setSelectPath] = useState([]);
   useEffect(() => {
-    let pathArray = path.replace(/\//g, '/ ').split(' ');
-    console.log(pathArray);
+    getFiles(path);
     console.log(path);
+    let pathArray = path.replace(/\//g, '/ ').split(' ');
+    pathArray.pop();
+    setSelectPath(pathArray);
+    console.log(pathArray);
   }, [path]);
+
+  const selectDirectory = (e, el) => {
+    e.preventDefault();
+    console.log(path);
+    console.log(el);
+    console.log(path.split(path.split(el)[0] + el));
+    setPath(path.split(el)[0] + el);
+  };
 
   return (
     <>
-      <button>a</button>
+      {selectPath.map((el, key) => (
+        <Button
+          margin="normal"
+          size="small"
+          onClick={(e) => selectDirectory(e, el)}
+          key={key}
+        >
+          {el}
+        </Button>
+      ))}
     </>
   );
 };
 
 FilesPath.propTypes = {
   path: PropTypes.string.isRequired,
+  setPath: PropTypes.func.isRequired,
+  getFiles: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   path: state.file.action.path,
 });
-
-export default connect(mapStateToProps)(FilesPath);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setPath: (x) => dispatch(foldersPath(x)),
+    getFiles: (x) => dispatch(getUserFiles(x)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FilesPath);
