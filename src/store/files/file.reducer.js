@@ -3,7 +3,7 @@ import fileTypes from './file.types';
 const initialState = {
   tree: { isLoading: false, items: [], path: '/' },
   trash: { isLoading: false, items: [] },
-  alert: { folder: { message: '', type: '' } },
+  alert: { folder: { message: '', type: 'info' } },
   action: {
     folders: [],
     path: '/',
@@ -39,7 +39,7 @@ const fileReducer = (state = initialState, action) => {
           folder: {
             ...state.alert.folder,
             message: '',
-            type: '',
+            type: 'info',
           },
         },
       };

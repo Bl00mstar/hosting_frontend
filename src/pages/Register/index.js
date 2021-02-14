@@ -10,8 +10,8 @@ import {
   handleClearError,
   handleSignupClear,
 } from '@store/user/user.actions';
-import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
-import SuccessAlert from '@containers/LoginAlerts/SuccessAlert';
+import ErrorAlert from '@components/LoginAlert/ErrorAlert';
+import SuccessAlert from '@components/LoginAlert/SuccessAlert';
 
 const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
   const { register, handleSubmit, errors, watch } = useForm({

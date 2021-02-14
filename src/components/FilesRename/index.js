@@ -1,93 +1,151 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  renameItem,
+  getUserFiles,
+  alertFiles,
+} from '@store/files/file.actions';
+import { TextField, Button, Card } from '@material-ui/core';
+import { fileFolderRegex } from '@utils/api';
 
-export default function index() {
-  return <div>renames</div>;
-}
+const useStyles = makeStyles(() => ({
+  input: {
+    marginTop: '5px',
+    marginBottom: '5px',
+    marginLeft: '7px',
+    width: '300px',
+    maxWidth: '60%',
+  },
+  button: {
+    marginTop: '9px',
+    marginRight: '7px',
+    float: 'right',
+  },
+}));
 
-// import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-// import { useForm } from 'react-hook-form';
-// import { TextField, Button, Box } from '@material-ui/core';
-// import { renameItem, getUserFiles } from '@store/files/file.actions';
+const FilesRename = ({
+  item,
+  alertFiles,
+  itemsList,
+  path,
+  rename,
+  getFiles,
+}) => {
+  const classes = useStyles();
 
-// const RenameView = ({ item, rename, path, getFiles }) => {
-//   const [name, setName] = useState('');
-//   const { handleSubmit } = useForm({
-//     criteriaMode: 'all',
-//     mode: 'onChange',
-//   });
+  const [name, setName] = useState('');
+  const [defaultName, setDefaultName] = useState({ name: '', ext: '' });
 
-//   const [selectedItem, setSelectedItem] = useState({});
-//   const handleChange = (event) => {
-//     setName(event.target.value);
-//   };
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
 
-//   useEffect(() => {
-//     if (item.type === 'file') {
-//       let itemName = item.name.split('.');
-//       itemName.pop();
-//       setName(itemName);
-//       setSelectedItem(item);
-//     } else if (item.type === 'folder') {
-//       setName(item.name);
-//       setSelectedItem(item);
-//     }
-//   }, [item]);
+  useEffect(() => {
+    if (item.type === 'file') {
+      let itemName = item.name.split('.');
+      let extension = itemName.pop();
+      setName(itemName);
+      setDefaultName({ name: item.name, ext: extension });
+    } else if (item.type === 'folder') {
+      setName(item.name);
+      setDefaultName(item.name);
+    }
+  }, [item]);
 
-//   const onSubmit = () => {
-//     rename({ newName: name, item: selectedItem, path: path });
-//     getFiles(path);
-//   };
+  const onSubmit = () => {
+    if (!name) {
+      alertFiles({ message: 'Folder name cannot be empty.', type: 'info' });
+    } else if (!fileFolderRegex.test(name)) {
+      alertFiles({
+        message: 'Invalid name.',
+        type: 'info',
+      });
+    } else {
+      if (item.type === 'file') {
+        let filtered = itemsList.filter(
+          (el) => el.name === name[0] + '.' + defaultName.ext
+        );
+        if (typeof filtered !== 'undefined' && filtered.length > 0) {
+          alertFiles({
+            message: 'File name is taken.',
+            type: 'info',
+          });
+        } else {
+          rename({ newName: name, item: item, path: path });
+          setName('');
+          setTimeout(() => {
+            getFiles(path);
+          }, 500);
+        }
+      } else if (item.type === 'folder') {
+        let filtered = itemsList.filter((el) => el.name === name);
+        if (typeof filtered !== 'undefined' && filtered.length > 0) {
+          alertFiles({
+            message: 'Folder name is taken.',
+            type: 'info',
+          });
+        } else {
+          rename({ newName: name, item: item, path: path });
+          setName('');
+          setTimeout(() => {
+            getFiles(path);
+          }, 500);
+        }
+      }
+    }
+  };
 
-//   return (
-//     <Box
-//       m={2}
-//       style={{ justify: 'center', maxWidth: '500px', margin: '0 auto' }}
-//     >
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <TextField
-//           fullWidth
-//           variant="outlined"
-//           margin="normal"
-//           id="rename"
-//           label="Name"
-//           value={name}
-//           size="small"
-//           onChange={handleChange}
-//         />
-//         <Box textAlign="center" m={1}>
-//           <Button
-//             size="small"
-//             variant="outlined"
-//             type="submit"
-//             style={{ marginBottom: '5px', justify: 'center' }}
-//           >
-//             Change
-//           </Button>
-//         </Box>
-//       </form>
-//     </Box>
-//   );
-// };
+  return (
+    <Card margin="normal" style={{ width: '95%', marginTop: '5px' }}>
+      <TextField
+        className={classes.input}
+        id="outlined-email-input"
+        label={'Rename '}
+        type="text"
+        size="small"
+        name="name"
+        value={name}
+        autoComplete="name"
+        variant="outlined"
+        color="primary"
+        onChange={handleChange}
+      />
 
-// RenameView.propTypes = {
-//   item: PropTypes.object.isRequired,
-//   rename: PropTypes.func.isRequired,
-//   getFiles: PropTypes.func.isRequired,
-//   path: PropTypes.string,
-// };
+      <Button
+        className={classes.button}
+        onClick={onSubmit}
+        variant="contained"
+        size="small"
+      >
+        Change
+      </Button>
+    </Card>
+  );
+};
 
-// const mapStateToProps = (state) => ({
-//   item: state.file.action.selected,
-//   path: state.file.tree.path,
-// });
+FilesRename.propTypes = {
+  item: PropTypes.object.isRequired,
+  rename: PropTypes.func.isRequired,
+  getFiles: PropTypes.func.isRequired,
+  path: PropTypes.string,
+  alertFiles: PropTypes.func.isRequired,
+  itemsList: PropTypes.array.isRequired,
+};
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     rename: (x) => dispatch(renameItem(x)),
-//     getFiles: (x) => dispatch(getUserFiles(x)),
-//   };
-// };
+const mapStateToProps = (state) => ({
+  item: state.file.action.selected,
+  path: state.file.tree.path,
+  itemsList: state.file.tree.items,
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(RenameView);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    rename: (x) => dispatch(renameItem(x)),
+    getFiles: (x) => dispatch(getUserFiles(x)),
+    alertFiles: (x) => dispatch(alertFiles(x)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilesRename);

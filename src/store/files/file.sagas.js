@@ -9,6 +9,8 @@ import {
   putTrashData,
   alertFiles,
   setFolders,
+  handleCheck,
+  handleSelected,
 } from './file.actions';
 import { saveAs } from 'file-saver';
 
@@ -91,11 +93,21 @@ export function* watchRenameItem() {
 function* renameItem({ payload }) {
   try {
     const data = yield postPathGetFiles(apiLink + '/file/rename', payload);
-    console.log(data);
-    yield console.log('asd');
+    yield put(
+      alertFiles({
+        message: data.msg,
+        type: 'success',
+      })
+    );
+    yield put(handleSelected({ type: '', id: '', name: '' }));
+    yield put(handleCheck([]));
   } catch (error) {
-    console.log(error);
-    yield console.log('asd');
+    yield put(
+      alertFiles({
+        message: error,
+        type: 'error',
+      })
+    );
   }
 }
 

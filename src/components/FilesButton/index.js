@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
+import { handleSelected } from '@store/files/file.actions';
 
-const FilesButton = ({ buttons = [], checkedItems }) => {
+const FilesButton = ({ buttons = [], checkedItems, selected }) => {
   const [activeElement, setActiveElement] = useState({
     active: '',
     component: '',
   });
+
+  useEffect(() => {
+    if (checkedItems.length === 0) {
+      selected({ type: '', id: '', name: '' });
+      setActiveElement({
+        active: '',
+        component: '',
+      });
+    } else if (checkedItems.length === 1) {
+      selected({
+        type: checkedItems[0].type,
+        id: checkedItems[0].id,
+        name: checkedItems[0].name,
+      });
+      setActiveElement({
+        active: '',
+        component: '',
+      });
+    } else if (checkedItems.length > 1) {
+      selected({ type: '', id: '', name: '' });
+      setActiveElement({
+        active: '',
+        component: '',
+      });
+    }
+  }, [checkedItems, selected]);
 
   const handleActiveElement = (value, element) => {
     if (activeElement.active === value) {
@@ -84,6 +111,7 @@ const FilesButton = ({ buttons = [], checkedItems }) => {
 
 FilesButton.propTypes = {
   buttons: PropTypes.array,
+  selected: PropTypes.func.isRequired,
   checkedItems: PropTypes.array.isRequired,
 };
 
@@ -92,4 +120,10 @@ const mapStateToProps = (state) => ({
   checkedItems: state.file.action.checked.items,
 });
 
-export default connect(mapStateToProps)(FilesButton);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selected: (x) => dispatch(handleSelected(x)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilesButton);

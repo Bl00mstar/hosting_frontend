@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { InsertDriveFile, GetApp, Folder } from '@material-ui/icons';
 import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -20,6 +20,14 @@ const FilesList = ({
   getFiles,
   setPath,
 }) => {
+  const [isChecked, setIsChecked] = useState({ values: [] });
+
+  useEffect(() => {
+    if (checkedItems.length === 0) {
+      console.log('clear');
+    }
+  }, [checkedItems]);
+
   useEffect(() => {
     handleCheck([]);
   }, [handleCheck]);
@@ -37,6 +45,15 @@ const FilesList = ({
     }
   };
 
+  const handleCheckElement = (value) => {
+    console.log('asd');
+    setIsChecked((isChecked) => ({
+      ...isChecked,
+      values: [...isChecked.values, value.id],
+    }));
+    console.log(isChecked);
+  };
+
   const generate = (values) => {
     if (values) {
       return values.map((value) =>
@@ -44,8 +61,10 @@ const FilesList = ({
           <ListItem width={'100px'}>
             <Checkbox
               value={value.name}
+              // checked={isChecked.values.includes(value.id) ? true : false}
               inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
               onChange={(e) => {
+                handleCheckElement(value);
                 handleCheckbox(e, value);
               }}
             />

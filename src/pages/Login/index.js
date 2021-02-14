@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { userLogin, handleClearError } from '@store/user/user.actions';
-import ErrorAlert from '@containers/LoginAlerts/ErrorAlert';
-import Ellipsis from '@containers/LoginAlerts/EllipsisPreloader';
+import ErrorAlert from '@components/LoginAlert/ErrorAlert';
+import Ellipsis from '@components/Preloaders/EllipsisPreloader';
 
 const Login = ({ login, clearError, userLoading, isAuthenticated }) => {
   const { register, handleSubmit, errors } = useForm({

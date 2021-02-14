@@ -1,7 +1,39 @@
 import React from 'react';
+import { Card, Button } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 export default function index() {
-  return <div>delete</div>;
+  return (
+    <Card
+      margin="normal"
+      style={{
+        justify: 'center',
+        width: '95%',
+        marginTop: '5px',
+        textAlign: 'center',
+      }}
+    >
+      <div style={{ marginTop: '5px', marginLeft: '5px', marginRight: '5px' }}>
+        <Alert severity="info">
+          Folders will be deleted, existed files will be moved into trash
+          folder. If you want continue press confirm.
+        </Alert>
+      </div>
+
+      <Button
+        variant="outlined"
+        size="small"
+        style={{
+          marginTop: '9px',
+          marginRight: '7px',
+          color: 'red',
+          marginBottom: '11px',
+        }}
+      >
+        Confirm
+      </Button>
+    </Card>
+  );
 }
 
 // import React, { useEffect, useState } from 'react';

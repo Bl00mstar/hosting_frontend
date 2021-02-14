@@ -8,14 +8,14 @@ const FileAlerts = ({ message, type, clearAlerts }) => {
   const [showAlerts, setShowAlerts] = useState(false);
 
   useEffect(() => {
-    if (message || type) {
+    if (message) {
       setShowAlerts(true);
       setTimeout(() => {
         clearAlerts();
         setShowAlerts(false);
       }, 3000);
     }
-  }, [message, type, clearAlerts]);
+  }, [message, clearAlerts]);
 
   return (
     <>

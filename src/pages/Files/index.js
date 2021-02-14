@@ -6,8 +6,8 @@ import PathNavigate from '@components/FilesPath';
 import FilesList from '@components/FilesList';
 import Filter from '@components/FilesFilter';
 import NavigateButton from '@components/FilesButton';
-
 import useButtonFiles from '@hooks/useButtonFiles';
+import FilesAlert from '@components/FilesAlert';
 
 const Files = ({ path, getFiles, checked }) => {
   const [filesOptions, filesOptionsComponent] = useButtonFiles();
@@ -23,6 +23,7 @@ const Files = ({ path, getFiles, checked }) => {
 
   return (
     <>
+      <FilesAlert />
       <PathNavigate />
       <NavigateButton />
       {filesOptionsComponent}

@@ -20,7 +20,7 @@ const SuccessAlert = ({ isSignupSuccess, signupSuccessMessage }) => {
 
 SuccessAlert.propTypes = {
   isSignupSuccess: PropTypes.bool.isRequired,
-  signupSuccessMessage: PropTypes.object.isRequired,
+  signupSuccessMessage: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
