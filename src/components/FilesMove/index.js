@@ -2,8 +2,14 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { getFolders, foldersPath } from '@store/files/file.actions';
-
+import {
+  getFolders,
+  foldersPath,
+  moveElements,
+  handleCheck,
+  getUserFiles,
+} from '@store/files/file.actions';
+import { RotateLeft, ArrowForwardIos } from '@material-ui/icons';
 import {
   Modal,
   Backdrop,
@@ -13,8 +19,7 @@ import {
   MenuItem,
   ListItem,
   Typography,
-  Breadcrumbs,
-  Link,
+  Button,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,14 +30,36 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    color: 'red',
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    width: '400px',
+    minHeight: '400px',
+  },
+  card: {
+    justify: 'center',
+    width: '95%',
+    marginTop: '5px',
+    textAlign: 'center',
+  },
+  button: {
+    marginTop: '9px',
+    marginRight: '7px',
+    marginBottom: '11px',
   },
 }));
 
-const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
+const FilesMove = ({
+  folders,
+  getFolders,
+  foldersPath,
+  actionPath,
+  getFiles,
+  path,
+  checkedItems,
+  move,
+  handleCheck,
+}) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -48,8 +75,17 @@ const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
     getFolders(actionPath);
     let localPathArr = actionPath.replace(/\//g, '/ ').split(' ');
     localPathArr.pop();
-    // setLocalPath(localPathArr);
   }, [getFolders, actionPath]);
+
+  const handleMoveButton = () => {
+    move({ elements: checkedItems, path: actionPath });
+    handleClose();
+    setTimeout(() => {
+      //nie sleected tylko check items
+      handleCheck([]);
+      getFiles(path);
+    }, 300);
+  };
 
   const generatePath = (values) => {
     if (values) {
@@ -71,19 +107,21 @@ const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
   };
 
   return (
-    <Card margin="normal" style={{ width: '95%', marginTop: '5px' }}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="textPrimary" href="/">
-          Select path
-        </Link>
-        <Link color="inherit" href="/getting-started/installation/">
-          Confirm
-        </Link>
-      </Breadcrumbs>
-      Move to: /
-      <button type="button" onClick={handleOpen}>
-        select path
-      </button>
+    <Card className={classes.card} margin="normal">
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        onClick={handleOpen}
+      >
+        Select Path
+      </Button>
+      {path !== '/' && (
+        <Button className={classes.button} variant="outlined" size="small">
+          Move to root
+        </Button>
+      )}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -98,7 +136,33 @@ const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            {/* in modal */}
+            <div style={{ height: '50px' }}>
+              <Button
+                variant="contained"
+                size="small"
+                className={classes.button}
+                startIcon={<RotateLeft />}
+                style={{ float: 'left' }}
+                onClick={() => foldersPath('/')}
+              >
+                Reset
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                className={classes.button}
+                endIcon={<ArrowForwardIos />}
+                style={{ float: 'right' }}
+                onClick={() => handleMoveButton()}
+              >
+                Move
+              </Button>
+            </div>
+            <div style={{ height: '60px' }}>
+              <p>Selected elements: {checkedItems.length}</p>
+              <p>Selected path: {actionPath}</p>
+            </div>
+
             <MenuList>{folders && generatePath(folders)}</MenuList>
           </div>
         </Fade>
@@ -108,43 +172,32 @@ const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
 };
 
 FilesMove.propTypes = {
+  path: PropTypes.string.isRequired,
   getFolders: PropTypes.func.isRequired,
   folders: PropTypes.array.isRequired,
   foldersPath: PropTypes.func.isRequired,
   actionPath: PropTypes.string.isRequired,
+  checkedItems: PropTypes.array.isRequired,
+  move: PropTypes.func.isRequired,
+  handleCheck: PropTypes.func.isRequired,
+  getFiles: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  path: state.file.tree.path,
   folders: state.file.action.folders,
   actionPath: state.file.action.path,
+  checkedItems: state.file.action.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFolders: (x) => dispatch(getFolders(x)),
     foldersPath: (x) => dispatch(foldersPath(x)),
+    move: (x) => dispatch(moveElements(x)),
+    handleCheck: (x) => dispatch(handleCheck(x)),
+    getFiles: (x) => dispatch(getUserFiles(x)),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilesMove);
-
-// const FilesMove = ({ folders, getFolders, foldersPath, actionPath }) => {
-//   const [localPath, setLocalPath] = useState([]);
-
-//           <Grid item xs={10}>
-//             Selected path:
-//             {localPath.map((el, key) => (
-//               <Button key={key} size="small" variant="text">
-//                 {el}
-//               </Button>
-//             ))}
-//           </Grid>
-
-//           <Grid item xs={12}>
-//             <MenuList>{folders && generatePath(folders)}</MenuList>
-//           </Grid>
-
-//       </Box>
-//     </div>
-//   );
-// };

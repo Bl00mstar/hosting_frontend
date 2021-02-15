@@ -59,6 +59,10 @@ const UploadFile = ({ alertFiles, path, getFiles, itemsList }) => {
             setTimeout(() => {
               getFiles(path);
             }, 500);
+            alertFiles({
+              message: uploadedImage.name + ' was uploaded.',
+              type: 'success',
+            });
           })
           .catch((err) => console.log(err));
       }

@@ -2,7 +2,7 @@ import fileTypes from './file.types';
 
 const initialState = {
   tree: { isLoading: false, items: [], path: '/' },
-  trash: { isLoading: false, items: [] },
+  trash: { isLoading: false, items: [], checked: { items: [] } },
   alert: { folder: { message: '', type: 'info' } },
   action: {
     folders: [],
@@ -14,8 +14,22 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.TRASH_SELECTED:
+      return {
+        ...state,
+        trash: {
+          ...state.trash,
+          checked: {
+            ...state.checked,
+            items: {
+              ...state.checked.items,
+              items: action.payload,
+            },
+          },
+        },
+      };
+
     case fileTypes.FOLDERS_PATH:
-      console.log(action.payload);
       return {
         ...state,
         action: {

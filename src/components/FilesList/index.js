@@ -12,19 +12,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const FilesList = ({
-  path,
-  files,
-  handleCheck,
-  checkedItems,
-  getFiles,
-  setPath,
-}) => {
+const FilesList = ({ path, files, handleCheck, checkedItems, getFiles }) => {
   const [isChecked, setIsChecked] = useState({ values: [] });
 
   useEffect(() => {
-    if (checkedItems.length === 0) {
-      console.log('clear');
+    if (checkedItems.length === 0 && isChecked.values.length > 0) {
+      setIsChecked({
+        values: [],
+      });
     }
   }, [checkedItems]);
 
@@ -46,12 +41,17 @@ const FilesList = ({
   };
 
   const handleCheckElement = (value) => {
-    console.log('asd');
-    setIsChecked((isChecked) => ({
-      ...isChecked,
-      values: [...isChecked.values, value.id],
-    }));
-    console.log(isChecked);
+    if (isChecked.values.includes(value.id)) {
+      let filtered = isChecked.values.filter((el) => el !== value.id);
+      setIsChecked({
+        values: filtered,
+      });
+    } else {
+      setIsChecked((isChecked) => ({
+        ...isChecked,
+        values: [...isChecked.values, value.id],
+      }));
+    }
   };
 
   const generate = (values) => {
@@ -61,7 +61,7 @@ const FilesList = ({
           <ListItem width={'100px'}>
             <Checkbox
               value={value.name}
-              // checked={isChecked.values.includes(value.id) ? true : false}
+              checked={isChecked.values.includes(value.id) ? true : false}
               inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
               onChange={(e) => {
                 handleCheckElement(value);
@@ -76,7 +76,6 @@ const FilesList = ({
                 style={{ cursor: 'pointer' }}
                 primary={value.name}
                 onClick={() => {
-                  setPath(path + value.name + '/');
                   getFiles(path + value.name + '/');
                 }}
               />
@@ -115,8 +114,13 @@ const FilesList = ({
       }}
       dense={true}
     >
-      {files ? generate(files) : <></>}
-      <div></div>
+      {files.length > 0 ? (
+        generate(files)
+      ) : (
+        <ListItem width={'100px'}>
+          <ListItemText primary={'Folder is empty.'} />
+        </ListItem>
+      )}
     </List>
   );
 };
@@ -131,7 +135,7 @@ FilesList.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  path: state.file.action.path,
+  path: state.file.tree.path,
   files: state.file.tree.items,
   checkedItems: state.file.action.checked.items,
 });

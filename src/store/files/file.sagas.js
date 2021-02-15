@@ -14,6 +14,19 @@ import {
 } from './file.actions';
 import { saveAs } from 'file-saver';
 
+export function* watchMoveElements() {
+  yield takeEvery(fileTypes.MOVE_ELEMENTS, moveElements);
+}
+function* moveElements({ payload }) {
+  console.log(payload);
+  try {
+    const data = yield postPathGetFiles(apiLink + '/file/move', payload);
+    yield put(alertFiles({ message: data.msg, type: 'success' }));
+  } catch (error) {
+    yield put(alertFiles({ message: error, type: 'error' }));
+  }
+}
+
 export function* watchGetFolders() {
   yield takeEvery(fileTypes.SELECT_FOLDER, getFolders);
 }
@@ -22,7 +35,7 @@ function* getFolders(payload) {
     const data = yield postPathGetFiles(apiLink + '/file/folders', payload);
     yield put(setFolders(data));
   } catch (error) {
-    yield console.log(error);
+    yield put(alertFiles({ message: error, type: 'error' }));
   }
 }
 

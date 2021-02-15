@@ -1,14 +1,24 @@
 import fileTypes from './file.types';
-// MOVE
+// move to path
+// selected path
+
+export const moveElements = (data) => {
+  return { type: fileTypes.MOVE_ELEMENTS, payload: data };
+};
+
+// get folders
+export const setFolders = (data) => {
+  return { type: fileTypes.MOVE_FOLDER, payload: data };
+};
+
+// Files action
 export const foldersPath = (path) => {
   return { type: fileTypes.FOLDERS_PATH, payload: path };
 };
 export const getFolders = (path) => {
   return { type: fileTypes.SELECT_FOLDER, payload: path };
 };
-export const setFolders = (data) => {
-  return { type: fileTypes.MOVE_FOLDER, payload: data };
-};
+
 //
 // ACTION MANAGEMENT
 //
@@ -83,6 +93,10 @@ export const loadUserFiles = () => {
 //
 // TRASH ACTIONS
 //
+export const trashSelected = (data) => {
+  return { type: fileTypes.TRASH_SELECTED, payload: data };
+};
+
 export const getUserTrash = () => {
   return { type: fileTypes.GET_TRASH_LIST };
 };

@@ -1,41 +1,48 @@
 import React from 'react';
 import { Card, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
 
-export default function index() {
+const useStyles = makeStyles(() => ({
+  card: {
+    justify: 'center',
+    width: '95%',
+    marginTop: '5px',
+    textAlign: 'center',
+  },
+  alert: {
+    marginTop: '5px',
+    marginLeft: '5px',
+    marginRight: '5px',
+  },
+  button: {
+    marginTop: '9px',
+    marginRight: '7px',
+    color: 'red',
+    marginBottom: '11px',
+  },
+}));
+
+const FilesDeleteToTrash = () => {
+  const classes = useStyles();
+
   return (
-    <Card
-      margin="normal"
-      style={{
-        justify: 'center',
-        width: '95%',
-        marginTop: '5px',
-        textAlign: 'center',
-      }}
-    >
-      <div style={{ marginTop: '5px', marginLeft: '5px', marginRight: '5px' }}>
+    <Card margin="normal" className={classes.card}>
+      <div className={classes.alert}>
         <Alert severity="info">
           Folders will be deleted, existed files will be moved into trash
           folder. If you want continue press confirm.
         </Alert>
       </div>
 
-      <Button
-        variant="outlined"
-        size="small"
-        style={{
-          marginTop: '9px',
-          marginRight: '7px',
-          color: 'red',
-          marginBottom: '11px',
-        }}
-      >
+      <Button className={classes.button} variant="outlined" size="small">
         Confirm
       </Button>
     </Card>
   );
-}
+};
 
+export default FilesDeleteToTrash;
 // import React, { useEffect, useState } from 'react';
 // import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';

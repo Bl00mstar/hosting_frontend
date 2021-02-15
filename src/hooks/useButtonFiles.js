@@ -15,7 +15,7 @@ const useButtonFiles = () => {
 
   return [
     (e) => filesOptions(e),
-    <FilesButton key={'a'} buttons={buttons} number={number} />,
+    <FilesButton key={''} buttons={buttons} number={number} />,
   ];
 };
 

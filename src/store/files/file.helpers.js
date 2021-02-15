@@ -53,6 +53,7 @@ export const download = async (url) => {
 };
 
 export const postPathGetFiles = async (url, values) => {
+  console.log('asd');
   let token = await tokenConfig();
 
   return new Promise((resolve, reject) => {

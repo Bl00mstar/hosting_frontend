@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { foldersPath, getUserFiles } from '@store/files/file.actions';
+import { setDirectoryPath, getUserFiles } from '@store/files/file.actions';
 
 const FilesPath = ({ path, setPath, getFiles }) => {
   const [selectPath, setSelectPath] = useState([]);
@@ -45,11 +45,11 @@ FilesPath.propTypes = {
   getFiles: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
-  path: state.file.action.path,
+  path: state.file.tree.path,
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    setPath: (x) => dispatch(foldersPath(x)),
+    setPath: (x) => dispatch(setDirectoryPath(x)),
     getFiles: (x) => dispatch(getUserFiles(x)),
   };
 };
