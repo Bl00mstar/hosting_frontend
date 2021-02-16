@@ -1,22 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import TrashList from '@components/TrashList';
 import TrashAlert from '@components/TrashAlert';
-// import useButtonTrash from '@hooks/useButtonTrash';
+import TrashButton from '@components/TrashButton';
+import { getUserTrash } from '@store/files/file.actions';
 
-const Trash = () => {
-  // const [trashOptions, trashOptionsComponent] = useButtonTrash();
-
-  // useEffect(() => {
-  //   trashOptions();
-  // }, [trashOptions]);
+const Trash = ({ getTrashList }) => {
+  useEffect(() => {
+    getTrashList();
+  }, []);
 
   return (
     <>
       <TrashAlert />
-      {/* {trashOptionsComponent} */}
+      <TrashButton />
       <TrashList />
     </>
   );
 };
 
-export default Trash;
+Trash.propTypes = {
+  getTrashList: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTrashList: (x) => dispatch(getUserTrash(x)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Trash);

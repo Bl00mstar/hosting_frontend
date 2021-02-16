@@ -6,13 +6,13 @@ import {
 } from './user/user.sagas';
 
 import {
+  watchTrashDelete,
+  watchTrashRestore,
   watchlistUserFolder,
   watchlistUserTrash,
   watchCreateFolder,
   watchRenameItem,
   watchDeleteItem,
-  watchRestoreItem,
-  watchPermDelete,
   watchDownloadItem,
   watchGetFolders,
   watchMoveElements,
@@ -20,11 +20,11 @@ import {
 
 export default function* rootSaga() {
   yield all([
+    watchTrashDelete(),
+    watchTrashRestore(),
     watchMoveElements(),
     watchGetFolders(),
     watchDownloadItem(),
-    watchRestoreItem(),
-    watchPermDelete(),
     watchDeleteItem(),
     watchRenameItem(),
     watchCreateFolder(),
