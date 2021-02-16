@@ -11,14 +11,38 @@ import {
   setFolders,
   handleCheck,
   handleSelected,
+  trashAlert,
 } from './file.actions';
 import { saveAs } from 'file-saver';
+
+export function* watchTrashDelete() {
+  yield takeEvery(fileTypes.TRASH_DELETE, trashDelete);
+}
+function* trashDelete({ payload }) {
+  try {
+    const data = yield postPathGetFiles(apiLink + '/trash/delete', payload);
+    yield put(trashAlert({ message: data.msg, type: 'success' }));
+  } catch (error) {
+    yield put(trashAlert({ message: error, type: 'error' }));
+  }
+}
+
+export function* watchTrashRestore() {
+  yield takeEvery(fileTypes.TRASH_RESTORE, trashRestore);
+}
+function* trashRestore({ payload }) {
+  try {
+    const data = yield postPathGetFiles(apiLink + '/trash/restore', payload);
+    yield put(trashAlert({ message: data.msg, type: 'success' }));
+  } catch (error) {
+    yield put(trashAlert({ message: error, type: 'error' }));
+  }
+}
 
 export function* watchMoveElements() {
   yield takeEvery(fileTypes.MOVE_ELEMENTS, moveElements);
 }
 function* moveElements({ payload }) {
-  console.log(payload);
   try {
     const data = yield postPathGetFiles(apiLink + '/file/move', payload);
     yield put(alertFiles({ message: data.msg, type: 'success' }));
@@ -36,36 +60,6 @@ function* getFolders(payload) {
     yield put(setFolders(data));
   } catch (error) {
     yield put(alertFiles({ message: error, type: 'error' }));
-  }
-}
-
-export function* watchPermDelete() {
-  yield takeEvery(fileTypes.PERM_DELETE, permDelete);
-}
-function* permDelete({ payload }) {
-  try {
-    const data = yield postPathGetFiles(
-      apiLink + '/file/trash/delete',
-      payload
-    );
-    console.log(data);
-  } catch (error) {
-    yield console.log(error);
-  }
-}
-
-export function* watchRestoreItem() {
-  yield takeEvery(fileTypes.RESTORE_ITEM, restoreItem);
-}
-function* restoreItem({ payload }) {
-  try {
-    const data = yield postPathGetFiles(
-      apiLink + '/file/trash/restore',
-      payload
-    );
-    console.log(data);
-  } catch (error) {
-    yield console.log(error);
   }
 }
 
@@ -89,14 +83,11 @@ export function* watchDeleteItem() {
   yield takeEvery(fileTypes.DELETE_ITEM, deleteItem);
 }
 function* deleteItem({ payload }) {
-  console.log(payload);
   try {
     const data = yield postPathGetFiles(apiLink + '/file/delete', payload);
-    console.log(data);
-    yield console.log('asd');
+    yield put(alertFiles({ message: data.msg, type: 'success' }));
   } catch (error) {
-    console.log(error);
-    yield console.log('asd');
+    yield put(alertFiles({ message: error, type: 'error' }));
   }
 }
 
@@ -182,7 +173,7 @@ export function* watchlistUserTrash() {
 function* listTrash() {
   yield put(loadUserTrash());
   try {
-    const data = yield fileRequest(apiLink + '/file/trash');
+    const data = yield fileRequest(apiLink + '/trash');
     yield put(putTrashData(data));
   } catch (error) {
     console.log(error);

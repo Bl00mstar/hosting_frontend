@@ -43,7 +43,7 @@ const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
       setFolderName({ name: '' });
       setTimeout(() => {
         getFiles(path);
-      }, 500);
+      }, 100);
     }
   };
 

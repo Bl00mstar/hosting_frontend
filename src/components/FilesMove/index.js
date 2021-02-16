@@ -79,9 +79,10 @@ const FilesMove = ({
 
   const handleMoveButton = () => {
     move({ elements: checkedItems, path: actionPath });
-    handleClose();
+
     setTimeout(() => {
       //nie sleected tylko check items
+      handleClose();
       handleCheck([]);
       getFiles(path);
     }, 300);

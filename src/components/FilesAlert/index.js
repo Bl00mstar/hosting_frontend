@@ -13,7 +13,7 @@ const FileAlerts = ({ message, type, clearAlerts }) => {
       setTimeout(() => {
         clearAlerts();
         setShowAlerts(false);
-      }, 3000);
+      }, 2500);
     }
   }, [message, clearAlerts]);
 
@@ -21,7 +21,10 @@ const FileAlerts = ({ message, type, clearAlerts }) => {
     <>
       {showAlerts ? (
         <Alert
-          style={{ marginBottom: '5px', marginRight: '5px', marginTop: '5px' }}
+          style={{
+            position: 'fixed',
+            right: '18px',
+          }}
           severity={type}
         >
           {message}

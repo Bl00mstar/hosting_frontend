@@ -3,7 +3,10 @@ import fileTypes from './file.types';
 const initialState = {
   tree: { isLoading: false, items: [], path: '/' },
   trash: { isLoading: false, items: [], checked: { items: [] } },
-  alert: { folder: { message: '', type: 'info' } },
+  alert: {
+    folder: { message: '', type: 'info' },
+    trash: { message: '', type: 'info' },
+  },
   action: {
     folders: [],
     path: '/',
@@ -14,17 +17,38 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.TRASH_ALERT:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          trash: {
+            ...state.alert.trash,
+            message: action.payload.message,
+            type: action.payload.type,
+          },
+        },
+      };
+    case fileTypes.TRASH_ALERT_CLEAR:
+      return {
+        ...state,
+        alert: {
+          ...state.alert,
+          trash: {
+            ...state.alert.trash,
+            message: '',
+            type: 'info',
+          },
+        },
+      };
     case fileTypes.TRASH_SELECTED:
       return {
         ...state,
         trash: {
           ...state.trash,
           checked: {
-            ...state.checked,
-            items: {
-              ...state.checked.items,
-              items: action.payload,
-            },
+            ...state.trash.checked,
+            items: action.payload,
           },
         },
       };

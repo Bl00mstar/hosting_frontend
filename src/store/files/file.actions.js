@@ -93,8 +93,24 @@ export const loadUserFiles = () => {
 //
 // TRASH ACTIONS
 //
+export const trashAlertClear = () => {
+  return { type: fileTypes.TRASH_ALERT_CLEAR };
+};
+
+export const trashAlert = (data) => {
+  return { type: fileTypes.TRASH_ALERT, payload: data };
+};
+
 export const trashSelected = (data) => {
   return { type: fileTypes.TRASH_SELECTED, payload: data };
+};
+
+export const trashRestore = (data) => {
+  return { type: fileTypes.TRASH_RESTORE, payload: data };
+};
+
+export const trashDelete = (data) => {
+  return { type: fileTypes.TRASH_DELETE, payload: data };
 };
 
 export const getUserTrash = () => {

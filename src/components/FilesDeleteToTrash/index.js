@@ -1,7 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Card, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import {
+  deleteItem,
+  getUserFiles,
+  handleCheck,
+} from '@store/files/file.actions';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -23,8 +30,22 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const FilesDeleteToTrash = () => {
+const FilesDeleteToTrash = ({
+  checkedItems,
+  moveToTrash,
+  getFiles,
+  path,
+  handleCheck,
+}) => {
   const classes = useStyles();
+
+  const handleMoveToTrash = () => {
+    moveToTrash({ items: checkedItems, path: path });
+    setTimeout(() => {
+      getFiles(path);
+      handleCheck([]);
+    }, 100);
+  };
 
   return (
     <Card margin="normal" className={classes.card}>
@@ -35,80 +56,37 @@ const FilesDeleteToTrash = () => {
         </Alert>
       </div>
 
-      <Button className={classes.button} variant="outlined" size="small">
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        onClick={() => handleMoveToTrash()}
+      >
         Confirm
       </Button>
     </Card>
   );
 };
 
-export default FilesDeleteToTrash;
-// import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-// import { Button } from '@material-ui/core';
-// import { itemSelected, deleteItem } from '@store/files/file.actions';
+FilesDeleteToTrash.propTypes = {
+  getFiles: PropTypes.func.isRequired,
+  checkedItems: PropTypes.array.isRequired,
+  moveToTrash: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
+  handleCheck: PropTypes.func.isRequired,
+};
 
-// const DeleteItem = ({ item, deleteItems, path }) => {
-//   const [deleteButton, setDeleteButton] = useState(false);
-//   useEffect(() => {
-//     if (item.length > 0) {
-//       setDeleteButton(true);
-//     } else {
-//       setDeleteButton(false);
-//     }
-//   }, [item]);
+const mapStateToProps = (state) => ({
+  checkedItems: state.file.action.checked.items,
+  path: state.file.tree.path,
+});
 
-//   const handleDelete = () => {
-//     if (
-//       confirm(
-//         'Are you sure? Files will be moved into trash folder, folders will be deleted.'
-//       )
-//     ) {
-//       // Save it!
-//       console.log('Delete!');
-//       //files /folders /path
-//       deleteItems({ items: item, path: path });
-//     } else {
-//       // Do nothing!
-//       console.log('Nope');
-//     }
-//   };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getFiles: (x) => dispatch(getUserFiles(x)),
+    moveToTrash: (x) => dispatch(deleteItem(x)),
+    handleCheck: (x) => dispatch(handleCheck(x)),
+  };
+};
 
-//   return (
-//     <>
-//       {deleteButton ? (
-//         <Button
-//           variant="outlined"
-//           style={{ marginRight: '5px', marginTop: '5px' }}
-//           onClick={() => handleDelete()}
-//         >
-//           Delete
-//         </Button>
-//       ) : (
-//         <></>
-//       )}
-//     </>
-//   );
-// };
-
-// DeleteItem.propTypes = {
-//   item: PropTypes.array.isRequired,
-//   selected: PropTypes.func.isRequired,
-//   deleteItems: PropTypes.func.isRequired,
-//   path: PropTypes.string,
-// };
-
-// const mapStateToProps = (state) => ({
-//   item: state.file.action.checked.items,
-//   path: state.file.tree.path,
-// });
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     selected: (x) => dispatch(itemSelected(x)),
-//     deleteItems: (x) => dispatch(deleteItem(x)),
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(DeleteItem);
+export default connect(mapStateToProps, mapDispatchToProps)(FilesDeleteToTrash);
