@@ -1,6 +1,11 @@
 import fileTypes from './file.types';
+
+// filters
+export const setFilters = (data) => {
+  return { type: fileTypes.SET_FILTERS, payload: data };
+};
+
 // move to path
-// selected path
 
 export const moveElements = (data) => {
   return { type: fileTypes.MOVE_ELEMENTS, payload: data };

@@ -1,4 +1,6 @@
 const fileTypes = {
+  SET_FILTERS: 'SET_FILTERS',
+
   MOVE_ELEMENTS: 'MOVE_ELEMENTS',
 
   GET_FILE_LIST: 'GET_FILE_LIST',

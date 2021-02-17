@@ -1,7 +1,16 @@
 import fileTypes from './file.types';
 
 const initialState = {
-  tree: { isLoading: false, items: [], path: '/' },
+  tree: {
+    isLoading: false,
+    items: [],
+    path: '/',
+    filters: {
+      folder: { type: 'byFolder' },
+      alpha: { active: true, type: 'byAlphaAsc' },
+      date: { active: false, type: 'byDefault' },
+    },
+  },
   trash: { isLoading: false, items: [], checked: { items: [] } },
   alert: {
     folder: { message: '', type: 'info' },
@@ -17,6 +26,12 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.SET_FILTERS:
+      return {
+        ...state,
+        tree: { ...state.tree, filters: action.payload },
+      };
+
     case fileTypes.TRASH_ALERT:
       return {
         ...state,
