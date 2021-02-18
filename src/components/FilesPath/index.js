@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { setDirectoryPath, getUserFiles } from '@store/files/file.actions';
 
-const FilesPath = ({ path, setPath, getFiles }) => {
+const FilesPath = ({ path, setPath, getFiles, filters }) => {
   const [selectPath, setSelectPath] = useState([]);
   useEffect(() => {
-    getFiles(path);
+    getFiles({ path: path, filters: filters });
     console.log(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
     pathArray.pop();
@@ -43,9 +43,11 @@ FilesPath.propTypes = {
   path: PropTypes.string.isRequired,
   setPath: PropTypes.func.isRequired,
   getFiles: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   path: state.file.tree.path,
+  filters: state.file.tree.filters,
 });
 const mapDispatchToProps = (dispatch) => {
   return {

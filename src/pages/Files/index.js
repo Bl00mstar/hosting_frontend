@@ -9,7 +9,7 @@ import NavigateButton from '@components/FilesButton';
 import useButtonFiles from '@hooks/useButtonFiles';
 import FilesAlert from '@components/FilesAlert';
 
-const Files = ({ path, getFiles, checked }) => {
+const Files = ({ path, getFiles, checked, filters }) => {
   const [filesOptions, filesOptionsComponent] = useButtonFiles();
 
   useEffect(() => {
@@ -17,19 +17,19 @@ const Files = ({ path, getFiles, checked }) => {
   }, [checked, filesOptions]);
 
   useEffect(() => {
-    getFiles(path);
+    getFiles({ path: path, filters: filters });
     // eslint-disable-next-line
-  }, [path]);
+  }, [path, filters]);
 
   return (
-    <>
+    <div style={{ height: '100%', overflow: 'hidden' }}>
       <FilesAlert />
       <PathNavigate />
       <NavigateButton />
       {filesOptionsComponent}
       <Filter />
       <FilesList />
-    </>
+    </div>
   );
 };
 
@@ -37,11 +37,13 @@ Files.propTypes = {
   path: PropTypes.string.isRequired,
   getFiles: PropTypes.func.isRequired,
   checked: PropTypes.array,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   checked: state.file.action.checked.items,
   path: state.file.tree.path,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

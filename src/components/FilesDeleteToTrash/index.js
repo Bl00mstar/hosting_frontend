@@ -36,13 +36,14 @@ const FilesDeleteToTrash = ({
   getFiles,
   path,
   handleCheck,
+  filters,
 }) => {
   const classes = useStyles();
 
   const handleMoveToTrash = () => {
     moveToTrash({ items: checkedItems, path: path });
     setTimeout(() => {
-      getFiles(path);
+      getFiles({ path: path, filters: filters });
       handleCheck([]);
     }, 100);
   };
@@ -74,11 +75,13 @@ FilesDeleteToTrash.propTypes = {
   moveToTrash: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   handleCheck: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   checkedItems: state.file.action.checked.items,
   path: state.file.tree.path,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

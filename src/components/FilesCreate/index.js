@@ -25,7 +25,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
+const CreateFolder = ({
+  alertFiles,
+  createFolder,
+  path,
+  getFiles,
+  filters,
+}) => {
   const classes = useStyles();
   const [folderName, setFolderName] = useState({ name: '' });
 
@@ -42,7 +48,7 @@ const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
       createFolder({ file_type: 'new', file_text: name, file_path: path });
       setFolderName({ name: '' });
       setTimeout(() => {
-        getFiles(path);
+        getFiles({ path: path, filters: filters });
       }, 100);
     }
   };
@@ -52,7 +58,15 @@ const CreateFolder = ({ alertFiles, createFolder, path, getFiles }) => {
   };
 
   return (
-    <Card margin="normal" style={{ width: '95%', marginTop: '5px' }}>
+    <Card
+      margin="normal"
+      style={{
+        display: 'block',
+        width: '95%',
+        marginTop: '5px',
+        maxHeight: '2%',
+      }}
+    >
       <TextField
         className={classes.input}
         id="outlined-email-input"
@@ -83,10 +97,12 @@ CreateFolder.propTypes = {
   path: PropTypes.string.isRequired,
   getFiles: PropTypes.func.isRequired,
   alertFiles: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   path: state.file.tree.path,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

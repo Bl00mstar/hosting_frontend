@@ -59,6 +59,7 @@ const FilesMove = ({
   checkedItems,
   move,
   handleCheck,
+  filters,
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -79,12 +80,11 @@ const FilesMove = ({
 
   const handleMoveButton = () => {
     move({ elements: checkedItems, path: actionPath });
-
+    handleClose();
     setTimeout(() => {
       //nie sleected tylko check items
-      handleClose();
       handleCheck([]);
-      getFiles(path);
+      getFiles({ path: path, filters: filters });
     }, 300);
   };
 
@@ -182,6 +182,7 @@ FilesMove.propTypes = {
   move: PropTypes.func.isRequired,
   handleCheck: PropTypes.func.isRequired,
   getFiles: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -189,6 +190,7 @@ const mapStateToProps = (state) => ({
   folders: state.file.action.folders,
   actionPath: state.file.action.path,
   checkedItems: state.file.action.checked.items,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

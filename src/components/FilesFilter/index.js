@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -11,94 +11,90 @@ import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
 
 import TextRotateUp from '@material-ui/icons/TextRotateUp';
 import TextRotationDown from '@material-ui/icons/TextRotationDown';
+import TextFormat from '@material-ui/icons/TextFormat';
 
 import Timer from '@material-ui/icons/Timer';
 import Timelapse from '@material-ui/icons/Timelapse';
-// { files, setFilters }
-const FilesFilter = ({ filters }) => {
-  // const [filter, setFilter] = useState({
-  //   byFolder: { type: 'byFolders' }, //byFiles //byFolders //byDefault
-  //   byAlpha: { active: true, type: 'byAlphaAsc' }, //byAlphaDesc //byAlphaAsc //byDefault
-  //   byData: { active: false, type: 'byDefault' }, //byDataDesc //byDataAsc //byDefault
-  // });
+import { EventBusy } from '@material-ui/icons';
 
-  // useEffect(() => {
-  //   if (typeof files !== 'undefined' && files.length > 0) {
-  //     console.log('asd');
-  //     setFilters(['asd']);
-  //   }
-  // }, [filter]);
+//    File 1; Folder -1 ;
+//    Alpha a-z: 1; Alpha z-a:-1 ;
+//    Date desc: 1; Date asc: -1;
 
-  // const handleSortEvent = (section, type, isActive) => {
-  //   if (section === 'byAlpha' && type !== 'byDefault') {
-  //     setFilter((filter) => ({
-  //       ...filter,
-  //       byData: { active: false, type: 'byDefault' },
-  //       byAlpha: { active: isActive, type: type },
-  //     }));
-  //   } else if (section === 'byData' && type !== 'byDefault') {
-  //     setFilter((filter) => ({
-  //       ...filter,
-  //       byAlpha: { active: false, type: 'byDefault' },
-  //       byData: { active: isActive, type: type },
-  //     }));
-  //   } else {
-  //     setFilter((filter) => ({
-  //       ...filter,
-  //       [section]: { type: type },
-  //     }));
-  //   }
-  // };
+const FilesFilter = ({ filters, setFilters }) => {
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
+
+  const handleSortEvent = ({ section, type }) => {
+    if (section === 'alpha') {
+      setFilters({
+        ...filters,
+        date: { active: false, type: 0 },
+        alpha: { active: true, type: type },
+      });
+    } else if (section === 'date') {
+      setFilters({
+        ...filters,
+        alpha: { active: false, type: 0 },
+        date: { active: true, type: type },
+      });
+    } else {
+      setFilters({ ...filters, [section]: { type: type } });
+    }
+  };
 
   return (
-    <ListItem style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <ListItem
+      style={{
+        display: 'flex',
+        right: '20px',
+      }}
+    >
       <ListItemIcon style={{ cursor: 'pointer' }}>
-        {filters.folder.type === 'byFolder' && (
+        {filters.folder.type === -1 && (
           <Folder
-          // onClick={() => handleSortEvent('byFolder', 'byFiles')}
+            onClick={() => handleSortEvent({ section: 'folder', type: 1 })}
           />
         )}
-        {filters.folder.type === 'byFiles' && (
+        {filters.folder.type === 1 && (
           <InsertDriveFile
-          // onClick={() => handleSortEvent('byFolder', 'byFolders')}
+            onClick={() => handleSortEvent({ section: 'folder', type: -1 })}
           />
         )}
       </ListItemIcon>
       <ListItemIcon style={{ cursor: 'pointer' }}>
-        {filters.alpha.active ? (
-          <>
-            {filters.alpha.type === 'byAlphaAsc' && (
-              <TextRotateUp
-              // onClick={() => handleSortEvent('byAlpha', 'byAlphaDesc', true)}
-              />
-            )}
-            {filters.alpha.type === 'byAlphaDesc' && (
-              <TextRotationDown
-              // onClick={() => handleSortEvent('byAlpha', 'byAlphaAsc', false)}
-              />
-            )}
-          </>
-        ) : (
-          <>nie</>
+        {filters.alpha.type === 1 && (
+          <TextRotateUp
+            onClick={() => handleSortEvent({ section: 'alpha', type: -1 })}
+          />
+        )}
+        {filters.alpha.type === -1 && (
+          <TextRotationDown
+            onClick={() => handleSortEvent({ section: 'alpha', type: 1 })}
+          />
+        )}
+        {filters.alpha.type === 0 && (
+          <TextFormat
+            onClick={() => handleSortEvent({ section: 'alpha', type: 1 })}
+          />
         )}
       </ListItemIcon>
       <ListItemIcon style={{ cursor: 'pointer' }}>
-        {filters.date.active ? (
-          <>
-            {' '}
-            {filters.date.type === 'byDataAsc' && (
-              <Timer
-              // onClick={() => handleSortEvent('byData', 'byDataDesc', true)}
-              />
-            )}
-            {filters.date.type === 'byDataDesc' && (
-              <Timelapse
-              // onClick={() => handleSortEvent('byData', 'byDataDesc', false)}
-              />
-            )}
-          </>
-        ) : (
-          <>nie</>
+        {filters.date.type === 1 && (
+          <Timer
+            onClick={() => handleSortEvent({ section: 'date', type: -1 })}
+          />
+        )}
+        {filters.date.type === -1 && (
+          <Timelapse
+            onClick={() => handleSortEvent({ section: 'date', type: 1 })}
+          />
+        )}
+        {filters.date.type === 0 && (
+          <EventBusy
+            onClick={() => handleSortEvent({ section: 'date', type: 1 })}
+          />
         )}
       </ListItemIcon>
     </ListItem>
@@ -108,7 +104,7 @@ const FilesFilter = ({ filters }) => {
 FilesFilter.propTypes = {
   files: PropTypes.array.isRequired,
   setFilters: PropTypes.func.isRequired,
-  filters: PropTypes.array.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -123,37 +119,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilesFilter);
-// export default FilesFilter;
-
-// const [sortedOptions, setSortedOptions] = useState({
-//   byAlpha: [],
-//   byDate: false,
-//   byFolder: true,
-// });
-
-// useEffect(() => {}, [sortedOptions, files]);
-
-// const handleAZFilter = (data) => {
-//   let arr = data.sort((a, b) => {
-//     if (a.name < b.name) return -1;
-//     if (a.name > b.name) return 1;
-//     return 0;
-//   });
-//   console.log(arr);
-// };
-
-// const handleZAFilter = (data) => {
-// let arr = data.sort((a, b) => {
-//   if (a.name > b.name) return -1;
-//   if (a.name < b.name) return 1;
-//   return 0;
-// });
-//   console.log(arr);
-// };
-
-// const handleDateFilter = (data) => {
-//   let arr = data.sort((a, b) => {
-//     return new Date(b.date) - new Date(a.date);
-//   });
-//   console.log(arr);
-// };

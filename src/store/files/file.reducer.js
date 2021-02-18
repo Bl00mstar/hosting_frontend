@@ -6,9 +6,9 @@ const initialState = {
     items: [],
     path: '/',
     filters: {
-      folder: { type: 'byFolder' },
-      alpha: { active: true, type: 'byAlphaAsc' },
-      date: { active: false, type: 'byDefault' },
+      folder: { type: -1 },
+      alpha: { active: true, type: 1 },
+      date: { active: false, type: 0 },
     },
   },
   trash: { isLoading: false, items: [], checked: { items: [] } },

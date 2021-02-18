@@ -4,6 +4,7 @@ import {
   ListItem,
   Checkbox,
   ListItemIcon,
+  Divider,
   ListItemText,
 } from '@material-ui/core';
 import { InsertDriveFile, GetApp, Folder } from '@material-ui/icons';
@@ -58,44 +59,59 @@ const FilesList = ({ path, files, handleCheck, checkedItems, getFiles }) => {
     if (values) {
       return values.map((value) =>
         React.cloneElement(
-          <ListItem width={'100px'}>
-            <Checkbox
-              value={value.name}
-              checked={isChecked.values.includes(value.id) ? true : false}
-              inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
-              onChange={(e) => {
-                handleCheckElement(value);
-                handleCheckbox(e, value);
-              }}
-            />
-            <ListItemIcon>
-              {value.type === 'folder' ? <Folder /> : <InsertDriveFile />}
-            </ListItemIcon>
-            {value.type === 'folder' ? (
-              <ListItemText
-                style={{ cursor: 'pointer' }}
-                primary={value.name}
-                onClick={() => {
-                  getFiles(path + value.name + '/');
+          <>
+            <Divider />
+            <ListItem width={'200px'}>
+              <Checkbox
+                value={value.name}
+                checked={isChecked.values.includes(value.id) ? true : false}
+                inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+                onChange={(e) => {
+                  handleCheckElement(value);
+                  handleCheckbox(e, value);
                 }}
               />
-            ) : (
+              <ListItemIcon>
+                {value.type === 'folder' ? <Folder /> : <InsertDriveFile />}
+              </ListItemIcon>
+
+              {value.type === 'folder' ? (
+                <ListItemText
+                  style={{
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    width: 'left',
+                  }}
+                  primary={value.name}
+                  onClick={() => {
+                    getFiles(path + value.name + '/');
+                  }}
+                />
+              ) : (
+                <ListItemText
+                  style={{
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                  }}
+                  primary={value.name}
+                />
+              )}
               <ListItemText
                 style={{ cursor: 'pointer' }}
-                primary={value.name}
+                primary={value.date}
               />
-            )}
-            {value.type === 'file' && (
-              <ListItemIcon
-                style={{ cursor: 'pointer' }}
-                // onClick={() => {
-                //   download({ id: value.id, name: value.name });
-                // }}
-              >
-                <GetApp />
-              </ListItemIcon>
-            )}
-          </ListItem>,
+              {value.type === 'file' && (
+                <ListItemIcon
+                  style={{ cursor: 'pointer' }}
+                  // onClick={() => {
+                  //   download({ id: value.id, name: value.name });
+                  // }}
+                >
+                  <GetApp />
+                </ListItemIcon>
+              )}
+            </ListItem>
+          </>,
           { key: value.id }
         )
       );
@@ -107,12 +123,19 @@ const FilesList = ({ path, files, handleCheck, checkedItems, getFiles }) => {
       size="small"
       style={{
         display: 'inline-block',
-        position: 'fixed',
-        minWidth: '70%',
-        maxHeight: '55%',
+        // position: 'fixed',
+        // minWidth: '70%',
+        // maxHeight: '55%',
         overflow: 'auto',
+        position: 'absolute',
+        bottom: '30px',
+        width: '1600px',
+        maxWidth: '90%',
+        height: '1600px',
+        maxHeight: '65%',
       }}
       dense={true}
+      fullWidth
     >
       {files.length > 0 ? (
         generate(files)

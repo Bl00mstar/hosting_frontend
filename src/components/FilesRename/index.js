@@ -32,6 +32,7 @@ const FilesRename = ({
   path,
   rename,
   getFiles,
+  filters,
 }) => {
   const classes = useStyles();
 
@@ -76,7 +77,7 @@ const FilesRename = ({
           rename({ newName: name, item: item, path: path });
           setName('');
           setTimeout(() => {
-            getFiles(path);
+            getFiles({ path: path, filters: filters });
           }, 500);
         }
       } else if (item.type === 'folder') {
@@ -132,12 +133,14 @@ FilesRename.propTypes = {
   path: PropTypes.string,
   alertFiles: PropTypes.func.isRequired,
   itemsList: PropTypes.array.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   item: state.file.action.selected,
   path: state.file.tree.path,
   itemsList: state.file.tree.items,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {

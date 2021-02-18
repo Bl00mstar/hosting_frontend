@@ -12,7 +12,7 @@ import {
 import { tokenConfig } from '@store/user/user.helpers';
 import { getUserFiles, alertFiles } from '@store/files/file.actions';
 
-const UploadFile = ({ alertFiles, path, getFiles, itemsList }) => {
+const UploadFile = ({ alertFiles, path, getFiles, itemsList, filters }) => {
   const [uploadedImage, setUploadedImage] = useState('');
   const [uploadPercentage, setUploadPercentage] = useState(0);
 
@@ -57,7 +57,7 @@ const UploadFile = ({ alertFiles, path, getFiles, itemsList }) => {
           })
           .then(() => {
             setTimeout(() => {
-              getFiles(path);
+              getFiles({ path: path, filters: filters });
             }, 500);
             alertFiles({
               message: uploadedImage.name + ' was uploaded.',
@@ -115,11 +115,13 @@ UploadFile.propTypes = {
   alertFiles: PropTypes.func.isRequired,
   getFiles: PropTypes.func.isRequired,
   itemsList: PropTypes.array.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   path: state.file.tree.path,
   itemsList: state.file.tree.items,
+  filters: state.file.tree.filters,
 });
 
 const mapDispatchToProps = (dispatch) => {
