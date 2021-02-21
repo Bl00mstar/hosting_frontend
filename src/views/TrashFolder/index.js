@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 // core components
 import GridItem from '@components/Grid/GridItem.js';
 import GridContainer from '@components/Grid/GridContainer.js';
-import Table from '@components/Table/Table.js';
 import Card from '@components/Card/Card.js';
 import CardHeader from '@components/Card/CardHeader.js';
 import CardBody from '@components/Card/CardBody.js';
-
+import { getUserTrash } from '@store/files/file.actions';
+import useTrashList from '@hooks/useTrashList.js';
 const styles = {
   cardCategoryWhite: {
     '&,& a,& a:hover,& a:focus': {
@@ -41,8 +43,19 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function TableList() {
+const TrashFolder = ({ getTrashList, trashData }) => {
+  const [table, tableComponent] = useTrashList();
+
   const classes = useStyles();
+
+  useEffect(() => {
+    table({ param: ['name', 'date'], trashData: trashData });
+  }, [trashData]);
+
+  useEffect(() => {
+    getTrashList();
+  }, []);
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
@@ -54,34 +67,26 @@ export default function TableList() {
               remove them permanently.
             </p>
           </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={['ID', 'Name', 'Country', 'City', 'Salary']}
-              tableData={[
-                ['1', 'Dakota Rice', '$36,738', 'Niger', 'Oud-Turnhout'],
-                ['2', 'Minerva Hooper', '$23,789', 'Curaçao', 'Sinaai-Waas'],
-                ['3', 'Sage Rodriguez', '$56,142', 'Netherlands', 'Baileux'],
-                [
-                  '4',
-                  'Philip Chaney',
-                  '$38,735',
-                  'Korea, South',
-                  'Overland Park',
-                ],
-                [
-                  '5',
-                  'Doris Greene',
-                  '$63,542',
-                  'Malawi',
-                  'Feldkirchen in Kärnten',
-                ],
-                ['6', 'Mason Porter', '$78,615', 'Chile', 'Gloucester'],
-              ]}
-            />
-          </CardBody>
+          <CardBody>{tableComponent}</CardBody>
         </Card>
       </GridItem>
     </GridContainer>
   );
-}
+};
+
+TrashFolder.propTypes = {
+  getTrashList: PropTypes.func.isRequired,
+  trashData: PropTypes.array.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  trashData: state.file.trash.items,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTrashList: (x) => dispatch(getUserTrash(x)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrashFolder);

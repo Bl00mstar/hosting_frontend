@@ -1,0 +1,87 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Card, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  deleteItem,
+  getUserFiles,
+  handleCheck,
+} from '@store/files/file.actions';
+
+const useStyles = makeStyles(() => ({
+  card: {
+    justify: 'center',
+    width: '95%',
+    marginTop: '5px',
+    textAlign: 'center',
+  },
+  alert: {
+    marginTop: '5px',
+    marginLeft: '5px',
+    marginRight: '5px',
+  },
+  button: {
+    marginTop: '9px',
+    marginRight: '7px',
+    color: 'red',
+    marginBottom: '11px',
+  },
+}));
+
+const FilesDeleteToTrash = ({
+  checkedItems,
+  moveToTrash,
+  getFiles,
+  path,
+  handleCheck,
+  filters,
+}) => {
+  const classes = useStyles();
+
+  const handleMoveToTrash = () => {
+    moveToTrash({ items: checkedItems, path: path });
+    setTimeout(() => {
+      getFiles({ path: path, filters: filters });
+      handleCheck([]);
+    }, 100);
+  };
+
+  return (
+    <Card>
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        onClick={() => handleMoveToTrash()}
+      >
+        Confirm
+      </Button>
+    </Card>
+  );
+};
+
+FilesDeleteToTrash.propTypes = {
+  getFiles: PropTypes.func.isRequired,
+  checkedItems: PropTypes.array.isRequired,
+  moveToTrash: PropTypes.func.isRequired,
+  path: PropTypes.string.isRequired,
+  handleCheck: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  checkedItems: state.file.action.checked.items,
+  path: state.file.tree.path,
+  filters: state.file.tree.filters,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getFiles: (x) => dispatch(getUserFiles(x)),
+    moveToTrash: (x) => dispatch(deleteItem(x)),
+    handleCheck: (x) => dispatch(handleCheck(x)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilesDeleteToTrash);
