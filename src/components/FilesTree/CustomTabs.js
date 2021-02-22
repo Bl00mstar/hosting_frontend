@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 // nodejs library to set properties for components
@@ -20,6 +20,16 @@ const useStyles = makeStyles(styles);
 
 const CustomTabs = (props) => {
   const [data, setData] = React.useState(null);
+  const classes = useStyles();
+  const { headerColor, tabs, title, checkedItems, rootPath } = props;
+  const cardTitle = classNames({
+    [classes.cardTitle]: true,
+  });
+
+  useEffect(() => {
+    setData(null);
+  }, [checkedItems, rootPath]);
+
   const handleChange = (event, value) => {
     if (value === data) {
       setData('');
@@ -27,11 +37,7 @@ const CustomTabs = (props) => {
       setData(value);
     }
   };
-  const classes = useStyles();
-  const { headerColor, tabs, title, checkedItems } = props;
-  const cardTitle = classNames({
-    [classes.cardTitle]: true,
-  });
+
   return (
     <Card plain>
       <CardHeader color={headerColor}>
@@ -151,9 +157,11 @@ CustomTabs.propTypes = {
   ),
   plainTabs: PropTypes.bool,
   checkedItems: PropTypes.array.isRequired,
+  rootPath: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  rootPath: state.file.tree.path,
   files: state.file.tree.items,
   checkedItems: state.file.action.checked.items,
 });

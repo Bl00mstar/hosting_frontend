@@ -7,23 +7,13 @@ import {
   getUserFiles,
   alertFiles,
 } from '@store/files/file.actions';
-import { TextField, Button, Card } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import Button from '@components/CustomButtons/Button.js';
 import { fileFolderRegex } from '@utils/api';
+import GridItem from '@components/Grid/GridItem.js';
+import GridContainer from '@components/Grid/GridContainer.js';
 
-const useStyles = makeStyles(() => ({
-  input: {
-    marginTop: '5px',
-    marginBottom: '5px',
-    marginLeft: '7px',
-    width: '300px',
-    maxWidth: '60%',
-  },
-  button: {
-    marginTop: '9px',
-    marginRight: '7px',
-    float: 'right',
-  },
-}));
+const useStyles = makeStyles(() => ({}));
 
 const FilesRename = ({
   item,
@@ -99,30 +89,37 @@ const FilesRename = ({
   };
 
   return (
-    <Card margin="normal" style={{ width: '95%', marginTop: '5px' }}>
-      <TextField
-        className={classes.input}
-        id="outlined-email-input"
-        label={'Rename '}
-        type="text"
-        size="small"
-        name="name"
-        value={name}
-        autoComplete="name"
-        variant="outlined"
-        color="primary"
-        onChange={handleChange}
-      />
-
-      <Button
-        className={classes.button}
-        onClick={onSubmit}
-        variant="contained"
-        size="small"
-      >
-        Change
-      </Button>
-    </Card>
+    <GridContainer style={{ textAlign: 'center' }}>
+      <GridItem xs={12} sm={12} md={12}>
+        <TextField
+          className={classes.input}
+          id="outlined-email-input"
+          label={'Rename '}
+          type="text"
+          size="small"
+          name="name"
+          value={name}
+          autoComplete="name"
+          variant="outlined"
+          color="primary"
+          onChange={handleChange}
+          style={{
+            width: '150px',
+            minWidth: '25%',
+            marginTop: '10px',
+            marginRight: '20px',
+          }}
+        />
+        <Button
+          size="sm"
+          color="primary"
+          style={{ maxWidth: '30%', height: '39px', marginTop: '10px' }}
+          onClick={onSubmit}
+        >
+          Change
+        </Button>
+      </GridItem>
+    </GridContainer>
   );
 };
 

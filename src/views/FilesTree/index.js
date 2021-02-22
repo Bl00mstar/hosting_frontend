@@ -3,26 +3,14 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-
 import Card from '@components/FilesTree/Card.js';
 import CardHeader from '@components/FilesTree/CardHeader.js';
 import FilesPath from '@components/FilesTree/FilesPath';
-import CardBody from '@components/FilesTree/CardBody.js';
-// import GridItem from '@components/FilesTree/GridItem.js';
-// import GridContainer from '@components/FilesTree/GridContainer.js';
-// import CustomTabs from '@components/FilesTree/CustomTabs.js';
-
-// import FilesUploadSingleFile from '@components/FilesTree/FilesUploadSingleFile';
-// import FilesRename from '@components/FilesTree/FilesRename';
-// import FilesMove from '@components/FilesTree/FilesMove';
-// import FilesDeleteToTrash from '@components/FilesTree/FilesDeleteToTrash';
-
-// import FilesOption from '@components/FilesTree/FilesOption';
-
+import FilesAlerts from '@components/FilesTree/FilesAlerts';
 import useFilesList from '@hooks/FilesTree/useFilesList.js';
 import useFilesOptions from '@hooks/FilesTree/useFilesOptions.js';
 
-import { getUserFiles } from '@store/files/file.actions';
+import { getUserFiles, handleSelected } from '@store/files/file.actions';
 
 const styles = {
   cardCategoryWhite: {
@@ -57,32 +45,39 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const FilesTree = ({ files, getFiles, filters, path }) => {
+const FilesTree = ({ files, getFiles, filters, path, checked, selected }) => {
   const classes = useStyles();
   const [table, tableComponent] = useFilesList();
   const [options, optionsComponent] = useFilesOptions();
 
   useEffect(() => {
-    options(0);
-  }, [options]);
+    options(checked.length);
+    if (checked.length === 1) {
+      selected(checked[0]);
+    } else {
+      selected({ type: '', id: '', name: '' });
+    }
+  }, [options, checked]);
 
   useEffect(() => {
-    table({ param: ['', 'name', 'created at', 'download'], trashData: files });
+    table({ param: ['', '', 'Name', '', 'Created at'], trashData: files });
   }, [files]);
 
   useEffect(() => {
     getFiles({ path: path, filters: filters });
-  }, []);
+  }, [filters]);
   return (
-    <Card plain>
+    <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Files</h4>
+        <h4 className={classes.cardTitleWhite}>Current path:</h4>
+
         <p className={classes.cardCategoryWhite}>
-          Path: <FilesPath />
+          <FilesPath />
         </p>
       </CardHeader>
       {optionsComponent}
       {tableComponent}
+      <FilesAlerts />
     </Card>
   );
 };
@@ -92,17 +87,20 @@ FilesTree.propTypes = {
   files: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   filters: PropTypes.object.isRequired,
+  checked: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   files: state.file.tree.items,
   path: state.file.tree.path,
   filters: state.file.tree.filters,
+  checked: state.file.action.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getFiles: (x) => dispatch(getUserFiles(x)),
+    selected: (x) => dispatch(handleSelected(x)),
   };
 };
 

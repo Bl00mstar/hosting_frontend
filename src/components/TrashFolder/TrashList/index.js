@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { trashSelected } from '@store/files/file.actions';
+import { trashSelected } from '../FilesTree/FilesList/node_modules/@store/files/file.actions';
 import {
   List,
   ListItemText,
   ListItemIcon,
   ListItem,
   Checkbox,
+  Grid,
 } from '@material-ui/core';
 import { InsertDriveFile } from '@material-ui/icons';
 import {
   setDirectoryPath,
   foldersPath,
   getUserTrash,
-} from '@store/files/file.actions';
+} from '../FilesTree/FilesList/node_modules/@store/files/file.actions';
 
 const TrashList = ({ checkedTrash, trashItems, handleCheckStore }) => {
   const handleCheckElement = (value) => {
@@ -53,25 +54,27 @@ const TrashList = ({ checkedTrash, trashItems, handleCheckStore }) => {
   };
 
   return (
-    <List
-      size="small"
-      style={{
-        display: 'inline-block',
-        position: 'fixed',
-        minWidth: '70%',
-        maxHeight: '55%',
-        overflow: 'auto',
-      }}
-      dense={true}
-    >
-      {trashItems.length > 0 ? (
-        generate(trashItems)
-      ) : (
-        <ListItem width={'100px'}>
-          <ListItemText primary={'Trash folder is empty.'} />
-        </ListItem>
-      )}
-    </List>
+    <Grid item xs={12}>
+      <List
+        size="small"
+        style={{
+          display: 'inline-block',
+          position: 'fixed',
+          minWidth: '70%',
+          maxHeight: '55%',
+          overflow: 'auto',
+        }}
+        dense={true}
+      >
+        {trashItems.length > 0 ? (
+          generate(trashItems)
+        ) : (
+          <ListItem width={'100px'}>
+            <ListItemText primary={'Trash folder is empty.'} />
+          </ListItem>
+        )}
+      </List>
+    </Grid>
   );
 };
 

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
-import Card from '@components/FilesTree/Card';
+// import Card from '@components/FilesTree/Card';
 import Button from '@components/CustomButtons/Button.js';
+import GridItem from '@components/Grid/GridItem.js';
+import GridContainer from '@components/Grid/GridContainer.js';
 import {
   createNewFolder,
   getUserFiles,
@@ -47,32 +49,38 @@ const CreateFolder = ({
   };
 
   return (
-    <Card>
-      <TextField
-        className={classes.input}
-        id="outlined-email-input"
-        label="New folder name"
-        type="text"
-        size="small"
-        name="name"
-        value={folderName.name}
-        onChange={(e) => handleChangeFolderInput(e)}
-        autoComplete="name"
-        variant="outlined"
-        color="primary"
-      />
-      <Button color="primary" onClick={() => handleCreateFolder()}>
-        Create folder
-      </Button>
-      {/* <Button
-        className={classes.button}
-        variant="contained"
-        onClick={() => handleCreateFolder()}
-        size="small"
-      >
-        Create folder
-      </Button> */}
-    </Card>
+    <GridContainer style={{ textAlign: 'center' }}>
+      <GridItem xs={12} sm={12} md={12}>
+        <TextField
+          className={classes.input}
+          id="outlined-email-input"
+          label="New folder name"
+          type="text"
+          size="small"
+          name="name"
+          value={folderName.name}
+          onChange={(e) => handleChangeFolderInput(e)}
+          autoComplete="name"
+          variant="outlined"
+          color="primary"
+          style={{
+            width: '150px',
+            minWidth: '25%',
+            marginTop: '10px',
+            marginRight: '20px',
+          }}
+        />
+
+        <Button
+          size="sm"
+          color="primary"
+          style={{ maxWidth: '30%', height: '39px', marginTop: '10px' }}
+          onClick={() => handleCreateFolder()}
+        >
+          Create folder
+        </Button>
+      </GridItem>
+    </GridContainer>
   );
 };
 

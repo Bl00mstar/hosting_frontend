@@ -1,37 +1,44 @@
 import React from 'react';
 import { useState } from 'react';
 import Table from '@components/FilesTree/Table.js';
+import GridContainer from '@components/Grid/GridContainer.js';
+import GridItem from '@components/Grid/GridItem.js';
 
 const useFilesList = () => {
-  const [trashList, setTrashList] = useState({
+  const [fileList, setFileList] = useState({
     tableData: {},
     tableHead: [],
   });
 
-  const download = (e) => {
+  const handleFiles = (e) => {
     let data = e.trashData.map((el) => {
       return { id: el.id, name: el.name, date: el.date, type: el.type };
     });
 
-    setTrashList((trashList) => ({
-      ...trashList,
+    setFileList((fileList) => ({
+      ...fileList,
       tableHead: e.param,
     }));
-    setTrashList((trashList) => ({
-      ...trashList,
+    setFileList((fileList) => ({
+      ...fileList,
       tableData: data,
     }));
-    console.log(e);
   };
 
   return [
-    (e) => download(e),
-    trashList.tableData.length > 0 && (
+    (e) => handleFiles(e),
+    fileList.tableData.length > 0 ? (
       <Table
         tableHeaderColor="primary"
-        tableHead={trashList.tableHead}
-        tableData={trashList.tableData}
+        tableHead={fileList.tableHead}
+        tableData={fileList.tableData}
       ></Table>
+    ) : (
+      <GridContainer style={{ textAlign: 'center' }}>
+        <GridItem xs={12} sm={12} md={12}>
+          <p>There are no files in this directory.</p>
+        </GridItem>
+      </GridContainer>
     ),
   ];
 };

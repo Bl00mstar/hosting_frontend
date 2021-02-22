@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import Button from '@components/CustomButtons/Button';
 import { setDirectoryPath, getUserFiles } from '@store/files/file.actions';
-
+import Tabs from '@material-ui/core/Tabs';
 const FilesPath = ({ path, setPath, getFiles, filters }) => {
   const [selectPath, setSelectPath] = useState([]);
   useEffect(() => {
     getFiles({ path: path, filters: filters });
-    console.log(path);
     let pathArray = path.replace(/\//g, '/ ').split(' ');
     pathArray.pop();
     setSelectPath(pathArray);
@@ -24,11 +23,11 @@ const FilesPath = ({ path, setPath, getFiles, filters }) => {
   };
 
   return (
-    <>
+    <Tabs variant="scrollable" scrollButtons="auto">
       {selectPath.map((el, key) => (
         <Button
           margin="normal"
-          size="small"
+          size="sm"
           onClick={(e) => selectDirectory(e, el)}
           key={key}
           // style={{ flexGrow: '0', maxHeight: '10%', flexBasis: '10%' }}
@@ -36,7 +35,7 @@ const FilesPath = ({ path, setPath, getFiles, filters }) => {
           {el}
         </Button>
       ))}
-    </>
+    </Tabs>
   );
 };
 

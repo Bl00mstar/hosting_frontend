@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import {
-  Card,
-  TextField,
-  Button,
-  LinearProgress,
-  Typography,
-} from '@material-ui/core';
+import GridItem from '@components/Grid/GridItem.js';
+import GridContainer from '@components/Grid/GridContainer.js';
+import Button from '@components/CustomButtons/Button.js';
+import { TextField, LinearProgress, Typography } from '@material-ui/core';
 import { tokenConfig } from '@store/user/user.helpers';
 import { getUserFiles, alertFiles } from '@store/files/file.actions';
 
@@ -70,43 +67,55 @@ const UploadFile = ({ alertFiles, path, getFiles, itemsList, filters }) => {
   };
 
   return (
-    <Card margin="normal">
-      <TextField
-        id="file"
-        type="file"
-        margin="normal"
-        size="small"
-        name="selectedFile"
-        variant="outlined"
-        color="primary"
-        style={{
-          marginTop: '5px',
-          marginBottom: '5px',
-          marginLeft: '7px',
-          width: '300px',
-          maxWidth: '60%',
-        }}
-        onChange={(e) => {
-          setUploadedImage(e.target.files[0]);
-        }}
-      />
-      <Button
-        variant="contained"
-        size="small"
-        onClick={handleClick}
-        style={{ marginTop: '9px', marginRight: '7px', float: 'right' }}
-      >
-        Upload
-      </Button>
-      {uploadPercentage !== 0 && (
-        <div>
-          <LinearProgress variant="determinate" value={uploadPercentage} />
-          <Typography variant="body2" color="textSecondary">
-            {uploadPercentage}
-          </Typography>
-        </div>
-      )}
-    </Card>
+    <GridContainer style={{ textAlign: 'center' }}>
+      <GridItem xs={12} sm={12} md={12}>
+        <TextField
+          id="file"
+          type="file"
+          margin="normal"
+          size="small"
+          name="selectedFile"
+          variant="outlined"
+          color="primary"
+          style={{
+            width: '150px',
+            minWidth: '25%',
+            marginTop: '10px',
+            marginRight: '20px',
+          }}
+          onChange={(e) => {
+            setUploadedImage(e.target.files[0]);
+          }}
+        />
+        <Button
+          size="sm"
+          color="primary"
+          style={{ maxWidth: '30%', height: '39px', marginTop: '10px' }}
+          onClick={handleClick}
+        >
+          Upload
+        </Button>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={12}>
+        {uploadPercentage !== 0 && (
+          <div>
+            <LinearProgress
+              style={{
+                marginLeft: '50px',
+                marginRight: '50px',
+                justify: 'center',
+                alignItems: 'center',
+              }}
+              variant="determinate"
+              value={uploadPercentage}
+            />
+            <Typography variant="body2" color="textSecondary">
+              {uploadPercentage}
+            </Typography>
+          </div>
+        )}
+      </GridItem>
+    </GridContainer>
   );
 };
 

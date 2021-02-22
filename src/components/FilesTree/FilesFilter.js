@@ -17,14 +17,8 @@ import Timer from '@material-ui/icons/Timer';
 import Timelapse from '@material-ui/icons/Timelapse';
 import { EventBusy } from '@material-ui/icons';
 
-//    File 1; Folder -1 ;
-//    Alpha a-z: 1; Alpha z-a:-1 ;
-//    Date desc: 1; Date asc: -1;
-
 const FilesFilter = ({ filters, setFilters }) => {
-  useEffect(() => {
-    console.log(filters);
-  }, [filters]);
+  useEffect(() => {}, [filters]);
 
   const handleSortEvent = ({ section, type }) => {
     if (section === 'alpha') {

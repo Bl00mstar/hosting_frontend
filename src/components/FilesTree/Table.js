@@ -9,12 +9,14 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
+import { ListItemIcon } from '@material-ui/core';
 // core components
-import styles from '@assets/jss/material-dashboard-react/components/tableStyle.js';
+import styles from '@assets/jss/components/FilesTree/tableStyle.js';
 import FilesFilter from '@components/FilesTree/FilesFilter';
 import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
 import { handleCheck } from '@store/files/file.actions';
-
+import { dateConverter } from '@utils/dashboardUtils';
+import { InsertDriveFile, Folder, GetApp } from '@material-ui/icons';
 const useStyles = makeStyles(styles);
 
 const FilesTable = (props) => {
@@ -25,13 +27,12 @@ const FilesTable = (props) => {
     tableHeaderColor,
     checkedItems,
     handleCheck,
+    path,
+    getFiles,
   } = props;
   const [isChecked, setIsChecked] = useState({ values: [] });
 
   const handleCheckbox = (e, data) => {
-    console.log(checkedItems);
-    console.log(data);
-    console.log(e);
     let filtered = checkedItems.filter((el) => el.id === e.target.value);
     let newChecked = { id: data.id, name: data.name, type: data.type };
     if (typeof filtered !== 'undefined' && filtered.length > 0) {
@@ -57,51 +58,100 @@ const FilesTable = (props) => {
   };
 
   return (
-    <div className={classes.tableResponsive}>
-      <FilesFilter />
-      <Table className={classes.table}>
-        {tableHead !== undefined ? (
-          <TableHead className={classes[tableHeaderColor + 'TableHeader']}>
-            <TableRow className={classes.tableHeadRow}>
-              {tableHead.map((prop, key) => {
-                return (
-                  <TableCell
-                    className={classes.tableCell + ' ' + classes.tableHeadCell}
-                    key={key}
-                  >
-                    {prop}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-        ) : null}
-        <TableBody>
-          {tableData.map((prop, key) => {
-            return (
-              <TableRow key={key} className={classes.tableBodyRow}>
-                <TableCell className={classes.tableCell}>
-                  <Checkbox
-                    value={prop.id}
-                    checked={isChecked.values.includes(prop.id) ? true : false}
-                    inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
-                    onChange={(e) => {
-                      handleCheckElement(prop);
-                      handleCheckbox(e, prop);
-                    }}
-                  />
-                </TableCell>
-                <TableCell className={classes.tableCell}>{prop.name}</TableCell>
-                <TableCell className={classes.tableCell}>{prop.date}</TableCell>
-                <TableCell className={classes.tableCell}>
-                  {prop.type === 'file' && 'download'}
-                </TableCell>
+    <>
+      <div className={classes.tableResponsive}>
+        <FilesFilter />
+        <Table className={classes.table}>
+          {tableHead !== undefined ? (
+            <TableHead className={classes[tableHeaderColor + 'TableHeader']}>
+              <TableRow className={classes.tableHeadRow}>
+                {tableHead.map((prop, key) => {
+                  return (
+                    <TableCell
+                      className={
+                        classes.tableCell + ' ' + classes.tableHeadCell
+                      }
+                      key={key}
+                    >
+                      {prop}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+            </TableHead>
+          ) : null}
+          <TableBody>
+            {tableData.map((prop, key) => {
+              return (
+                <TableRow key={key} className={classes.tableBodyRow}>
+                  <TableCell
+                    className={classes.tableCell}
+                    style={{ width: '15px' }}
+                  >
+                    <Checkbox
+                      value={prop.id}
+                      checked={
+                        isChecked.values.includes(prop.id) ? true : false
+                      }
+                      inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+                      style={{ color: 'green' }}
+                      onChange={(e) => {
+                        handleCheckElement(prop);
+                        handleCheckbox(e, prop);
+                      }}
+                    />
+                  </TableCell>
+
+                  {prop.type === 'folder' ? (
+                    <>
+                      <TableCell
+                        className={classes.tableCell}
+                        style={{ width: '15px' }}
+                      >
+                        <ListItemIcon style={{ marginTop: '4px' }}>
+                          <Folder />
+                        </ListItemIcon>
+                      </TableCell>
+                      <TableCell
+                        className={classes.tableCell}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => getFiles(path + prop.name + '/')}
+                      >
+                        {prop.name}
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell
+                        className={classes.tableCell}
+                        style={{ width: '15px' }}
+                      >
+                        <ListItemIcon style={{ marginTop: '4px' }}>
+                          <InsertDriveFile />
+                        </ListItemIcon>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {prop.name}
+                      </TableCell>
+                    </>
+                  )}
+                  <TableCell className={classes.tableCell}>
+                    {prop.type === 'file' && (
+                      <ListItemIcon>
+                        <GetApp style={{ cursor: 'pointer' }} />
+                      </ListItemIcon>
+                    )}
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    {dateConverter(prop.date)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 

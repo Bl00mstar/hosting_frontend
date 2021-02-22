@@ -24,6 +24,8 @@ const FileAlerts = ({ message, type, clearAlerts }) => {
           style={{
             position: 'fixed',
             right: '18px',
+            bottom: '18px',
+            zIndex: '999',
           }}
           severity={type}
         >

@@ -10,11 +10,12 @@ import {
   getUserFiles,
 } from '@store/files/file.actions';
 import { RotateLeft, ArrowForwardIos } from '@material-ui/icons';
+import GridItem from '@components/Grid/GridItem.js';
+import GridContainer from '@components/Grid/GridContainer.js';
 import {
   Modal,
   Backdrop,
   Fade,
-  Card,
   MenuList,
   MenuItem,
   ListItem,
@@ -108,67 +109,69 @@ const FilesMove = ({
   };
 
   return (
-    <Card className={classes.card} margin="normal">
-      <Button
-        className={classes.button}
-        variant="outlined"
-        size="small"
-        onClick={handleOpen}
-      >
-        Select Path
-      </Button>
-      {path !== '/' && (
-        <Button className={classes.button} variant="outlined" size="small">
-          Move to root
+    <GridContainer style={{ textAlign: 'center' }}>
+      <GridItem xs={12} sm={12} md={12}>
+        <Button
+          className={classes.button}
+          variant="outlined"
+          size="small"
+          onClick={handleOpen}
+        >
+          Select Path
         </Button>
-      )}
+        {path !== '/' && (
+          <Button className={classes.button} variant="outlined" size="small">
+            Move to root
+          </Button>
+        )}
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        className={classes.modal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <div style={{ height: '50px' }}>
-              <Button
-                variant="contained"
-                size="small"
-                className={classes.button}
-                startIcon={<RotateLeft />}
-                style={{ float: 'left' }}
-                onClick={() => foldersPath('/')}
-              >
-                Reset
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                className={classes.button}
-                endIcon={<ArrowForwardIos />}
-                style={{ float: 'right' }}
-                onClick={() => handleMoveButton()}
-              >
-                Move
-              </Button>
-            </div>
-            <div style={{ height: '60px' }}>
-              <p>Selected elements: {checkedItems.length}</p>
-              <p>Selected path: {actionPath}</p>
-            </div>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          className={classes.modal}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <div className={classes.paper}>
+              <div style={{ height: '50px' }}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  className={classes.button}
+                  startIcon={<RotateLeft />}
+                  style={{ float: 'left' }}
+                  onClick={() => foldersPath('/')}
+                >
+                  Reset
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  className={classes.button}
+                  endIcon={<ArrowForwardIos />}
+                  style={{ float: 'right' }}
+                  onClick={() => handleMoveButton()}
+                >
+                  Move
+                </Button>
+              </div>
+              <div style={{ height: '60px' }}>
+                <p>Selected elements: {checkedItems.length}</p>
+                <p>Selected path: {actionPath}</p>
+              </div>
 
-            <MenuList>{folders && generatePath(folders)}</MenuList>
-          </div>
-        </Fade>
-      </Modal>
-    </Card>
+              <MenuList>{folders && generatePath(folders)}</MenuList>
+            </div>
+          </Fade>
+        </Modal>
+      </GridItem>
+    </GridContainer>
   );
 };
 

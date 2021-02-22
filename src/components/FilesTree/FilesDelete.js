@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import GridItem from '@components/Grid/GridItem.js';
+import GridContainer from '@components/Grid/GridContainer.js';
 import { connect } from 'react-redux';
-import { Card, Button } from '@material-ui/core';
+import Button from '@components/CustomButtons/Button.js';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   deleteItem,
@@ -9,25 +11,7 @@ import {
   handleCheck,
 } from '@store/files/file.actions';
 
-const useStyles = makeStyles(() => ({
-  card: {
-    justify: 'center',
-    width: '95%',
-    marginTop: '5px',
-    textAlign: 'center',
-  },
-  alert: {
-    marginTop: '5px',
-    marginLeft: '5px',
-    marginRight: '5px',
-  },
-  button: {
-    marginTop: '9px',
-    marginRight: '7px',
-    color: 'red',
-    marginBottom: '11px',
-  },
-}));
+const useStyles = makeStyles(() => ({}));
 
 const FilesDeleteToTrash = ({
   checkedItems,
@@ -48,16 +32,22 @@ const FilesDeleteToTrash = ({
   };
 
   return (
-    <Card>
-      <Button
-        className={classes.button}
-        variant="outlined"
-        size="small"
-        onClick={() => handleMoveToTrash()}
-      >
-        Confirm
-      </Button>
-    </Card>
+    <GridContainer style={{ textAlign: 'center' }}>
+      <GridItem xs={12} sm={12} md={12}>
+        <div>
+          Folders will be deleted. Existing files will be moved to trash folder.
+        </div>
+
+        <Button
+          className={classes.button}
+          variant="outlined"
+          size="small"
+          onClick={() => handleMoveToTrash()}
+        >
+          Confirm
+        </Button>
+      </GridItem>
+    </GridContainer>
   );
 };
 
