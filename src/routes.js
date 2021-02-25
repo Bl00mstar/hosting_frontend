@@ -1,13 +1,13 @@
 import React from 'react';
-import Dashboard from '@pages/Dashboard';
-import Files from '@pages/Files';
-import Home from '@pages/Home';
-import Login from '@pages/Login';
-import NewFolder from '@pages/NewFolder';
-import Register from '@pages/Register';
-import Setting from '@pages/Setting';
-import Trash from '@pages/Trash';
-import Upload from '@pages/Upload';
+import Dashboard from './views/Dashboard';
+import FilesTree from './views/FilesTree';
+import Home from './views/Home';
+import Login from './views/Login';
+import NewFolder from './views/NewFolder';
+import Register from './views/Register';
+import Setting from './views/Settings';
+import TrashFolder from './views/TrashFolder';
+import UploadFile from './views/UploadFile';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
@@ -56,16 +56,16 @@ export const routes = [
     type: ['user'],
   },
   {
-    description: 'Files tree',
+    description: 'Manage files',
     path: '/user/files',
-    element: <Files />,
+    element: <FilesTree />,
     icon: <AccountTreeIcon />,
     type: ['files'],
   },
   {
     description: 'Upload file',
     path: '/user/upload',
-    element: <Upload />,
+    element: <UploadFile />,
     icon: <CloudUploadIcon />,
     type: ['files'],
   },
@@ -79,7 +79,7 @@ export const routes = [
   {
     description: 'Trash folder',
     path: '/user/trash',
-    element: <Trash />,
+    element: <TrashFolder />,
     icon: <DeleteIcon />,
     type: ['files'],
   },
