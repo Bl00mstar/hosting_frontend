@@ -1,21 +1,15 @@
-import React, { Component } from 'react';
-import { DropzoneArea } from 'material-ui-dropzone';
+import React from 'react';
+import Card from '@components/UploadFile/Card';
+import CardHeader from '@components/UploadFile/CardHeader';
+import Upload from './Upload';
 
-class DropzoneAreaExample extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      files: [],
-    };
-  }
-  handleChange(files) {
-    this.setState({
-      files: files,
-    });
-  }
-  render() {
-    return <DropzoneArea onChange={this.handleChange.bind(this)} />;
-  }
+export default function index() {
+  return (
+    <Card>
+      <CardHeader color="primary">
+        <p>Upload</p>
+      </CardHeader>
+      <Upload />
+    </Card>
+  );
 }
-
-export default DropzoneAreaExample;

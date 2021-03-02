@@ -8,6 +8,7 @@ import Register from './views/Register';
 import Setting from './views/Settings';
 import TrashFolder from './views/TrashFolder';
 import UploadFile from './views/UploadFile';
+import AlphaTesting from './views/AlphaTesting';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
@@ -81,6 +82,13 @@ export const routes = [
     path: '/user/trash',
     element: <TrashFolder />,
     icon: <DeleteIcon />,
+    type: ['files'],
+  },
+  {
+    description: 'Alpha TESTING',
+    path: '/user/testing',
+    element: <AlphaTesting />,
+    icon: <AccountTreeIcon />,
     type: ['files'],
   },
 ];
