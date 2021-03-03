@@ -9,39 +9,8 @@ import FilesPath from '@components/FilesTree/FilesPath';
 import FilesAlerts from '@components/FilesTree/FilesAlerts';
 import useFilesList from '@hooks/FilesTree/useFilesList.js';
 import useFilesOptions from '@hooks/FilesTree/useFilesOptions.js';
-
 import { getUserFiles, handleSelected } from '@store/files/file.actions';
-
-const styles = {
-  cardCategoryWhite: {
-    '&,& a,& a:hover,& a:focus': {
-      color: 'rgba(255,255,255,.62)',
-      margin: '0',
-      fontSize: '18px',
-      marginTop: '0',
-      marginBottom: '0',
-    },
-    '& a,& a:hover,& a:focus': {
-      color: '#FFFFFF',
-    },
-  },
-  cardTitleWhite: {
-    color: '#FFFFFF',
-    marginTop: '0px',
-    minHeight: 'auto',
-    fontSize: '17px',
-    fontWeight: '300',
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: '2px',
-    textDecoration: 'none',
-    '& small': {
-      color: '#777',
-      fontSize: '55%',
-      fontWeight: '400',
-      lineHeight: '1',
-    },
-  },
-};
+import { styles } from '@assets/js/components/FilesTree/filesTree';
 
 const useStyles = makeStyles(styles);
 
@@ -60,7 +29,7 @@ const FilesTree = ({ files, getFiles, filters, path, checked, selected }) => {
   }, [options, checked]);
 
   useEffect(() => {
-    table({ param: ['', '', 'Name', '', 'Created at'], trashData: files });
+    table({ param: ['', '', 'Name', '', '', 'Created at'], trashData: files });
   }, [files]);
 
   useEffect(() => {

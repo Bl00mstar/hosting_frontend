@@ -13,10 +13,6 @@ import styles from '@assets/jss/material-dashboard-react/components/headerStyle.
 
 import { routes } from '../../routes';
 
-// import Menu from '@material-ui/icons/Menu';
-// import IconButton from '@material-ui/core/IconButton';
-// import Hidden from '@material-ui/core/Hidden';
-
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
@@ -24,7 +20,6 @@ export default function Header(props) {
   function makeBrand() {
     var name;
     routes.map((prop) => {
-      console.log(window.location.href.indexOf(prop.path));
       if (window.location.href.indexOf(prop.path) !== -1) {
         name = props.rtlActive ? prop.rtlName : prop.description;
       }
@@ -40,7 +35,6 @@ export default function Header(props) {
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
-          {/* Here we create navbar brand, based on route name */}
           <Button color="transparent" href="#" className={classes.title}>
             {makeBrand()}
           </Button>
@@ -67,5 +61,4 @@ Header.propTypes = {
   color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
   rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
-  //   routes: PropTypes.arrayOf(PropTypes.object),
 };

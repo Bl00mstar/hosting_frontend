@@ -3,18 +3,15 @@ import Dashboard from './views/Dashboard';
 import FilesTree from './views/FilesTree';
 import Home from './views/Home';
 import Login from './views/Login';
-import NewFolder from './views/NewFolder';
 import Register from './views/Register';
 import Setting from './views/Settings';
 import TrashFolder from './views/TrashFolder';
 import UploadFile from './views/UploadFile';
-import AlphaTesting from './views/AlphaTesting';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 export const routes = [
@@ -64,17 +61,10 @@ export const routes = [
     type: ['files'],
   },
   {
-    description: 'Upload file',
+    description: 'Upload files',
     path: '/user/upload',
     element: <UploadFile />,
     icon: <CloudUploadIcon />,
-    type: ['files'],
-  },
-  {
-    description: 'New folder',
-    path: '/user/create',
-    element: <NewFolder />,
-    icon: <CreateNewFolderIcon />,
     type: ['files'],
   },
   {
@@ -82,13 +72,6 @@ export const routes = [
     path: '/user/trash',
     element: <TrashFolder />,
     icon: <DeleteIcon />,
-    type: ['files'],
-  },
-  {
-    description: 'Alpha TESTING',
-    path: '/user/testing',
-    element: <AlphaTesting />,
-    icon: <AccountTreeIcon />,
     type: ['files'],
   },
 ];
