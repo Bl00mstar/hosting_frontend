@@ -7,6 +7,7 @@ import Card from '@components/FilesTree/Card.js';
 import CardHeader from '@components/FilesTree/CardHeader.js';
 import FilesPath from '@components/FilesTree/FilesPath';
 import FilesAlerts from '@components/FilesTree/FilesAlerts';
+
 import useFilesList from '@hooks/FilesTree/useFilesList.js';
 import useFilesOptions from '@hooks/FilesTree/useFilesOptions.js';
 import { getUserFiles, handleSelected } from '@store/files/file.actions';
@@ -36,18 +37,20 @@ const FilesTree = ({ files, getFiles, filters, path, checked, selected }) => {
     getFiles({ path: path, filters: filters });
   }, [filters]);
   return (
-    <Card>
-      <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Current path:</h4>
+    <>
+      <Card>
+        <CardHeader color="primary">
+          <h4 className={classes.cardTitleWhite}>Current path:</h4>
 
-        <p className={classes.cardCategoryWhite}>
-          <FilesPath />
-        </p>
-      </CardHeader>
-      {optionsComponent}
-      {tableComponent}
-      <FilesAlerts />
-    </Card>
+          <p className={classes.cardCategoryWhite}>
+            <FilesPath />
+          </p>
+        </CardHeader>
+        {optionsComponent}
+        {tableComponent}
+        <FilesAlerts />
+      </Card>
+    </>
   );
 };
 

@@ -17,6 +17,8 @@ import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
 import { handleCheck } from '@store/files/file.actions';
 import { dateConverter } from '@utils/dashboardUtils';
 import { InsertDriveFile, Folder, GetApp, Movie } from '@material-ui/icons';
+import useFileDownloader from '@hooks/FilesTree/useFileDownloader';
+
 const useStyles = makeStyles(styles);
 
 const FilesTable = (props) => {
@@ -31,7 +33,9 @@ const FilesTable = (props) => {
     getFiles,
   } = props;
   const [isChecked, setIsChecked] = useState({ values: [] });
+  const [downloadFile, downloaderComponentUI] = useFileDownloader();
 
+  const download = (file) => downloadFile(file);
   const handleCheckbox = (e, data) => {
     let filtered = checkedItems.filter((el) => el.id === e.target.value);
     let newChecked = { id: data.id, name: data.name, type: data.type };
@@ -144,8 +148,13 @@ const FilesTable = (props) => {
                   </TableCell>
                   <TableCell className={classes.tableCell}>
                     {prop.type === 'file' && (
-                      <ListItemIcon>
-                        <GetApp style={{ cursor: 'pointer' }} />
+                      <ListItemIcon
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          download({ id: prop.id, name: prop.name });
+                        }}
+                      >
+                        <GetApp />
                       </ListItemIcon>
                     )}
                   </TableCell>
@@ -158,6 +167,7 @@ const FilesTable = (props) => {
           </TableBody>
         </Table>
       </div>
+      {downloaderComponentUI}
     </>
   );
 };

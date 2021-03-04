@@ -12,24 +12,36 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { ListItemIcon } from '@material-ui/core';
 // core components
 import styles from '@assets/jss/components/FilesTree/tableStyle.js';
-import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
+import {
+  setDirectoryPath,
+  foldersPath,
+  trashSelected,
+} from '@store/files/file.actions';
 import { handleCheck } from '@store/files/file.actions';
 import { InsertDriveFile } from '@material-ui/icons';
 const useStyles = makeStyles(styles);
 
 const FilesTable = (props) => {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor } = props;
+  const {
+    tableHead,
+    tableData,
+    tableHeaderColor,
+    setChecked,
+    checkedItems,
+  } = props;
   const [isChecked, setIsChecked] = useState({ values: [] });
 
   const handleCheckElement = (value) => {
     console.log(value);
     if (isChecked.values.includes(value.id)) {
       let filtered = isChecked.values.filter((el) => el !== value.id);
+      setChecked(filtered);
       setIsChecked({
         values: filtered,
       });
     } else {
+      setChecked([...checkedItems, value]);
       setIsChecked((isChecked) => ({
         ...isChecked,
         values: [...isChecked.values, value.id],
@@ -61,7 +73,6 @@ const FilesTable = (props) => {
           ) : null}
           <TableBody>
             {tableData.map((prop, key) => {
-              console.log(tableData);
               return (
                 <TableRow key={key} className={classes.tableBodyRow}>
                   <TableCell
@@ -122,12 +133,13 @@ FilesTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  setChecked: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   path: state.file.tree.path,
   files: state.file.tree.items,
-  checkedItems: state.file.action.checked.items,
+  checkedItems: state.file.trash.checked.items,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -135,6 +147,7 @@ const mapDispatchToProps = (dispatch) => {
     handleCheck: (x) => dispatch(handleCheck(x)),
     getFiles: (x) => dispatch(setDirectoryPath(x)),
     setPath: (x) => dispatch(foldersPath(x)),
+    setChecked: (x) => dispatch(trashSelected(x)),
   };
 };
 

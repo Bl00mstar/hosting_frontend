@@ -5,6 +5,7 @@ import Home from './views/Home';
 import Login from './views/Login';
 import Register from './views/Register';
 import Setting from './views/Settings';
+import Playlist from './views/Playlist';
 import TrashFolder from './views/TrashFolder';
 import UploadFile from './views/UploadFile';
 
@@ -13,6 +14,7 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
+import QueueIcon from '@material-ui/icons/Queue';
 
 export const routes = [
   {
@@ -51,6 +53,13 @@ export const routes = [
     path: '/user/settings',
     element: <Setting />,
     icon: <SettingsApplicationsIcon />,
+    type: ['user'],
+  },
+  {
+    description: 'Playlists',
+    path: '/user/playlist',
+    element: <Playlist />,
+    icon: <QueueIcon />,
     type: ['user'],
   },
   {

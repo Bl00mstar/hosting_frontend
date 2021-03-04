@@ -1,4 +1,4 @@
-import Downloader from '../containers/Downloader/index';
+import Downloader from '@components/FilesTree/Downloader';
 import React, { useState } from 'react';
 
 const useFileDownloader = () => {

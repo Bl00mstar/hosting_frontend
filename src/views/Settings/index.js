@@ -47,6 +47,15 @@ export default function UserProfile() {
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
               <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
+            generate API token
+            <br></br>
+            imie
+            <br></br>
+            nazwisko
+            <br></br>
+            email
+            <br></br>
+            haslo
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>

@@ -14,7 +14,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import styles from '@assets/jss/material-dashboard-react/layouts/adminStyle.js';
 
-import bgImage from '@assets/img/sidebar-4.jpg';
+import bgImage from '@assets/img/sidebar-12.jpg';
 
 const useStyles = makeStyles(styles);
 
