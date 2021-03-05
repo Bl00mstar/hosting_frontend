@@ -11,14 +11,10 @@ const FilesPath = ({ path, setPath, getFiles, filters }) => {
     let pathArray = path.replace(/\//g, '/ ').split(' ');
     pathArray.pop();
     setSelectPath(pathArray);
-    console.log(pathArray);
   }, [path]);
 
   const selectDirectory = (e, el) => {
     e.preventDefault();
-    console.log(path);
-    console.log(el);
-    console.log(path.split(path.split(el)[0] + el));
     setPath(path.split(el)[0] + el);
   };
 
