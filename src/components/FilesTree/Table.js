@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
-import { ListItemIcon } from '@material-ui/core';
+import { ListItemIcon, Tooltip } from '@material-ui/core';
 // core components
 import styles from '@assets/jss/components/FilesTree/tableStyle.js';
 import FilesFilter from '@components/FilesTree/FilesFilter';
@@ -59,6 +59,10 @@ const FilesTable = (props) => {
         values: [...isChecked.values, value.id],
       }));
     }
+  };
+
+  const handleWatch = (id) => {
+    console.log(id);
   };
 
   return (
@@ -141,21 +145,28 @@ const FilesTable = (props) => {
                   )}
                   <TableCell className={classes.tableCell}>
                     {prop.type === 'file' && (
-                      <ListItemIcon>
-                        <Movie style={{ cursor: 'pointer' }} />
-                      </ListItemIcon>
+                      <Tooltip
+                        title="watch"
+                        onClick={() => handleWatch(prop.id)}
+                      >
+                        <ListItemIcon>
+                          <Movie style={{ cursor: 'pointer' }} />
+                        </ListItemIcon>
+                      </Tooltip>
                     )}
                   </TableCell>
                   <TableCell className={classes.tableCell}>
                     {prop.type === 'file' && (
-                      <ListItemIcon
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          download({ id: prop.id, name: prop.name });
-                        }}
-                      >
-                        <GetApp />
-                      </ListItemIcon>
+                      <Tooltip title="download">
+                        <ListItemIcon
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            download({ id: prop.id, name: prop.name });
+                          }}
+                        >
+                          <GetApp />
+                        </ListItemIcon>
+                      </Tooltip>
                     )}
                   </TableCell>
                   <TableCell className={classes.tableCell}>
