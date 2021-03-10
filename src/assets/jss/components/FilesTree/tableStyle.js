@@ -72,6 +72,20 @@ const tableStyle = (theme) => ({
     outline: 'none',
     verticalAlign: 'middle',
   },
+  dropdown: {
+    position: 'absolute',
+    bottom: 10,
+    right: 0,
+    width: '200px',
+    left: 0,
+    zIndex: 10,
+    border: '1px solid gray',
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+  },
+  root: {
+    position: 'relative',
+  },
 });
 
 export default tableStyle;

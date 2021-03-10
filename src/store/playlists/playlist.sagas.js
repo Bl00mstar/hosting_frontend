@@ -7,15 +7,15 @@ import {
   deletePlaylistHelper,
   editPlaylistHelper,
 } from './playlist.helpers';
-import { setPlaylists } from './playlist.actions';
+import { setPlaylists, setActiveFile } from './playlist.actions';
 
 export function* watchGetFileData() {
   yield takeEvery(playlistTypes.GET_FILE_DATA, getFileData);
 }
 function* getFileData({ payload }) {
   try {
-    yield getPlaylistHelper(apiLink + '/playlist', payload);
-    yield console.log('asd');
+    const data = yield getPlaylistHelper(apiLink + '/playlist/file/' + payload);
+    yield put(setActiveFile(data.msg));
   } catch (error) {
     yield console.log(error);
   }

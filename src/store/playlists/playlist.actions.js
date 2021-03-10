@@ -1,11 +1,15 @@
 import playlistTypes from './playlist.types';
 
+export const playFile = (data) => {
+  return { type: playlistTypes.PLAY_FILE, payload: data };
+};
+
 export const setActiveFile = (data) => {
   return { type: playlistTypes.SET_ACTIVE_FILE, payload: data };
 };
 
-export const getFileData = () => {
-  return { type: playlistTypes.GET_FILE_DATA };
+export const getFileData = (data) => {
+  return { type: playlistTypes.GET_FILE_DATA, payload: data };
 };
 
 //used

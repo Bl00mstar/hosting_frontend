@@ -1,7 +1,10 @@
 /*eslint-disable*/
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@components/CustomButtons/Button.js';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Video from './Video';
+
 const styles = {
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
@@ -22,30 +25,27 @@ const styles = {
 };
 
 const useStyles = makeStyles(styles);
-export default function PlaylistStream() {
+
+const PlaylistStream = ({ file }) => {
   const classes = useStyles();
-  const showVideo = () => {
-    return (
-      <video
-        style={{ width: '100%', height: 'auto' }}
-        controls
-        controlsList="nodownload"
-      >
-        <source
-          // src={`${LiveURL}/watch/movie/${vid}`}
-          src={`http://192.168.55.100:9000/stream/movie/3`}
-          onContextMenu="return false;"
-          onCanPlay={true}
-          //   type="video/x-matroska;"
-        />
-      </video>
-    );
-  };
+  const [activeFile, setActiveFile] = useState({});
+
+  useEffect(() => {
+    if (file.file._id) {
+      setActiveFile(file.file);
+    }
+  }, [file]);
+
   return (
     <>
-      {/* <h6 className={classes.cardCategory}>playlist</h6> */}
-      <h3 className={classes.cardTitle}>active name</h3>
-      {showVideo()}
+      <h4 className={classes.cardTitle}>{activeFile.name}</h4>
+      <Video file={file.file} />
     </>
   );
-}
+};
+
+PlaylistStream.propTypes = {
+  file: PropTypes.object.isRequired,
+};
+
+export default connect()(PlaylistStream);

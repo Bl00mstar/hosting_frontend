@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/*eslint-disable*/
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // @material-ui/core components
@@ -16,12 +17,26 @@ import FilesFilter from '@components/FilesTree/FilesFilter';
 import { setDirectoryPath, foldersPath } from '@store/files/file.actions';
 import { handleCheck } from '@store/files/file.actions';
 import { dateConverter } from '@utils/dashboardUtils';
-import { InsertDriveFile, Folder, GetApp, Movie } from '@material-ui/icons';
+import {
+  InsertDriveFile,
+  Folder,
+  GetApp,
+  Movie,
+  StarBorder,
+} from '@material-ui/icons';
 import useFileDownloader from '@hooks/FilesTree/useFileDownloader';
+import { playFile } from '@store/playlists/playlist.actions';
+import { useNavigate } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import { getPlaylists } from '@store/playlists/playlist.actions';
+import PlaylistMenu from './PlaylistMenu';
 
 const useStyles = makeStyles(styles);
 
 const FilesTable = (props) => {
+  let navigate = useNavigate();
   const classes = useStyles();
   const {
     tableHead,
@@ -31,9 +46,25 @@ const FilesTable = (props) => {
     handleCheck,
     path,
     getFiles,
+    playFile,
+    getPlaylists,
+    playlistList,
   } = props;
   const [isChecked, setIsChecked] = useState({ values: [] });
   const [downloadFile, downloaderComponentUI] = useFileDownloader();
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    getPlaylists();
+  }, []);
 
   const download = (file) => downloadFile(file);
   const handleCheckbox = (e, data) => {
@@ -59,10 +90,6 @@ const FilesTable = (props) => {
         values: [...isChecked.values, value.id],
       }));
     }
-  };
-
-  const handleWatch = (id) => {
-    console.log(id);
   };
 
   return (
@@ -145,14 +172,31 @@ const FilesTable = (props) => {
                   )}
                   <TableCell className={classes.tableCell}>
                     {prop.type === 'file' && (
-                      <Tooltip
-                        title="watch"
-                        onClick={() => handleWatch(prop.id)}
-                      >
-                        <ListItemIcon>
-                          <Movie style={{ cursor: 'pointer' }} />
-                        </ListItemIcon>
-                      </Tooltip>
+                      <>
+                        <Tooltip
+                          title="watch"
+                          onClick={() =>
+                            playFile(prop.id) && navigate('/user/playlist')
+                          }
+                        >
+                          <ListItemIcon>
+                            <Movie style={{ cursor: 'pointer' }} />
+                          </ListItemIcon>
+                        </Tooltip>
+                        <Tooltip
+                          title="Add to playlist"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <ListItemIcon
+                            aria-label="more"
+                            aria-controls="long-menu"
+                            aria-haspopup="true"
+                            onClick={() => handleOpen(true)}
+                          >
+                            <StarBorder />
+                          </ListItemIcon>
+                        </Tooltip>
+                      </>
                     )}
                   </TableCell>
                   <TableCell className={classes.tableCell}>
@@ -178,12 +222,20 @@ const FilesTable = (props) => {
           </TableBody>
         </Table>
       </div>
+
       {downloaderComponentUI}
+      <PlaylistMenu
+        open={open}
+        handleOpen={handleOpen}
+        handleClose={handleClose}
+      />
     </>
   );
 };
 
 FilesTable.propTypes = {
+  getPlaylists: PropTypes.func.isRequired,
+  playlistList: PropTypes.array.isRequired,
   getFiles: PropTypes.func.isRequired,
   setPath: PropTypes.func.isRequired,
   files: PropTypes.array.isRequired,
@@ -201,9 +253,11 @@ FilesTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  playFile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  playlistList: state.playlist.list,
   path: state.file.tree.path,
   files: state.file.tree.items,
   checkedItems: state.file.action.checked.items,
@@ -214,6 +268,8 @@ const mapDispatchToProps = (dispatch) => {
     handleCheck: (x) => dispatch(handleCheck(x)),
     getFiles: (x) => dispatch(setDirectoryPath(x)),
     setPath: (x) => dispatch(foldersPath(x)),
+    playFile: (id) => dispatch(playFile(id)),
+    getPlaylists: () => dispatch(getPlaylists()),
   };
 };
 
