@@ -41,12 +41,13 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
   return (
     <>
       <h4 className={classes.cardTitle}>PLAYLISTS</h4>
-      <Table>
+      <Table size={'small'}>
         <TableBody>
           {playlistList.map((value, key) => (
             <TableRow
+              hover={true}
               key={key}
-              className={classes.tableRow}
+              //   className={classes.tableRow}
               onClick={() => handleSelectedPlaylist(value)}
             >
               <TableCell className={classes.tableCell}></TableCell>
@@ -93,7 +94,10 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
                       title="Change playlist name"
                       placement="top"
                       classes={{ tooltip: classes.tooltip }}
-                      onClick={() => editPlaylistName(value)}
+                      onClick={() => {
+                        console.log(value);
+                        editPlaylistName(value);
+                      }}
                     >
                       <IconButton
                         aria-label="Edit"

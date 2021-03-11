@@ -7,7 +7,51 @@ import {
   deletePlaylistHelper,
   editPlaylistHelper,
 } from './playlist.helpers';
-import { setPlaylists, setActiveFile } from './playlist.actions';
+import {
+  setPlaylists,
+  setActiveFile,
+  setFilesPlaylist,
+} from './playlist.actions';
+
+export function* watchFilesFromPlaylist() {
+  yield takeEvery(playlistTypes.PLAYLIST_FILES, filesFromPlaylist);
+}
+function* filesFromPlaylist({ payload }) {
+  try {
+    const data = yield getPlaylistHelper(apiLink + `/playlist/${payload}`);
+    yield put(setFilesPlaylist(data.msg));
+  } catch (error) {
+    yield console.log(error);
+  }
+}
+
+export function* watchFileFromPlaylist() {
+  yield takeEvery(playlistTypes.PLAYLIST_DELETE_FILE, fileFromPlaylist);
+}
+function* fileFromPlaylist({ payload }) {
+  try {
+    const { playlist, file } = payload;
+    yield deletePlaylistHelper(apiLink + `/playlist/${playlist}/${file}`);
+    const data = yield getPlaylistHelper(apiLink + '/playlist');
+    yield put(setPlaylists(data.msg));
+  } catch (error) {
+    yield console.log(error);
+  }
+}
+
+export function* watchFileToPlaylist() {
+  yield takeEvery(playlistTypes.PLAYLIST_ADD_FILE, fileToPlaylist);
+}
+function* fileToPlaylist({ payload }) {
+  try {
+    const { playlist, file } = payload;
+    yield editPlaylistHelper(apiLink + `/playlist/${playlist}/${file}`);
+    const data = yield getPlaylistHelper(apiLink + '/playlist');
+    yield put(setPlaylists(data.msg));
+  } catch (error) {
+    yield console.log(error);
+  }
+}
 
 export function* watchGetFileData() {
   yield takeEvery(playlistTypes.GET_FILE_DATA, getFileData);

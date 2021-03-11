@@ -30,7 +30,7 @@ import { useNavigate } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
-import { getPlaylists } from '@store/playlists/playlist.actions';
+import { getPlaylists, selectFile } from '@store/playlists/playlist.actions';
 import PlaylistMenu from './PlaylistMenu';
 
 const useStyles = makeStyles(styles);
@@ -49,6 +49,7 @@ const FilesTable = (props) => {
     playFile,
     getPlaylists,
     playlistList,
+    selectFile,
   } = props;
   const [isChecked, setIsChecked] = useState({ values: [] });
   const [downloadFile, downloaderComponentUI] = useFileDownloader();
@@ -186,12 +187,14 @@ const FilesTable = (props) => {
                         <Tooltip
                           title="Add to playlist"
                           style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            selectFile(prop) && handleOpen(true);
+                          }}
                         >
                           <ListItemIcon
                             aria-label="more"
                             aria-controls="long-menu"
                             aria-haspopup="true"
-                            onClick={() => handleOpen(true)}
                           >
                             <StarBorder />
                           </ListItemIcon>
@@ -234,6 +237,7 @@ const FilesTable = (props) => {
 };
 
 FilesTable.propTypes = {
+  selectFile: PropTypes.func.isRequired,
   getPlaylists: PropTypes.func.isRequired,
   playlistList: PropTypes.array.isRequired,
   getFiles: PropTypes.func.isRequired,
@@ -270,6 +274,7 @@ const mapDispatchToProps = (dispatch) => {
     setPath: (x) => dispatch(foldersPath(x)),
     playFile: (id) => dispatch(playFile(id)),
     getPlaylists: () => dispatch(getPlaylists()),
+    selectFile: (id) => dispatch(selectFile(id)),
   };
 };
 

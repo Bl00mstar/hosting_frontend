@@ -207,15 +207,12 @@ class Upload extends Component {
       const formData = new FormData();
       const xhr = new XMLHttpRequest();
       const data = this.props.formData;
-      console.log('x');
       if (data.length > 0) {
         data.map((d) => {
           formData.append(d.name, d.value);
         });
       }
       let token = tokenConfig();
-
-      console.log(token);
       formData.append(this.props.fieldName, file, file.name);
 
       xhr.onload = () => {

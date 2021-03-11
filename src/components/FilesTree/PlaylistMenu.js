@@ -1,57 +1,3 @@
-// import React, { useEffect } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import { getPlaylists } from '@store/playlists/playlist.actions';
-// import Add from '@material-ui/icons/Add';
-// import ListItemIcon from '@material-ui/core/IconButton';
-
-// const PlaylistMenu = (props) => {
-//   const { getPlaylists, playlistList, handleClose, key } = props;
-//   const { id } = props.file;
-//   useEffect(() => {
-//     console.log(id);
-//     getPlaylists();
-//   }, []);
-
-//   const handleClick = (fileId, optionId) => {
-//     console.log(fileId);
-//     console.log(optionId);
-//   };
-
-//   return (
-//     <div key={key}>
-//       {playlistList.map((option, idx) => (
-//         <MenuItem key={idx} onClick={handleClose}>
-//           <ListItemIcon size="small">
-//             <Add onClick={() => handleClick(id, option._id)} />
-//           </ListItemIcon>
-//           {option.name}
-//         </MenuItem>
-//       ))}
-//     </div>
-//   );
-// };
-
-// PlaylistMenu.propTypes = {
-//   getPlaylists: PropTypes.func.isRequired,
-//   playlistList: PropTypes.array.isRequired,
-//   handleClose: PropTypes.func.isRequired,
-//   file: PropTypes.object.isRequired,
-//   key: PropTypes.number.isRequired,
-// };
-
-// const mapStateToProps = (state) => ({
-//   playlistList: state.playlist.list,
-// });
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     getPlaylists: () => dispatch(getPlaylists()),
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(PlaylistMenu);
 /*eslint-disable*/
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -66,7 +12,17 @@ import {
   ListItem,
   Typography,
   Button,
+  Table,
+  TableRow,
+  TableBody,
+  TableCell,
+  Checkbox,
 } from '@material-ui/core';
+import {
+  getPlaylists,
+  addFileToPlaylist,
+  deleteFileFromPlaylist,
+} from '@store/playlists/playlist.actions';
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -75,11 +31,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: '1px solid #000',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    padding: theme.spacing(1, 0, 1),
     width: '400px',
-    minHeight: '400px',
   },
   card: {
     justify: 'center',
@@ -87,15 +42,32 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '5px',
     textAlign: 'center',
   },
-  button: {
-    marginTop: '9px',
-    marginRight: '7px',
-    marginBottom: '11px',
-  },
 }));
 
-const PlaylistMenu = ({ handleOpen, handleClose, open }) => {
+const PlaylistMenu = ({
+  handleOpen,
+  handleClose,
+  open,
+  getPlaylists,
+  playlists,
+  file,
+  addFileToPlaylist,
+  deleteFileFromPlaylist,
+}) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    getPlaylists();
+  }, []);
+
+  const handleActivePlaylist = (data) => {
+    const { playlist, file, idx } = data;
+    if (playlists[idx].files.includes(file)) {
+      deleteFileFromPlaylist({ playlist: playlist, file: file });
+    } else {
+      addFileToPlaylist({ playlist: playlist, file: file });
+    }
+  };
 
   return (
     <>
@@ -112,19 +84,58 @@ const PlaylistMenu = ({ handleOpen, handleClose, open }) => {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>pdw</div>
+          <div className={classes.paper}>
+            <p style={{ padding: 3 }}>{file.name}</p>
+            <Table size="small">
+              <TableBody>
+                {playlists.map((playlist, idx) => (
+                  <TableRow key={idx} style={{ height: '50px' }}>
+                    <TableCell style={{ width: '15px', height: '50px' }}>
+                      <Checkbox
+                        value={playlist._id}
+                        checked={
+                          playlists[idx].files.includes(file.id) ? true : false
+                        }
+                        onClick={() => {
+                          handleActivePlaylist({
+                            playlist: playlist._id,
+                            file: file.id,
+                            idx: idx,
+                          });
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>{playlist.name}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </Fade>
       </Modal>
     </>
   );
 };
 
-PlaylistMenu.propTypes = {};
+PlaylistMenu.propTypes = {
+  playlists: PropTypes.array.isRequired,
+  getPlaylists: PropTypes.func.isRequired,
+  addFileToPlaylist: PropTypes.func.isRequired,
+  deleteFileFromPlaylist: PropTypes.func.isRequired,
+  file: PropTypes.object.isRequired,
+};
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+  playlists: state.playlist.list,
+  file: state.playlist.selectedFile,
+});
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getPlaylists: () => dispatch(getPlaylists()),
+    addFileToPlaylist: (x) => dispatch(addFileToPlaylist(x)),
+    deleteFileFromPlaylist: (x) => dispatch(deleteFileFromPlaylist(x)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistMenu);

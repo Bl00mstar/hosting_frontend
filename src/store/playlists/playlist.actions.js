@@ -1,5 +1,26 @@
 import playlistTypes from './playlist.types';
 
+export const setFilesPlaylist = (data) => {
+  return { type: playlistTypes.PLAYLIST_FILES_SET, payload: data };
+};
+
+export const filesFromPlaylist = (data) => {
+  return { type: playlistTypes.PLAYLIST_FILES, payload: data };
+};
+
+export const addFileToPlaylist = (data) => {
+  return { type: playlistTypes.PLAYLIST_ADD_FILE, payload: data };
+};
+
+export const deleteFileFromPlaylist = (data) => {
+  return { type: playlistTypes.PLAYLIST_DELETE_FILE, payload: data };
+};
+
+export const selectFile = (data) => {
+  return { type: playlistTypes.PLAYLIST_SELECT_FILE, payload: data };
+};
+
+//used
 export const playFile = (data) => {
   return { type: playlistTypes.PLAY_FILE, payload: data };
 };
@@ -11,8 +32,6 @@ export const setActiveFile = (data) => {
 export const getFileData = (data) => {
   return { type: playlistTypes.GET_FILE_DATA, payload: data };
 };
-
-//used
 
 export const editPlaylist = (data) => {
   return { type: playlistTypes.EDIT_PLAYLIST, payload: data };
