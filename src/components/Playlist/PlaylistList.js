@@ -14,7 +14,12 @@ import tsstyles from '@assets/jss/material-dashboard-react/components/tasksStyle
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(tsstyles);
-const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
+const PlaylistList = ({
+  playlistList,
+  deletePlaylist,
+  editPlaylist,
+  handlePlaylist,
+}) => {
   const classes = useStyles();
   const [selectedPlaylist, setSelectedPlaylist] = useState({});
 
@@ -34,10 +39,6 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
     setSelectedPlaylist({});
   };
 
-  const handleSelectedPlaylist = (a) => {
-    console.log(a);
-  };
-
   return (
     <>
       <h4 className={classes.cardTitle}>PLAYLISTS</h4>
@@ -48,7 +49,7 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
               hover={true}
               key={key}
               //   className={classes.tableRow}
-              onClick={() => handleSelectedPlaylist(value)}
+              //   onClick={() => handlePlaylist(value._id)}
             >
               <TableCell className={classes.tableCell}></TableCell>
               {selectedPlaylist._id === value._id ? (
@@ -85,6 +86,7 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
                   <TableCell
                     className={classes.tableCell}
                     style={{ width: '900px' }}
+                    onClick={() => handlePlaylist(value._id)}
                   >
                     <div>{value.name}</div>
                   </TableCell>
@@ -140,6 +142,7 @@ const PlaylistList = ({ playlistList, deletePlaylist, editPlaylist }) => {
 };
 
 PlaylistList.propTypes = {
+  handlePlaylist: PropTypes.func.isRequired,
   playlistList: PropTypes.array.isRequired,
   deletePlaylist: PropTypes.func.isRequired,
   editPlaylist: PropTypes.func.isRequired,

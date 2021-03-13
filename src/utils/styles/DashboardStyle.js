@@ -15,6 +15,12 @@ export const useStyles = makeStyles((theme) => ({
       flexShrink: 0,
     },
   },
+  appBarPb: {
+    [theme.breakpoints.up('sm')]: {
+      width: `0px`,
+      marginLeft: drawerWidth,
+    },
+  },
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,

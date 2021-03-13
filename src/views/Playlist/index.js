@@ -45,13 +45,8 @@ const Playlist = (props) => {
     getPlaylists();
   }, []);
 
-  const handlePlaylist = () => {
-    filesFromPlaylist('6048fdf0c9f9c4552e3fc2a6');
-  };
-
   return (
     <div>
-      <button onClick={() => handlePlaylist()}>SET playlist</button>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           {file.active && (
@@ -77,6 +72,7 @@ const Playlist = (props) => {
           <Card profile>
             <CardBody>
               <PlaylistList
+                handlePlaylist={filesFromPlaylist}
                 playlistList={playlistList}
                 deletePlaylist={deletePlaylist}
                 editPlaylist={editPlaylist}

@@ -2,7 +2,7 @@ import userTypes from './user.types';
 
 const initialState = {
   isUserLoaded: false,
-  details: { token: '', email: '', isLoading: false, isAuthenticated: false },
+  details: { token: '', user: '', isLoading: false, isAuthenticated: false },
   error: { isError: false, msgError: '' },
   action: { isSignupSuccess: false, signupSuccessMessage: '' },
 };
@@ -15,18 +15,19 @@ const userReducer = (state = initialState, action) => {
         ...state,
         details: {
           token: '',
-          email: '',
+          user: '',
           isLoading: false,
           isAuthenticated: false,
         },
       };
     case userTypes.USER_DATA:
       localStorage.setItem('authorization', action.payload.token);
+      console.log(action.payload);
       return {
         ...state,
         details: {
           token: action.payload.token,
-          email: action.payload.email,
+          user: action.payload.user,
           isLoading: false,
           isAuthenticated: true,
         },

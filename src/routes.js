@@ -21,7 +21,7 @@ export const routes = [
     description: 'Home',
     path: '/',
     element: <Home />,
-    type: [],
+    type: [''],
   },
   {
     description: 'Login',
