@@ -1,4 +1,16 @@
 import { all } from 'redux-saga/effects';
+
+import {
+  watchGetPlaylists,
+  watchPostPlaylist,
+  watchDeletePlaylist,
+  watchUpdatePlaylist,
+  watchGetFileData,
+  watchFileFromPlaylist,
+  watchFileToPlaylist,
+  watchFilesFromPlaylist,
+} from './playlists/playlist.sagas';
+
 import {
   watchUserLogin,
   watchUserSignup,
@@ -20,6 +32,14 @@ import {
 
 export default function* rootSaga() {
   yield all([
+    watchFilesFromPlaylist(),
+    watchFileFromPlaylist(),
+    watchFileToPlaylist(),
+    watchGetFileData(),
+    watchGetPlaylists(),
+    watchPostPlaylist(),
+    watchDeletePlaylist(),
+    watchUpdatePlaylist(),
     watchTrashDelete(),
     watchTrashRestore(),
     watchMoveElements(),

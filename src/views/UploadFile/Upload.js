@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { Box, Paper } from '@material-ui/core';
 import defaultStyles from './styles';
 import { Attachment, Close } from '@material-ui/icons';
+import { apiLink } from '@utils/api';
 
 class Upload extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Upload extends Component {
       items: [],
       styles: Object.assign({}, defaultStyles, props.styles),
     };
-    this.url = 'http://192.168.55.100:9000/stream/upload';
+    this.url = `${apiLink}/stream/upload`;
     this.activeDrag = 0;
     this.xhrs = [];
     this.onClick = this.onClick.bind(this);

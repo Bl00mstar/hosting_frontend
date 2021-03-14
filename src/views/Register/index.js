@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import * as Elems from '../Shared/public';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -35,13 +35,13 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
     navigate('/');
   }
   return (
-    <StyledRow>
+    <Elems.StyledRow>
       <ErrorAlert />
       <SuccessAlert />
-      <PageTitle>Register</PageTitle>
-      <PageDescription>
+      <Elems.PageTitle>Register</Elems.PageTitle>
+      <Elems.PageDescription>
         Enter your details to register an account.
-      </PageDescription>
+      </Elems.PageDescription>
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledInput>
           <HalfInput
@@ -61,12 +61,12 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
             })}
           />
           {errors?.firstName?.types?.required && (
-            <StyledError>First name required.</StyledError>
+            <Elems.StyledError>First name required.</Elems.StyledError>
           )}
           {errors?.lastName?.types?.required && (
-            <StyledError>Last name required.</StyledError>
+            <Elems.StyledError>Last name required.</Elems.StyledError>
           )}
-          <Input
+          <Elems.Input
             type="email"
             placeholder="E-mail"
             name="email"
@@ -76,12 +76,12 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
             })}
           />
           {errors?.email?.types?.required && (
-            <StyledError>Email required.</StyledError>
+            <Elems.StyledError>Email required.</Elems.StyledError>
           )}
           {errors?.email?.types?.pattern && (
-            <StyledError>Wrong email address.</StyledError>
+            <Elems.StyledError>Wrong email address.</Elems.StyledError>
           )}
-          <Input
+          <Elems.Input
             type="password"
             placeholder="Password"
             name="password"
@@ -91,12 +91,14 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
             })}
           />
           {errors?.password?.types?.required && (
-            <StyledError>Password required.</StyledError>
+            <Elems.StyledError>Password required.</Elems.StyledError>
           )}
           {errors?.password?.types?.minLength && (
-            <StyledError>Password must have at least 6 characters.</StyledError>
+            <Elems.StyledError>
+              Password must have at least 6 characters.
+            </Elems.StyledError>
           )}
-          <Input
+          <Elems.Input
             type="password"
             placeholder="Confirm password"
             name="passwordConfirm"
@@ -106,14 +108,16 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
             })}
           />
           {errors.passwordConfirm && (
-            <StyledError>{errors.passwordConfirm.message}</StyledError>
+            <Elems.StyledError>
+              {errors.passwordConfirm.message}
+            </Elems.StyledError>
           )}
         </StyledInput>
-        <StyledDiv>
-          <StyledButton>Sign up</StyledButton>
-        </StyledDiv>
+        <Elems.StyledDiv>
+          <Elems.StyledButton>Sign up</Elems.StyledButton>
+        </Elems.StyledDiv>
       </form>
-    </StyledRow>
+    </Elems.StyledRow>
   );
 };
 
@@ -138,54 +142,9 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
 
-export const StyledError = styled.p`
-  color: red;
-`;
-
-export const PageTitle = styled.div`
-  font-size: 2.5rem;
-  margin-top: 4rem;
-`;
-export const PageDescription = styled.div`
-  font-size: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-`;
-
-export const StyledDiv = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export const StyledRow = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-`;
-
 export const HalfInput = styled.input`
   height: 40px;
   width: 50%;
-  border: 2px solid #aaa;
-  border-radius: 20px;
-  padding-left: 20px;
-  margin: 8px 0;
-  outline: none;
-  box-sizing: border-box;
-  transition: 0.3s;
-  :hover {
-    border-color: #993399;
-    box-shadow: 0 0 8px 0 #990099;
-  }
-  :focus {
-    border-color: #993399;
-    box-shadow: 0 0 8px 0 #990099;
-  }
-`;
-
-const Input = styled.input`
-  height: 40px;
-  width: 100%;
   border: 2px solid #aaa;
   border-radius: 20px;
   padding-left: 20px;
@@ -229,33 +188,5 @@ const StyledInput = styled.div`
   }
   &.inputWithIcon {
     position: relative;
-  }
-`;
-
-export const StyledButton = styled(motion.button)`
-  position: relative;
-  font-size: 1rem;
-  letter-spacing: 4px;
-  line-height: 2.5rem;
-  display: block;
-  text-align: center;
-  border: 1px solid #ba55d3;
-  color: #ba55d3;
-  background-color: transparent;
-  border-radius: 0.2rem;
-  width: 10rem;
-  height: 2.5rem;
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: all 1s;
-  background-size: 200%;
-  background-position: 100% 0;
-  background-image: linear-gradient(45deg, #ba55d3 50%, transparent 50%);
-  :focus {
-    outline: none;
-  }
-  :hover {
-    background-position: 0 100%;
-    color: ${({ theme }) => theme.colors.ground};
   }
 `;

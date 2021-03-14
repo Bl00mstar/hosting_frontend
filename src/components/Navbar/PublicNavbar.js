@@ -1,54 +1,120 @@
-// /*eslint-disable*/
+/*eslint-disable*/
 import PropTypes from 'prop-types';
-// import { makeStyles } from '@material-ui/core/styles';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
 import Menu from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-import Button from '@components/CustomButtons/Button.js';
-// import styles from '@assets/jss/material-dashboard-react/components/headerStyle.js';
-
+import Logo from '@assets/cfbrand.svg';
 import { routes } from '../../routes';
-
-// const useStyles = makeStyles(styles);
-
-//   const classes = useStyles();
-
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   grow: {
     flexGrow: 1,
   },
+  title: {
+    display: 'inline-block',
+    textAlign: 'center',
+    border: '1px solid #4caf50',
+    borderRadius: '1rem',
+    fontSize: '19px',
+    letterSpacing: '2px',
+    lineHeight: '2rem',
+    backgroundColor: 'transparent',
+    color: '#4caf50',
+    width: '10rem',
+    height: '2.2rem',
+    backgroundSize: '250%',
+    backgroundPosition: '100% 0',
+    marginRight: '20px',
+    cursor: 'pointer',
+    transition: 'all 1s',
+    // boxShadow: '1px 1px 1px #4caf50',
+    backgroundImage: 'linear-gradient(45deg, #d3ebd5 50%, transparent 50%)',
+    textDecoration: 'none',
+    '&:hover': {
+      backgroundPosition: '0 100%',
+      color: 'black',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  titleActive: { backgroundPosition: '0 100%', color: 'black' },
+  publicAppBar: {
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    paddingTop: '10px',
+    color: 'green',
+    zIndex: '1029',
+    transition: 'all 150ms ease 0s',
+    minHeight: '50px',
+  },
+  appIcon: {
+    height: '8%',
+    width: '7%',
+    minHeight: '70px',
+    minWidth: '70px',
+    marginTop: '0.5rem',
+    transition: 'all 1s',
+    backgroundPosition: '100% 0',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundPosition: '0 100%',
+      color: 'black',
+    },
+  },
 }));
 
 const Header = (props) => {
   const classes = useStyles();
+  const location = useLocation();
+  let navigate = useNavigate();
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <AppBar position="fixed" color="primary">
-        <Toolbar>
+      <AppBar className={classes.publicAppBar} position="fixed" color="primary">
+        <Toolbar style={{ marginLeft: '15%', marginRight: '15%' }}>
+          <svg
+            id="e7518008-444d-481c-8895-28f7a8311917"
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 800 800"
+            className={classes.appIcon}
+            style={{
+              width: '50px',
+              height: '50px',
+            }}
+            onClick={() => navigate('/')}
+          >
+            <path
+              fill="currentColor"
+              d="M148.6 304c8.2 68.5 67.4 115.5 146 111.3 51.2 43.3 136.8 45.8 186.4-5.6 69.2 1.1 118.5-44.6 131.5-99.5 14.8-62.5-18.2-132.5-92.1-155.1-33-88.1-131.4-101.5-186.5-85-57.3 17.3-84.3 53.2-99.3 109.7-7.8 2.7-26.5 8.9-45 24.1 11.7 0 15.2 8.9 15.2 19.5v20.4c0 10.7-8.7 19.5-19.5 19.5h-20.2c-10.7 0-19.5-6-19.5-16.7V240H98.8C95 240 88 244.3 88 251.9v40.4c0 6.4 5.3 11.8 11.7 11.8h48.9zm227.4 8c-10.7 46.3 21.7 72.4 55.3 86.8C324.1 432.6 259.7 348 296 288c-33.2 21.6-33.7 71.2-29.2 92.9-17.9-12.4-53.8-32.4-57.4-79.8-3-39.9 21.5-75.7 57-93.9C297 191.4 369.9 198.7 400 248c-14.1-48-53.8-70.1-101.8-74.8 30.9-30.7 64.4-50.3 114.2-43.7 69.8 9.3 133.2 82.8 67.7 150.5 35-16.3 48.7-54.4 47.5-76.9l10.5 19.6c11.8 22 15.2 47.6 9.4 72-9.2 39-40.6 68.8-79.7 76.5-32.1 6.3-83.1-5.1-91.8-59.2zM128 208H88.2c-8.9 0-16.2-7.3-16.2-16.2v-39.6c0-8.9 7.3-16.2 16.2-16.2H128c8.9 0 16.2 7.3 16.2 16.2v39.6c0 8.9-7.3 16.2-16.2 16.2zM10.1 168C4.5 168 0 163.5 0 157.9v-27.8c0-5.6 4.5-10.1 10.1-10.1h27.7c5.5 0 10.1 4.5 10.1 10.1v27.8c0 5.6-4.5 10.1-10.1 10.1H10.1zM168 142.7v-21.4c0-5.1 4.2-9.3 9.3-9.3h21.4c5.1 0 9.3 4.2 9.3 9.3v21.4c0 5.1-4.2 9.3-9.3 9.3h-21.4c-5.1 0-9.3-4.2-9.3-9.3zM56 235.5v25c0 6.3-5.1 11.5-11.4 11.5H19.4C13.1 272 8 266.8 8 260.5v-25c0-6.3 5.1-11.5 11.4-11.5h25.1c6.4 0 11.5 5.2 11.5 11.5z"
+            ></path>
+          </svg>
+
           <div className={classes.grow} />
           <Hidden smDown implementation="css">
             {routes.map((route, idx) => {
               if (route.type.includes('public')) {
                 return (
-                  <Button
+                  <NavLink
+                    to={route.path}
                     edge="end"
                     key={idx}
                     color="transparent"
                     href="#"
-                    //   className={classes.publicTitle}
+                    className={
+                      route.path === location.pathname
+                        ? classes.title + ' ' + classes.titleActive
+                        : classes.title
+                    }
                   >
                     {route.description}
-                  </Button>
+                  </NavLink>
                 );
               }
             })}

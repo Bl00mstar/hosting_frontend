@@ -1,11 +1,15 @@
+/*eslint-disable*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PublicNavbar from '@components/Navbar/PublicNavbar.js';
 import Navbar from '@components/Navbar/Navbar.js';
+import PublicFooter from '@components/Footer/PublicFooter.js';
 import Footer from '@components/Footer/Footer.js';
 import Sidebar from '@components/Sidebar/Sidebar.js';
+import PublicSidebar from '@components/Sidebar/PublicSidebar.js';
 // import FixedPlugin from '@components/FixedPlugin/FixedPlugin.js';
 import { routes } from '../../routes';
 import { useRoutes, useNavigate } from 'react-router-dom';
@@ -28,10 +32,6 @@ const PrivateLayout = ({ isAuthenticated, ...rest }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   let navigate = useNavigate();
-
-  if (!isAuthenticated) {
-    navigate('account/login');
-  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -61,24 +61,45 @@ const PrivateLayout = ({ isAuthenticated, ...rest }) => {
   }, [mainPanel]);
   return (
     <div className={classes.wrapper}>
-      <Sidebar
-        image={image}
-        handleDrawerToggle={handleDrawerToggle}
-        open={mobileOpen}
-        color={color}
-        {...rest}
-      />
+      {isAuthenticated ? (
+        <Sidebar
+          image={image}
+          handleDrawerToggle={handleDrawerToggle}
+          open={mobileOpen}
+          color={color}
+          {...rest}
+        />
+      ) : (
+        <PublicSidebar
+          image={image}
+          handleDrawerToggle={handleDrawerToggle}
+          open={mobileOpen}
+          color={color}
+          {...rest}
+        />
+      )}
+
       <div
-        style={{ backgroundColor: '#c2bebe' }}
-        className={classes.mainPanel}
+        style={
+          isAuthenticated
+            ? { backgroundColor: '#c2bebe' }
+            : { backgroundColor: '#ffffff' }
+        }
+        className={isAuthenticated ? classes.mainPanel : classes.publicPanel}
         ref={mainPanel}
       >
-        <Navbar handleDrawerToggle={handleDrawerToggle} {...rest} />
+        {isAuthenticated ? (
+          <Navbar handleDrawerToggle={handleDrawerToggle} {...rest} />
+        ) : (
+          <PublicNavbar handleDrawerToggle={handleDrawerToggle} {...rest} />
+        )}
 
-        <div className={classes.content}>
+        <div
+          className={isAuthenticated ? classes.content : classes.publicContent}
+        >
           <div className={classes.container}>{element}</div>
         </div>
-        <Footer />
+        {isAuthenticated ? <Footer /> : <PublicFooter />}
       </div>
     </div>
   );

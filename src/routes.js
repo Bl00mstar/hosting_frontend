@@ -55,13 +55,7 @@ export const routes = [
     icon: <SettingsApplicationsIcon />,
     type: ['user'],
   },
-  {
-    description: 'Playlists',
-    path: '/user/playlist',
-    element: <Playlist />,
-    icon: <QueueIcon />,
-    type: ['user'],
-  },
+
   {
     description: 'Manage files',
     path: '/user/files',
@@ -76,6 +70,14 @@ export const routes = [
     icon: <CloudUploadIcon />,
     type: ['files'],
   },
+  {
+    description: 'Playlists',
+    path: '/user/playlist',
+    element: <Playlist />,
+    icon: <QueueIcon />,
+    type: ['user'],
+  },
+
   {
     description: 'Trash folder',
     path: '/user/trash',

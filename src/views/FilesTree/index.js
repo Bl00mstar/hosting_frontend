@@ -11,11 +11,13 @@ import useFilesList from '@hooks/FilesTree/useFilesList.js';
 import useFilesOptions from '@hooks/FilesTree/useFilesOptions.js';
 import { getUserFiles, handleSelected } from '@store/files/file.actions';
 import { styles } from '@assets/js/components/FilesTree/filesTree';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles(styles);
 
 const FilesTree = ({ files, getFiles, filters, path, checked, selected }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [table, tableComponent] = useFilesList();
   const [options, optionsComponent] = useFilesOptions();
 
@@ -59,6 +61,7 @@ FilesTree.propTypes = {
   path: PropTypes.string.isRequired,
   filters: PropTypes.object.isRequired,
   checked: PropTypes.array.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -66,6 +69,7 @@ const mapStateToProps = (state) => ({
   path: state.file.tree.path,
   filters: state.file.tree.filters,
   checked: state.file.action.checked.items,
+  isAuthenticated: state.user.details.isAuthenticated,
 });
 
 const mapDispatchToProps = (dispatch) => {

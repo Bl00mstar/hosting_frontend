@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 import defaultStyles from './styles';
+import { apiLink } from '@utils/api';
 
 class XHRUploader extends Component {
   constructor(props) {
@@ -431,7 +432,7 @@ XHRUploader.propTypes = {
 };
 
 XHRUploader.defaultProps = {
-  url: 'http://192.168.55.100:9000/stream/upload',
+  url: `${apiLink}/stream/upload`,
   method: 'POST',
   auto: false,
   fieldName: 'datafile',
