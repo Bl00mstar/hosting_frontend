@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -10,10 +10,8 @@ import {
   handleClearError,
   handleSignupClear,
 } from '@store/user/user.actions';
-import ErrorAlert from '@components/LoginAlert/ErrorAlert';
-import SuccessAlert from '@components/LoginAlert/SuccessAlert';
 
-const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
+const Signup = ({ signup, isAuthenticated }) => {
   const { register, handleSubmit, errors, watch } = useForm({
     criteriaMode: 'all',
     mode: 'onChange',
@@ -21,11 +19,6 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
   let navigate = useNavigate();
   const password = useRef({});
   password.current = watch('password', '');
-
-  useEffect(() => {
-    clearError();
-    signupClear();
-  }, [clearError, signupClear]);
 
   const onSubmit = (data, e) => {
     signup(data);
@@ -36,8 +29,6 @@ const Signup = ({ signup, clearError, signupClear, isAuthenticated }) => {
   }
   return (
     <Elems.StyledRow>
-      <ErrorAlert />
-      <SuccessAlert />
       <Elems.PageTitle>Register</Elems.PageTitle>
       <Elems.PageDescription>
         Enter your details to register an account.

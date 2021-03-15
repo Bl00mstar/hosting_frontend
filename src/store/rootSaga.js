@@ -15,6 +15,7 @@ import {
   watchUserLogin,
   watchUserSignup,
   watchIsUserLoaded,
+  watchChangeUserData,
 } from './user/user.sagas';
 
 import {
@@ -53,5 +54,6 @@ export default function* rootSaga() {
     watchUserSignup(),
     watchIsUserLoaded(),
     watchlistUserFolder(),
+    watchChangeUserData(),
   ]);
 }

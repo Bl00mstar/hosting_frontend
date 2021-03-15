@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,9 +9,10 @@ import PublicFooter from '@components/Footer/PublicFooter.js';
 import Footer from '@components/Footer/Footer.js';
 import Sidebar from '@components/Sidebar/Sidebar.js';
 import PublicSidebar from '@components/Sidebar/PublicSidebar.js';
+import Alert from '../../views/Alert';
 // import FixedPlugin from '@components/FixedPlugin/FixedPlugin.js';
 import { routes } from '../../routes';
-import { useRoutes, useNavigate } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
@@ -30,8 +30,6 @@ const PrivateLayout = ({ isAuthenticated, ...rest }) => {
   const color = 'green';
   const image = bgImage;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  let navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -97,7 +95,10 @@ const PrivateLayout = ({ isAuthenticated, ...rest }) => {
         <div
           className={isAuthenticated ? classes.content : classes.publicContent}
         >
-          <div className={classes.container}>{element}</div>
+          <div className={classes.container}>
+            {element}
+            <Alert />
+          </div>
         </div>
         {isAuthenticated ? <Footer /> : <PublicFooter />}
       </div>

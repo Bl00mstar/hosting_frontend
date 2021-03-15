@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-// @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -12,9 +11,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Hidden from '@material-ui/core/Hidden';
 import Person from '@material-ui/icons/Person';
 import Poppers from '@material-ui/core/Popper';
-// @material-ui/icons
-import { useNavigate } from 'react-router-dom';
 import { userLogout } from '@store/user/user.actions';
+import { setMessage } from '@store/alerts/alert.actions';
 import Button from '@components/CustomButtons/Button.js';
 
 import styles from '@assets/jss/material-dashboard-react/components/headerLinksStyle.js';
@@ -22,9 +20,8 @@ import { ListItem } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
-const AdminNavbarLinks = ({ logout }) => {
+const AdminNavbarLinks = ({ logout, setMessage }) => {
   const classes = useStyles();
-  let navigate = useNavigate();
 
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleCloseProfile = () => {
@@ -83,7 +80,14 @@ const AdminNavbarLinks = ({ logout }) => {
                       onClick={handleCloseProfile}
                       className={classes.dropdownItem}
                     >
-                      <ListItem onClick={() => logout() && navigate('/')}>
+                      <ListItem
+                        onClick={() =>
+                          setMessage({
+                            message: 'User logged out',
+                            type: 'success',
+                          }) && logout()
+                        }
+                      >
                         Logout
                       </ListItem>
                     </MenuItem>
@@ -100,6 +104,7 @@ const AdminNavbarLinks = ({ logout }) => {
 
 AdminNavbarLinks.propTypes = {
   logout: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = () => ({});
@@ -107,6 +112,7 @@ const mapStateToProps = () => ({});
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(userLogout()),
+    setMessage: (x) => dispatch(setMessage(x)),
   };
 };
 

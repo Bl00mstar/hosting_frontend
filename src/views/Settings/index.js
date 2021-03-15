@@ -1,12 +1,13 @@
-import React from 'react';
+/*eslint-disable*/
+import React, { useEffect, useState } from 'react';
 // @material-ui/core components
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
 // core components
 import GridItem from '@components/Grid/GridItem.js';
 import GridContainer from '@components/Grid/GridContainer.js';
-import CustomInput from '@components/CustomInput/CustomInput.js';
 import Button from '@components/CustomButtons/Button.js';
 import Card from '@components/Card/Card.js';
 import CardHeader from '@components/Card/CardHeader.js';
@@ -14,8 +15,9 @@ import CardHeader from '@components/Card/CardHeader.js';
 import CardBody from '@components/Card/CardBody.js';
 import CardFooter from '@components/Card/CardFooter.js';
 // import { Input } from '@material-ui/core';
-
-// import avatar from 'assets/img/faces/marc.jpg';
+import { changeUserData } from '@store/user/user.actions';
+import { setMessage } from '@store/alerts/alert.actions';
+import { TextField } from '@material-ui/core';
 
 const styles = {
   cardCategoryWhite: {
@@ -38,8 +40,30 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const Settings = ({ userData }) => {
-  console.log(userData);
+const Settings = ({ userData, setMessage, changeUserData }) => {
+  const [credentials, setCredentials] = useState({});
+
+  useEffect(() => {
+    setCredentials(userData);
+  }, [userData]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (credentials === userData) {
+      setMessage({ message: 'Settings are the same.', type: 'info' });
+    } else {
+      changeUserData(credentials);
+      console.log(userData);
+    }
+  };
+
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -51,80 +75,97 @@ const Settings = ({ userData }) => {
               <p className={classes.cardCategoryWhite}>Change credentials</p>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={8}>
-                  <CustomInput
-                    labelText="First name"
-                    id="firstName"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      value: userData.firstName,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={8}>
-                  <CustomInput
-                    labelText="Last name"
-                    id="lastName"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      value: userData.lastName,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={8}>
-                  <CustomInput
-                    labelText="E-mail"
-                    id="email"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      value: userData.email,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="New password"
-                    id="newPassword"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      value: '',
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Confirm new password"
-                    id="confirmNewPassword"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      value: '',
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}></GridItem>
-              </GridContainer>
+              <form onSubmit={handleSubmit}>
+                <GridContainer justify={'center'}>
+                  <GridItem xs={12} sm={12} md={10} lg={8}>
+                    <GridContainer>
+                      <GridItem
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        style={{ marginTop: '20px' }}
+                      >
+                        <TextField
+                          label="First name"
+                          name="firstName"
+                          fullWidth
+                          value={credentials.firstName}
+                          onChange={(e) => handleChange(e)}
+                          InputLabelProps={{ shrink: true }}
+                        />
+                      </GridItem>
+                      <GridItem
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        style={{ marginTop: '20px' }}
+                      >
+                        <TextField
+                          label="Last name"
+                          name="lastName"
+                          fullWidth
+                          value={credentials.lastName}
+                          onChange={(e) => handleChange(e)}
+                          InputLabelProps={{ shrink: true }}
+                        />
+                      </GridItem>
+                      <GridItem
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        style={{ marginTop: '20px' }}
+                      >
+                        <TextField
+                          label="E-mail"
+                          name="email"
+                          fullWidth
+                          value={credentials.email}
+                          onChange={(e) => handleChange(e)}
+                          InputLabelProps={{ shrink: true }}
+                        />
+                      </GridItem>
+                    </GridContainer>
+                  </GridItem>
+                </GridContainer>
+                <GridContainer justify={'center'}>
+                  <GridItem
+                    xs={12}
+                    sm={12}
+                    md={10}
+                    lg={8}
+                    style={{ marginTop: '20px' }}
+                  >
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <TextField
+                          label="New password"
+                          name="newPassword"
+                          onChange={(e) => handleChange(e)}
+                          fullWidth
+                        />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <TextField
+                          label="Confirm new password"
+                          name="confirmNewPassword"
+                          onChange={(e) => handleChange(e)}
+                          fullWidth
+                        />
+                      </GridItem>
+                    </GridContainer>
+                    <GridContainer justify={'center'}>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        style={{ marginTop: '20px' }}
+                      >
+                        Update
+                      </Button>
+                    </GridContainer>
+                  </GridItem>
+                </GridContainer>
+              </form>
             </CardBody>
-            <CardFooter>
-              <Button color="primary">Update</Button>
-            </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
@@ -133,17 +174,19 @@ const Settings = ({ userData }) => {
 };
 
 Settings.propTypes = {
-  userData: PropTypes.object,
+  userData: PropTypes.object.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  changeUserData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   userData: state.user.details.user,
 });
 
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    // getFiles: (x) => dispatch(getUserFiles(x)),
-    // selected: (x) => dispatch(handleSelected(x)),
+    changeUserData: (x) => dispatch(changeUserData(x)),
+    setMessage: (x) => dispatch(setMessage(x)),
   };
 };
 

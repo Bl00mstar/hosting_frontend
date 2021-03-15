@@ -22,7 +22,6 @@ const userReducer = (state = initialState, action) => {
       };
     case userTypes.USER_DATA:
       localStorage.setItem('authorization', action.payload.token);
-      console.log(action.payload);
       return {
         ...state,
         details: {
@@ -48,12 +47,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         details: { ...state.details, isLoading: false },
-        error: { isError: true, msgError: action.payload },
-      };
-    case userTypes.USER_CLEAR:
-      return {
-        ...state,
-        error: { isError: false, msgError: '' },
       };
     case userTypes.SIGNUP_SUCCESS:
       return {

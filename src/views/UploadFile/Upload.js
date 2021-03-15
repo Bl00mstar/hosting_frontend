@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 import { tokenConfig } from '@store/user/user.helpers';
-// import AddIcon from '@material-ui/icons/Add';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { Box, Paper } from '@material-ui/core';
 import defaultStyles from './styles';
 import { Attachment, Close } from '@material-ui/icons';
+import Check from '@material-ui/icons/Check';
 import { apiLink } from '@utils/api';
 
 class Upload extends Component {
@@ -178,8 +178,6 @@ class Upload extends Component {
         });
       }
       let token = tokenConfig();
-
-      console.log(token);
       formData.append(
         this.props.fieldName,
         blob,
@@ -222,7 +220,8 @@ class Upload extends Component {
 
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
-          progressCallback((e.loaded / e.total) * 100);
+          let progresss = (e.loaded / e.total) * 100;
+          progressCallback(progresss.toFixed(0));
         }
       };
 
@@ -264,9 +263,7 @@ class Upload extends Component {
     if (Math.abs(bytes) < thresh) {
       return bytes + ' B';
     }
-    var units = si
-      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    var units = si ? ['kB', 'MB', 'GB', 'TB'] : ['KiB', 'MiB', 'GiB', 'TiB'];
     var u = -1;
     do {
       bytes /= thresh;
@@ -277,31 +274,32 @@ class Upload extends Component {
 
   renderDropTarget() {
     return (
-      <div
-        data-test-id="dropTarget"
-        // style={dropTargetStyle}
-
-        onClick={this.onClick}
-        onDragEnter={this.onDragEnter}
-        onDragOver={this.onDragOver}
-        onDragLeave={this.onDragLeave}
-        onDrop={this.onDrop}
-      >
-        {/* style={styles.placeHolderStyle} */}
+      <>
         <div
-          style={{
-            border: '3px dashed #009900',
-            padding: 10,
-            cursor: 'pointer',
-            textAlign: 'center',
-          }}
-        >
-          <p>{this.props.dropzoneLabel}</p>
-          <Attachment />
-        </div>
+          data-test-id="dropTarget"
+          // style={dropTargetStyle}
 
+          onClick={this.onClick}
+          onDragEnter={this.onDragEnter}
+          onDragOver={this.onDragOver}
+          onDragLeave={this.onDragLeave}
+          onDrop={this.onDrop}
+        >
+          {/* style={styles.placeHolderStyle} */}
+          <div
+            style={{
+              border: '3px dashed #009900',
+              padding: 10,
+              cursor: 'pointer',
+              textAlign: 'center',
+            }}
+          >
+            <p>{this.props.dropzoneLabel}</p>
+            <Attachment />
+          </div>
+        </div>
         {this.renderFileSet()}
-      </div>
+      </>
     );
   }
 
@@ -309,23 +307,14 @@ class Upload extends Component {
     const items = this.state.items;
     const { filesetTransitionName: transitionName } = this.props;
     if (items.length > 0) {
-      const { cancelIconClass, completeIconClass } = this.props;
       const { styles } = this.state;
       return (
-        <TransitionGroup
-          component="div"
-          transitionName={transitionName}
-          transitionEnterTimeout={0}
-          transitionLeaveTimeout={0}
-        >
-          {/* style={filesetStyle} */}
+        <TransitionGroup component="div" transitionName={transitionName}>
           <div>
             {items
               .filter((item) => !item.cancelled && !!item.file)
               .map((item) => {
                 const file = item.file;
-                const iconClass =
-                  item.progress < 100 ? cancelIconClass : completeIconClass;
                 return (
                   <Paper
                     elevation={3}
@@ -336,33 +325,45 @@ class Upload extends Component {
                       <div style={styles.fileDetails}>
                         <span className="icon-file icon-large">&nbsp;</span>
                         <span style={styles.fileName}>{`${file.name}`}</span>
-                        <Close
-                          className={iconClass}
-                          style={{ cursor: 'pointer', color: 'red' }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            this.cancelFile(item.index);
-                          }}
-                        />
-                      </div>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        style={{ padding: 5 }}
-                      >
-                        <Box width="100%" mr={1}>
-                          <LinearProgress
-                            variant="determinate"
-                            value={item.progress}
+                        {item.progress < 100 ? (
+                          <Close
+                            style={{ cursor: 'pointer', color: 'red' }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              this.cancelFile(item.index);
+                            }}
                           />
-                        </Box>
-                        <Box minWidth={35}>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                          >{`${item.progress}%`}</Typography>
-                        </Box>
-                      </Box>
+                        ) : (
+                          <Check
+                            style={{ cursor: 'pointer', color: 'green' }}
+                            onClick={() => {
+                              this.cancelFile(item.index);
+                            }}
+                          />
+                        )}
+                      </div>
+                      {item.progress < 100 && (
+                        <>
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            style={{ padding: 5 }}
+                          >
+                            <Box width="100%" mr={1}>
+                              <LinearProgress
+                                variant="determinate"
+                                value={item.progress}
+                              />
+                            </Box>
+                            <Box minWidth={35}>
+                              <Typography
+                                variant="body2"
+                                color="textSecondary"
+                              >{`${item.progress}%`}</Typography>
+                            </Box>
+                          </Box>
+                        </>
+                      )}
                     </div>
                   </Paper>
                 );
@@ -371,14 +372,7 @@ class Upload extends Component {
         </TransitionGroup>
       );
     }
-    return (
-      <TransitionGroup
-        component="div"
-        transitionName={transitionName}
-        transitionEnterTimeout={0}
-        transitionLeaveTimeout={0}
-      />
-    );
+    return <TransitionGroup component="div" />;
   }
 
   renderInput() {
@@ -409,7 +403,7 @@ class Upload extends Component {
 }
 
 Upload.propTypes = {
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
   method: PropTypes.string,
   auto: PropTypes.bool,
   fieldName: PropTypes.string,
@@ -439,7 +433,7 @@ Upload.defaultProps = {
   fieldName: 'datafile',
   buttonLabel: 'Upload',
   dropzoneLabel: 'Drag and drop files',
-  maxSize: 25 * 1024 * 1024,
+  // maxSize: 25 * 1024 * 1024,
   chunks: false,
   chunkSize: 512 * 1024,
   localStore: false,

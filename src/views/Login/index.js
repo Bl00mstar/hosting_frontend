@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { userLogin, handleClearError } from '@store/user/user.actions';
-import ErrorAlert from '@components/LoginAlert/ErrorAlert';
 import Ellipsis from '@components/Preloaders/EllipsisPreloader';
 import * as Elems from '../Shared/public';
 
@@ -32,7 +31,6 @@ const Login = ({ login, clearError, userLoading, isAuthenticated }) => {
   return (
     <Elems.StyledRow>
       {userLoading && <Ellipsis />}
-      <ErrorAlert />
       <Elems.PageTitle>Login</Elems.PageTitle>
       <Elems.PageDescription>
         To log in, enter your email and password.

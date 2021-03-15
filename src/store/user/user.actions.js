@@ -1,5 +1,9 @@
 import userTypes from './user.types';
 
+export const changeUserData = (data) => {
+  return { type: userTypes.CHANGE_USER_DATA, payload: data };
+};
+
 export const isUserAuthenticated = () => {
   return { type: userTypes.CHECK_USER_AUTHENTICATED };
 };

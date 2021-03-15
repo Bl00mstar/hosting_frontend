@@ -12,6 +12,21 @@ import {
   isUserLoaded,
 } from './user.actions';
 
+import { setMessage } from '../alerts/alert.actions';
+
+export function* watchChangeUserData() {
+  yield takeEvery(userTypes.CHANGE_USER_DATA, changeUserData);
+}
+
+function* changeUserData({ payload }) {
+  try {
+    yield userRequest('POST', `${apiLink}/user/${payload._id}`, payload);
+    yield put(setMessage({ message: 'Data changed', type: 'success' }));
+  } catch (error) {
+    yield put(setMessage({ message: error, type: 'danger' }));
+  }
+}
+
 export function* watchUserLogin() {
   yield takeEvery(userTypes.USER_LOGIN, userLogin);
 }
@@ -25,7 +40,9 @@ function* userLogin(loginData) {
       loginData.payload
     );
     yield put(userData(data));
+    yield put(setMessage({ message: 'Login successfull', type: 'success' }));
   } catch (error) {
+    yield put(setMessage({ message: error, type: 'danger' }));
     yield put(handleUserError(error));
   }
 }
@@ -44,9 +61,9 @@ function* userSignup(signupData) {
       signupData.payload
     );
     yield put(handleSignupSuccess(data));
+    yield put(setMessage({ message: 'Register successfull', type: 'success' }));
   } catch (error) {
-    console.log('asd');
-    console.log(error);
+    yield put(setMessage({ message: error, type: 'danger' }));
     yield put(handleUserError(error));
   }
 }
