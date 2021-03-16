@@ -1,11 +1,8 @@
-/*es-list disable*/
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import AddAlert from '@material-ui/icons/AddAlert';
 import Error from '@material-ui/icons/Error';
 import Snackbar from '@components/Notification/Snackbar.js';
-
 import { clearMessage } from '@store/alerts/alert.actions';
 
 const Alert = (props) => {
@@ -20,7 +17,7 @@ const Alert = (props) => {
         clearMessage();
       }, timeout);
     }
-  }, [message]);
+  }, [message, clearMessage, setBR, timeout]);
 
   return (
     <>

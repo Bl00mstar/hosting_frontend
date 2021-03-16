@@ -1,20 +1,22 @@
 import React from 'react';
-import Dashboard from './views/Dashboard';
-import FilesTree from './views/FilesTree';
-import Home from './views/Home';
-import Login from './views/Login';
-import Register from './views/Register';
-import Setting from './views/Settings';
-import Playlist from './views/Playlist';
-import TrashFolder from './views/TrashFolder';
-import UploadFile from './views/UploadFile';
+import Dashboard from '@views/Dashboard';
+import FilesTree from '@views/FilesTree';
+import Home from '@views/Home';
+import Login from '@views/Login';
+import Register from '@views/Register';
+import Setting from '@views/Settings';
+import Playlist from '@views/Playlist';
+import TrashFolder from '@views/TrashFolder';
+import UploadFile from '@views/UploadFile';
 
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import DeleteIcon from '@material-ui/icons/Delete';
-import QueueIcon from '@material-ui/icons/Queue';
+import {
+  Dashboard as DashboardIcon,
+  SettingsApplications,
+  AccountTree,
+  CloudUpload,
+  Delete,
+  Queue,
+} from '@material-ui/icons';
 
 export const routes = [
   {
@@ -52,7 +54,7 @@ export const routes = [
     description: 'Settings',
     path: '/user/settings',
     element: <Setting />,
-    icon: <SettingsApplicationsIcon />,
+    icon: <SettingsApplications />,
     type: ['user'],
   },
 
@@ -60,21 +62,21 @@ export const routes = [
     description: 'Manage files',
     path: '/user/files',
     element: <FilesTree />,
-    icon: <AccountTreeIcon />,
+    icon: <AccountTree />,
     type: ['files'],
   },
   {
     description: 'Upload files',
     path: '/user/upload',
     element: <UploadFile />,
-    icon: <CloudUploadIcon />,
+    icon: <CloudUpload />,
     type: ['files'],
   },
   {
     description: 'Playlists',
     path: '/user/playlist',
     element: <Playlist />,
-    icon: <QueueIcon />,
+    icon: <Queue />,
     type: ['user'],
   },
 
@@ -82,7 +84,7 @@ export const routes = [
     description: 'Trash folder',
     path: '/user/trash',
     element: <TrashFolder />,
-    icon: <DeleteIcon />,
+    icon: <Delete />,
     type: ['files'],
   },
 ];

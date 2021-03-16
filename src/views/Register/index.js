@@ -1,15 +1,10 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-import * as Elems from '../Shared/public';
+import * as Elems from '@assets/js/components/loginregister/loginregisterStyle.js';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import {
-  userSignup,
-  handleClearError,
-  handleSignupClear,
-} from '@store/user/user.actions';
+import { userSignup } from '@store/user/user.actions';
 
 const Signup = ({ signup, isAuthenticated }) => {
   const { register, handleSubmit, errors, watch } = useForm({
@@ -34,8 +29,8 @@ const Signup = ({ signup, isAuthenticated }) => {
         Enter your details to register an account.
       </Elems.PageDescription>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <StyledInput>
-          <HalfInput
+        <Elems.StyledInput>
+          <Elems.HalfInput
             type="text"
             placeholder="First Name"
             name="firstName"
@@ -43,7 +38,7 @@ const Signup = ({ signup, isAuthenticated }) => {
               required: true,
             })}
           />
-          <HalfInput
+          <Elems.HalfInput
             type="text"
             placeholder="Last Name"
             name="lastName"
@@ -103,7 +98,7 @@ const Signup = ({ signup, isAuthenticated }) => {
               {errors.passwordConfirm.message}
             </Elems.StyledError>
           )}
-        </StyledInput>
+        </Elems.StyledInput>
         <Elems.StyledDiv>
           <Elems.StyledButton>Sign up</Elems.StyledButton>
         </Elems.StyledDiv>
@@ -114,8 +109,6 @@ const Signup = ({ signup, isAuthenticated }) => {
 
 Signup.propTypes = {
   signup: PropTypes.func.isRequired,
-  clearError: PropTypes.func.isRequired,
-  signupClear: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
@@ -126,58 +119,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     signup: (x) => dispatch(userSignup(x)),
-    clearError: () => dispatch(handleClearError()),
-    signupClear: () => dispatch(handleSignupClear()),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
-
-export const HalfInput = styled.input`
-  height: 40px;
-  width: 50%;
-  border: 2px solid #aaa;
-  border-radius: 20px;
-  padding-left: 20px;
-  margin: 8px 0;
-  outline: none;
-  box-sizing: border-box;
-  transition: 0.3s;
-  :hover {
-    border-color: #993399;
-    box-shadow: 0 0 8px 0 #990099;
-  }
-  :focus {
-    border-color: #993399;
-    box-shadow: 0 0 8px 0 #990099;
-  }
-`;
-
-const StyledInput = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 350px;
-  select {
-    top: 8px;
-    font-size: 18px;
-    outline: none;
-    right: 0.5rem;
-  }
-  svg {
-    position: absolute;
-    left: 0;
-    top: 8px;
-    padding: 9px 8px;
-    fill: black;
-    transition: 0.3s;
-    :hover {
-      fill: #990099;
-    }
-  }
-  input:focus + svg {
-    fill: #990099;
-  }
-  &.inputWithIcon {
-    position: relative;
-  }
-`;

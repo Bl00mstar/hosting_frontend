@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { userLogin, handleClearError } from '@store/user/user.actions';
 import Ellipsis from '@components/Preloaders/EllipsisPreloader';
-import * as Elems from '../Shared/public';
+import * as Elems from '@assets/js/components/loginregister/loginregisterStyle.js';
 
 const Login = ({ login, clearError, userLoading, isAuthenticated }) => {
   const { register, handleSubmit, errors } = useForm({
