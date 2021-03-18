@@ -19,6 +19,8 @@ import {
 } from './user/user.sagas';
 
 import {
+  watchStatisticsTrash,
+  watchStatisticsStorage,
   watchTrashDelete,
   watchTrashRestore,
   watchlistUserFolder,
@@ -33,6 +35,8 @@ import {
 
 export default function* rootSaga() {
   yield all([
+    watchStatisticsStorage(),
+    watchStatisticsTrash(),
     watchFilesFromPlaylist(),
     watchFileFromPlaylist(),
     watchFileToPlaylist(),

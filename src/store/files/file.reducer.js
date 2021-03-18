@@ -1,6 +1,10 @@
 import fileTypes from './file.types';
 
 const initialState = {
+  statistics: {
+    trash: { countTrashFiles: 0, spaceTrashFiles: 0 },
+    storage: { countStorageFiles: 0, spaceStorageFiles: 0 },
+  },
   tree: {
     isLoading: false,
     items: [],
@@ -26,6 +30,31 @@ const initialState = {
 
 const fileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case fileTypes.STATISTICS_TRASH_SET:
+      console.log(action.payload);
+      return {
+        ...state,
+        statistics: {
+          ...state.statistics,
+          trash: {
+            ...state.statistics.trash,
+            spaceTrashFiles: action.payload.totalStorage,
+            countTrashFiles: action.payload.countFiles,
+          },
+        },
+      };
+    case fileTypes.STATISTICS_STORAGE_SET:
+      return {
+        ...state,
+        statistics: {
+          ...state.statistics,
+          storage: {
+            ...state.statistics.storage,
+            countStorageFiles: action.payload.countFiles,
+            spaceStorageFiles: action.payload.totalStorage,
+          },
+        },
+      };
     case fileTypes.SET_FILTERS:
       return {
         ...state,

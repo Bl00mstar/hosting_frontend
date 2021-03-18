@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -43,7 +44,7 @@ const PrivateLayout = ({ isAuthenticated, ...rest }) => {
   React.useEffect(() => {
     if (navigator.platform.indexOf('Win') > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
-        suppressScrollX: true,
+        suppressScrollX: false,
         suppressScrollY: false,
       });
       document.body.style.overflow = 'hidden';

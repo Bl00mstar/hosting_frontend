@@ -12,8 +12,46 @@ import {
   handleCheck,
   handleSelected,
   trashAlert,
+  setTrashStatistics,
+  setStorageStatistics,
 } from './file.actions';
 import { saveAs } from 'file-saver';
+
+export function* watchStatisticsStorage() {
+  yield takeEvery(fileTypes.STATISTICS_STORAGE, statisticsStorage);
+}
+function* statisticsStorage() {
+  try {
+    const data = yield fileRequest(apiLink + '/file/statistics/false');
+    console.log(data);
+    yield put(setStorageStatistics(data));
+  } catch (error) {
+    yield put(
+      alertFiles({
+        message: error,
+        type: 'error',
+      })
+    );
+  }
+}
+
+export function* watchStatisticsTrash() {
+  yield takeEvery(fileTypes.STATISTICS_TRASH, statisticsTrash);
+}
+function* statisticsTrash() {
+  try {
+    const data = yield fileRequest(apiLink + '/file/statistics/true');
+    console.log(data);
+    yield put(setTrashStatistics(data));
+  } catch (error) {
+    yield put(
+      alertFiles({
+        message: error,
+        type: 'error',
+      })
+    );
+  }
+}
 
 export function* watchTrashDelete() {
   yield takeEvery(fileTypes.TRASH_DELETE, trashDelete);

@@ -1,5 +1,17 @@
 import fileTypes from './file.types';
 
+export const setStorageStatistics = (data) => {
+  return { type: fileTypes.STATISTICS_STORAGE_SET, payload: data };
+};
+export const setTrashStatistics = (data) => {
+  return { type: fileTypes.STATISTICS_TRASH_SET, payload: data };
+};
+export const getStorageStatics = () => {
+  return { type: fileTypes.STATISTICS_STORAGE };
+};
+export const getTrashStatics = () => {
+  return { type: fileTypes.STATISTICS_TRASH };
+};
 // filters
 export const setFilters = (data) => {
   return { type: fileTypes.SET_FILTERS, payload: data };

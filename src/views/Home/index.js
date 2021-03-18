@@ -25,10 +25,10 @@ const Home = ({ isAuthenticated }) => {
             className={classes.mainContainer}
             direction="row-reverse"
           >
-            <Grid className={classes.homeGridItem} xs={12} sm={12} md={6}>
+            <Grid className={classes.homeGridItem} xs={12} sm={12} md={5}>
               <img className={classes.homeImage} src={homeImage} />
             </Grid>
-            <Grid className={classes.homeGridItem} xs={12} sm={12} md={6}>
+            <Grid className={classes.homeGridItem} xs={12} sm={12} md={5}>
               <h1 className={classes.homeText}>
                 Upload, share and manage your files.
               </h1>

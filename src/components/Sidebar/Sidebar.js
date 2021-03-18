@@ -14,7 +14,7 @@ import Icon from '@material-ui/core/Icon';
 // core components
 import AdminNavbarLinks from '@components/Navbar/AdminNavbarLinks.js';
 // import RTLNavbarLinks from '@components/Navbars/RTLNavbarLinks.js';
-
+import sidebarImage from '@assets/sidebarImage.svg';
 import styles from '@assets/jss/material-dashboard-react/components/sidebarStyle.js';
 import { routes } from '../../routes';
 const useStyles = makeStyles(styles);
@@ -71,7 +71,7 @@ export default function Sidebar(props) {
       })}
     </List>
   );
-  var brand = <div className={classes.logo}>Alpha v1.0</div>;
+
   return (
     <div>
       <Hidden mdUp implementation="css">
@@ -79,19 +79,18 @@ export default function Sidebar(props) {
           variant="temporary"
           anchor={props.rtlActive ? 'left' : 'right'}
           open={props.open}
-          classes={{
-            paper: classNames(classes.drawerPaper, {
-              [classes.drawerPaperRTL]: props.rtlActive,
-            }),
-          }}
           onClose={props.handleDrawerToggle}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
         >
-          {brand}
+          <img
+            color="green"
+            style={{ zIndex: '12', height: '100px', color: 'green' }}
+            src={sidebarImage}
+          />
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+            <AdminNavbarLinks />
             {links}
           </div>
           {image !== undefined ? (
@@ -113,7 +112,11 @@ export default function Sidebar(props) {
             }),
           }}
         >
-          {brand}
+          <img
+            color="green"
+            style={{ zIndex: '11', height: '100px', color: 'green' }}
+            src={sidebarImage}
+          />
           <div className={classes.sidebarWrapper}>{links}</div>
           {image !== undefined ? (
             <div
